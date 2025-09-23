@@ -1,8 +1,11 @@
 {
-  "name": "ali-software-backend",
+  "name": "ali-backend",
   "version": "1.0.0",
   "description": "Backend para Ali Software Jurídico - Sistema de gestão para escritórios de advocacia",
   "main": "server.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",

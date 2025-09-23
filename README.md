@@ -99,7 +99,62 @@ EMAIL_SUPPORT=alisoftwarejuridico@gmail.com
 - **8h diariamente**: Verifica contas vencidas
 - **0h diariamente**: Reset de flags de lembretes
 
-## 🔧 Tecnologias Utilizadas
+## � Deploy
+
+### Backend no Railway
+
+1. **Configurações do serviço no Railway:**
+   - Source → Add Root Directory: `backend/`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Networking → Generate Domain (copiar a URL pública)
+
+2. **Variáveis de ambiente (Railway → Variables → Raw Editor):**
+
+   ```env
+   NODE_ENV=production
+   PORT=3001
+   DATABASE_PATH=/app/database/ali_software.db
+   JWT_SECRET=sua_chave_jwt_secreta_32bytes
+   JWT_EXPIRES_IN=7d
+   EMAIL_HOST=smtp.gmail.com
+   EMAIL_PORT=587
+   EMAIL_USER=alisoftwarejuridico@gmail.com
+   EMAIL_PASS=opqm nemr fobi nvjr
+   GMAIL_USER=alisoftwarejuridico@gmail.com
+   GMAIL_PASS=opqm nemr fobi nvjr
+   ASAAS_API_URL=https://sandbox.asaas.com/api/v3
+   ASAAS_API_KEY=sua-chave-sandbox-asaas
+   FRONTEND_URL=https://seu-site.netlify.app
+   BACKEND_URL=https://SEU-DOMINIO-RAILWAY.up.railway.app
+   ```
+
+3. **Persistência SQLite (recomendado):**
+   - Storage → Add Volume
+     - Name: `ali-sqlite`
+     - Mount Path: `/app/database`
+
+4. **Healthcheck:**
+   - Deploy → Healthcheck Path: `/api/hello`
+
+5. **Teste:**
+
+   ```bash
+   GET https://SEU-DOMINIO-RAILWAY.up.railway.app/api/hello
+   Resposta: {"ok": true, "message": "Ali Software Jurídico Backend - Running!"}
+   ```
+
+### Frontend no Netlify
+
+1. **Configuração do build:**
+   - Build command: `npm run build` (se aplicável)
+   - Publish directory: `public/` ou `dist/`
+
+2. **Ajuste de configuração:**
+   - Editar `frontend/config.js` com a URL do Railway
+   - Substituir `fetch("/api/...")` por `fetch("${API_URL}/...")`
+
+## �🔧 Tecnologias Utilizadas
 
 - **Backend**: Node.js, Express, SQLite
 - **Autenticação**: JWT

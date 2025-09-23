@@ -80,6 +80,16 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Healthcheck para Railway/deployment
+app.get('/api/hello', (req, res) => {
+  res.json({ 
+    ok: true, 
+    message: 'Ali Software Jurídico Backend - Running!',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Rotas da API
 app.use('/api/auth', authRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
@@ -115,11 +125,12 @@ async function startServer() {
     // Iniciar agendamentos de notificações
     iniciarAgendamentos();
     
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor rodando na porta ${PORT}`);
-      console.log(`📊 Dashboard: http://localhost:${PORT}`);
-      console.log(`🔗 API: http://localhost:${PORT}/api`);
-      console.log(`❤️  Health: http://localhost:${PORT}/health`);
+    const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+    app.listen(PORT, host, () => {
+      console.log(`🚀 Servidor rodando na porta ${PORT} (host: ${host})`);
+      console.log(`📊 Dashboard: http://${host === '0.0.0.0' ? 'localhost' : host}:${PORT}`);
+      console.log(`🔗 API: http://${host === '0.0.0.0' ? 'localhost' : host}:${PORT}/api`);
+      console.log(`❤️  Health: http://${host === '0.0.0.0' ? 'localhost' : host}:${PORT}/health`);
     });
   } catch (error) {
     console.error('❌ Erro ao iniciar servidor:', error);
