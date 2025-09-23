@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Jurídico - Ali Software</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-dark: #153555;
+            --primary-light: #2d4a68;
+            --secondary: #e2e8f0;
+            --accent: #3182ce;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --info: #3182ce;
+            --white: #ffffff;
+            --gray-50: #f7fafc;
+            --gray-100: #edf2f7;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e0;
+            --gray-400: #a0aec0;
+            --gray-500: #718096;
+            --gray-600: #4a5568;
+            --gray-700: #2d3748;
+            --gray-800: #1a202c;
+            --gray-900: #171923;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--gray-700);
+            min-height: 100vh;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 1.5rem 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: var(--white);
+            border-left-color: var(--accent);
+        }
+
+        .nav-item i {
+            width: 20px;
+            font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+            background: var(--gray-50);
+            min-height: 100vh;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: #3b82f6;
+        }
+
+        .status-bar {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            font-weight: 500;
+            color: #059669;
+        }
+
+        .last-update {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #3b82f6;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.1rem;
+        }
+
+        .card-icon.primary { background: linear-gradient(135deg, var(--primary), var(--accent)); }
+        .card-icon.success { background: linear-gradient(135deg, var(--success), #48bb78); }
+        .card-icon.warning { background: linear-gradient(135deg, var(--warning), #ed8936); }
+        .card-icon.info { background: linear-gradient(135deg, var(--info), #4299e1); }
+
+        .card-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .card-label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .card-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .card-trend.up { color: var(--success); }
+        .card-trend.down { color: var(--danger); }
+
+        /* Controls Panel */
+        .controls-panel {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .controls-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .controls-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background: #2f855a;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #c53030;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+
+        /* Events Panel */
+        .events-panel {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .events-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .events-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .events-content {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+        }
+
+        .event-item:hover {
+            background: var(--gray-50);
+        }
+
+        .event-item:last-child {
+            border-bottom: none;
+        }
+
+        .event-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .event-source {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .event-time {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .event-process {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .event-movement {
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .event-description {
+            color: var(--gray-600);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .event-link {
+            margin-top: 0.75rem;
+        }
+
+        .event-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 500;
+        }
+
+        .event-link a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state, .loading-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--gray-500);
+        }
+
+        .empty-state i, .loading-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gray-400);
+        }
+
+        .empty-state h3, .loading-state h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-600);
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #f0fff4;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            color: #744210;
+            border: 1px solid #f6e05e;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <div class="logo-text">Ali Software</div>
+                </div>
+            </div>
+            
+            <div class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Monitor</div>
+                    <a href="#" class="nav-item active" onclick="showPage('dashboard')">
+                        <i class="fas fa-chart-line"></i>
+                        Dashboard
+                    </a>
+                    <a href="#" class="nav-item" onclick="showPage('alertas')">
+                        <i class="fas fa-bell"></i>
+                        Alertas
+                    </a>
+                    <a href="#" class="nav-item" onclick="showPage('historico')">
+                        <i class="fas fa-history"></i>
+                        Histórico
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Configurações</div>
+                    <a href="#" class="nav-item" onclick="showPage('preferencias')">
+                        <i class="fas fa-cog"></i>
+                        Preferências
+                    </a>
+                    <a href="#" class="nav-item" onclick="showPage('usuarios')">
+                        <i class="fas fa-users"></i>
+                        Usuários
+                    </a>
+                    <a href="#" class="nav-item" onclick="showPage('fontes')">
+                        <i class="fas fa-database"></i>
+                        Fontes
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Navegação</div>
+                    <a href="index.html" class="nav-item" title="Voltar para o sistema principal Ali Software">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar ao Sistema
+                    </a>
+                    <a href="pages/dashboard.html" class="nav-item" title="Ir para o dashboard principal">
+                        <i class="fas fa-home"></i>
+                        Dashboard Principal
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Sistema</div>
+                    <a href="#" class="nav-item" onclick="showPage('sobre')">
+                        <i class="fas fa-info-circle"></i>
+                        Sobre
+                    </a>
+                    <a href="#" class="nav-item" onclick="showPage('ajuda')">
+                        <i class="fas fa-question-circle"></i>
+                        Ajuda
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Monitor Jurídico
+                    </h1>
+                    <p class="page-subtitle">Sistema de monitoramento de processos jurídicos em tempo real</p>
+                </header>
+
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span class="status-text">Sistema Operacional</span>
+                    </div>
+                    <div class="last-update" id="lastUpdate">
+                        Última atualização: --
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Total de Eventos</div>
+                            <div class="card-icon primary">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="totalEvents">0</div>
+                        <div class="card-label">Eventos registrados</div>
+                        <div class="card-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12% vs mês anterior</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Eventos Hoje</div>
+                            <div class="card-icon success">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="todayEvents">0</div>
+                        <div class="card-label">Registrados hoje</div>
+                        <div class="card-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+5 novos eventos</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Processos Únicos</div>
+                            <div class="card-icon warning">
+                                <i class="fas fa-gavel"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="uniqueProcesses">0</div>
+                        <div class="card-label">Processos monitorados</div>
+                        <div class="card-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>3 novos processos</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Fontes Ativas</div>
+                            <div class="card-icon info">
+                                <i class="fas fa-rss"></i>
+                            </div>
+                        </div>
+                        <div class="card-value" id="activeSources">0</div>
+                        <div class="card-label">Tribunais conectados</div>
+                        <div class="card-trend">
+                            <i class="fas fa-minus"></i>
+                            <span>Estável</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls Panel -->
+                <div class="controls-panel">
+                    <div class="controls-header">
+                        <div class="controls-title">
+                            <i class="fas fa-sliders-h"></i>
+                            Painel de Controle
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Usuário</label>
+                            <select id="userSelect" class="form-select" title="Selecionar usuário para carregar histórico">
+                                <option value="">Selecione um usuário</option>
+                                <option value="user-test-1">👤 Usuário Teste 1</option>
+                                <option value="user-test-2">👤 Usuário Teste 2</option>
+                                <option value="user-prod-1">👨‍💼 Usuário Produção 1</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Número do Processo</label>
+                            <input type="text" id="testProcesso" class="form-input" 
+                                   placeholder="0000000-00.0000.0.00.0000" 
+                                   value="1000123-45.2024.8.26.0100"
+                                   title="Digite o número do processo para teste">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Fonte do Tribunal</label>
+                            <select id="testFonte" class="form-select" title="Selecionar fonte do tribunal">
+                                <option value="TJSP">🏛️ TJSP - São Paulo</option>
+                                <option value="TJRJ">🏛️ TJRJ - Rio de Janeiro</option>
+                                <option value="TJMG">🏛️ TJMG - Minas Gerais</option>
+                                <option value="STJ">⚖️ STJ - Superior</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="actions-grid">
+                        <button class="btn btn-primary" onclick="loadHistory()">
+                            <i class="fas fa-download"></i>
+                            Carregar Histórico
+                        </button>
+                        <button class="btn btn-success" onclick="sendTestEvent()">
+                            <i class="fas fa-flask"></i>
+                            Evento Teste
+                        </button>
+                        <button class="btn btn-outline" onclick="refreshData()">
+                            <i class="fas fa-sync-alt"></i>
+                            Atualizar
+                        </button>
+                        <button class="btn btn-danger" onclick="clearHistory()">
+                            <i class="fas fa-trash"></i>
+                            Limpar Histórico
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Events Panel -->
+                <div class="events-panel">
+                    <div class="events-header">
+                        <div class="events-title">
+                            <i class="fas fa-list-alt"></i>
+                            Histórico de Eventos
+                        </div>
+                        
+                        <div class="search-controls">
+                            <input type="text" id="searchInput" class="search-input" 
+                                   placeholder="Buscar por processo, fonte ou movimento..."
+                                   title="Digite para buscar eventos">
+                            <button class="btn btn-outline" onclick="filterEvents()" title="Buscar eventos">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <button class="btn btn-outline" onclick="clearFilter()" title="Limpar filtros de busca">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="events-content" id="eventsContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <h3>Nenhum evento encontrado</h3>
+                            <p>Selecione um usuário e clique em "Carregar Histórico" para visualizar os eventos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas Page -->
+            <div id="alertas-page" class="page">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-bell"></i>
+                        Alertas do Sistema
+                    </h1>
+                    <p class="page-subtitle">Configure e monitore alertas automáticos para eventos importantes</p>
+                </header>
+
+                <div class="controls-panel">
+                    <div class="controls-header">
+                        <div class="controls-title">
+                            <i class="fas fa-plus"></i>
+                            Criar Novo Alerta
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Nome do Alerta</label>
+                            <input type="text" class="form-input" placeholder="Ex: Sentença em Ação de Cobrança" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Evento</label>
+                            <select class="form-select">
+                                <option>Sentença</option>
+                                <option>Despacho</option>
+                                <option>Audiência</option>
+                                <option>Decisão</option>
+                                <option>Recurso</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tribunal</label>
+                            <select class="form-select">
+                                <option>Todos</option>
+                                <option>TJSP</option>
+                                <option>TJRJ</option>
+                                <option>TJMG</option>
+                                <option>STJ</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email para Notificação</label>
+                            <input type="email" class="form-input" placeholder="advogado@email.com" />
+                        </div>
+                    </div>
+
+                    <div class="actions-grid">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar Alerta
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-test-tube"></i>
+                            Testar Alerta
+                        </button>
+                    </div>
+                </div>
+
+                <div class="events-panel">
+                    <div class="events-header">
+                        <div class="events-title">
+                            <i class="fas fa-list-alt"></i>
+                            Alertas Configurados
+                        </div>
+                    </div>
+
+                    <div class="events-content">
+                        <div class="event-item">
+                            <div class="event-header">
+                                <span class="event-source">ATIVO</span>
+                                <span class="event-time">
+                                    <i class="fas fa-clock"></i>
+                                    Criado há 2 dias
+                                </span>
+                            </div>
+                            <div class="event-process">
+                                <i class="fas fa-bell"></i> Sentenças em Ações de Cobrança - TJSP
+                            </div>
+                            <div class="event-movement">
+                                <i class="fas fa-envelope"></i> Notificar: advogado@escritorio.com
+                            </div>
+                            <div class="event-description">
+                                Alerta ativado para todas as sentenças em processos de cobrança no TJSP. 
+                                Última notificação enviada ontem às 14:30.
+                            </div>
+                        </div>
+
+                        <div class="event-item">
+                            <div class="event-header">
+                                <span class="event-source">PAUSADO</span>
+                                <span class="event-time">
+                                    <i class="fas fa-clock"></i>
+                                    Criado há 1 semana
+                                </span>
+                            </div>
+                            <div class="event-process">
+                                <i class="fas fa-bell"></i> Audiências em Ações Trabalhistas - TRT
+                            </div>
+                            <div class="event-movement">
+                                <i class="fas fa-envelope"></i> Notificar: juridico@empresa.com
+                            </div>
+                            <div class="event-description">
+                                Alerta temporariamente pausado. Reativar quando necessário.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Histórico Page -->
+            <div id="historico-page" class="page">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-history"></i>
+                        Histórico Completo
+                    </h1>
+                    <p class="page-subtitle">Visualização avançada de todos os eventos processados pelo sistema</p>
+                </header>
+
+                <div class="controls-panel">
+                    <div class="controls-header">
+                        <div class="controls-title">
+                            <i class="fas fa-filter"></i>
+                            Filtros Avançados
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Data Inicial</label>
+                            <input type="date" class="form-input" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data Final</label>
+                            <input type="date" class="form-input" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tribunal</label>
+                            <select class="form-select">
+                                <option>Todos</option>
+                                <option>TJSP</option>
+                                <option>TJRJ</option>
+                                <option>TJMG</option>
+                                <option>STJ</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Movimento</label>
+                            <select class="form-select">
+                                <option>Todos</option>
+                                <option>Sentença</option>
+                                <option>Despacho</option>
+                                <option>Audiência</option>
+                                <option>Recurso</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="actions-grid">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            Aplicar Filtros
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-download"></i>
+                            Exportar CSV
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-file-pdf"></i>
+                            Exportar PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="events-panel">
+                    <div class="events-header">
+                        <div class="events-title">
+                            <i class="fas fa-database"></i>
+                            Registros do Sistema (últimos 30 dias)
+                        </div>
+                    </div>
+
+                    <div class="events-content">
+                        <div class="event-item">
+                            <div class="event-header">
+                                <span class="event-source">TJSP</span>
+                                <span class="event-time">
+                                    <i class="fas fa-clock"></i>
+                                    23/09/2024 15:30
+                                </span>
+                            </div>
+                            <div class="event-process">
+                                <i class="fas fa-file-alt"></i> 1000123-45.2024.8.26.0100
+                            </div>
+                            <div class="event-movement">
+                                <i class="fas fa-gavel"></i> Sentença de Procedência Parcial
+                            </div>
+                            <div class="event-description">
+                                Proferida sentença julgando parcialmente procedente o pedido inicial, 
+                                condenando o réu ao pagamento de R$ 25.000,00 com juros e correção monetária.
+                            </div>
+                        </div>
+
+                        <div class="event-item">
+                            <div class="event-header">
+                                <span class="event-source">TJRJ</span>
+                                <span class="event-time">
+                                    <i class="fas fa-clock"></i>
+                                    23/09/2024 14:15
+                                </span>
+                            </div>
+                            <div class="event-process">
+                                <i class="fas fa-file-alt"></i> 0001234-56.2024.8.19.0001
+                            </div>
+                            <div class="event-movement">
+                                <i class="fas fa-calendar"></i> Designação de Audiência
+                            </div>
+                            <div class="event-description">
+                                Designada audiência de conciliação para o dia 15/10/2024 às 14:00h.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outras páginas serão adicionadas aqui -->
+            <div id="preferencias-page" class="page">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-cog"></i>
+                        Preferências do Sistema
+                    </h1>
+                    <p class="page-subtitle">Configure as opções do monitor jurídico</p>
+                </header>
+                <div class="alert alert-warning">
+                    <i class="fas fa-wrench"></i>
+                    Página em desenvolvimento. Em breve você poderá configurar suas preferências do sistema.
+                </div>
+            </div>
+
+            <div id="usuarios-page" class="page">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-users"></i>
+                        Gerenciamento de Usuários
+                    </h1>
+                    <p class="page-subtitle">Gerencie usuários e permissões do sistema</p>
+                </header>
+                <div class="alert alert-warning">
+                    <i class="fas fa-wrench"></i>
+                    Página em desenvolvimento. Em breve você poderá gerenciar usuários do sistema.
+                </div>
+            </div>
+
+            <div id="fontes-page" class="page">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-database"></i>
+                        Configuração de Fontes
+                    </h1>
+                    <p class="page-subtitle">Configure fontes de dados dos tribunais</p>
+                </header>
+                <div class="alert alert-warning">
+                    <i class="fas fa-wrench"></i>
+                    Página em desenvolvimento. Em breve você poderá configurar fontes de dados.
+                </div>
+            </div>
+
+            <div id="sobre-page" class="page">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-info-circle"></i>
+                        Sobre o Sistema
+                    </h1>
+                    <p class="page-subtitle">Informações sobre o Monitor Jurídico Ali Software</p>
+                </header>
+                
+                <div class="controls-panel">
+                    <div class="controls-header">
+                        <div class="controls-title">
+                            <i class="fas fa-info"></i>
+                            Informações do Sistema
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Versão do Sistema</label>
+                            <input type="text" class="form-input" value="1.0.0" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Última Atualização</label>
+                            <input type="text" class="form-input" value="23/09/2024" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Desenvolvedor</label>
+                            <input type="text" class="form-input" value="Ali Software Jurídico" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status do Sistema</label>
+                            <input type="text" class="form-input" value="✅ Operacional" readonly />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="events-panel">
+                    <div class="events-header">
+                        <div class="events-title">
+                            <i class="fas fa-file-alt"></i>
+                            Funcionalidades
+                        </div>
+                    </div>
+                    
+                    <div class="events-content">
+                        <div class="event-item">
+                            <div class="event-process">
+                                <i class="fas fa-chart-line"></i> Dashboard em Tempo Real
+                            </div>
+                            <div class="event-description">
+                                Monitoramento em tempo real de processos jurídicos com estatísticas atualizadas automaticamente.
+                            </div>
+                        </div>
+                        
+                        <div class="event-item">
+                            <div class="event-process">
+                                <i class="fas fa-bell"></i> Sistema de Alertas
+                            </div>
+                            <div class="event-description">
+                                Configuração de alertas personalizados para eventos específicos de processos.
+                            </div>
+                        </div>
+                        
+                        <div class="event-item">
+                            <div class="event-process">
+                                <i class="fas fa-database"></i> Histórico Completo
+                            </div>
+                            <div class="event-description">
+                                Armazenamento e consulta de histórico completo de eventos processados pelo sistema.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ajuda-page" class="page">
+                <header class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-question-circle"></i>
+                        Central de Ajuda
+                    </h1>
+                    <p class="page-subtitle">Documentação e suporte para o Monitor Jurídico</p>
+                </header>
+                
+                <div class="controls-panel">
+                    <div class="controls-header">
+                        <div class="controls-title">
+                            <i class="fas fa-life-ring"></i>
+                            Precisa de Ajuda?
+                        </div>
+                    </div>
+                    
+                    <div class="actions-grid">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-envelope"></i>
+                            Enviar Ticket de Suporte
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-phone"></i>
+                            Contato por Telefone
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-video"></i>
+                            Assistir Tutoriais
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="events-panel">
+                    <div class="events-header">
+                        <div class="events-title">
+                            <i class="fas fa-book"></i>
+                            Perguntas Frequentes
+                        </div>
+                    </div>
+                    
+                    <div class="events-content">
+                        <div class="event-item">
+                            <div class="event-process">
+                                <i class="fas fa-question"></i> Como configurar um novo usuário?
+                            </div>
+                            <div class="event-description">
+                                Acesse a seção "Usuários" no menu lateral e clique em "Adicionar Usuário". 
+                                Preencha as informações necessárias e defina as permissões adequadas.
+                            </div>
+                        </div>
+                        
+                        <div class="event-item">
+                            <div class="event-process">
+                                <i class="fas fa-question"></i> Como criar um alerta personalizado?
+                            </div>
+                            <div class="event-description">
+                                Na seção "Alertas", defina o tipo de evento, tribunal e email para notificação. 
+                                O sistema enviará emails automaticamente quando o evento ocorrer.
+                            </div>
+                        </div>
+                        
+                        <div class="event-item">
+                            <div class="event-process">
+                                <i class="fas fa-question"></i> Como exportar o histórico de eventos?
+                            </div>
+                            <div class="event-description">
+                                Na página "Histórico", aplique os filtros desejados e clique em "Exportar CSV" 
+                                ou "Exportar PDF" para download dos dados.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let allEvents = [];
+        let filteredEvents = [];
+        let isLoading = false;
+        let currentPage = 'dashboard';
+
+        // Configuração da API
+        const API_BASE = window.location.origin;
+
+        // Navegação entre páginas
+        function showPage(pageId) {
+            // Esconder todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remover classe active de todos os nav-items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Mostrar página selecionada
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+                currentPage = pageId;
+            }
+            
+            // Adicionar classe active ao item de navegação clicado
+            event?.target?.classList.add('active');
+            
+            // Se não encontrou o target pelo event, procurar pelo onclick
+            if (!event?.target?.classList.contains('active')) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    if (item.getAttribute('onclick') === `showPage('${pageId}')`) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+            
+            // Executar ações específicas da página
+            switch (pageId) {
+                case 'dashboard':
+                    updateStats();
+                    updateLastUpdate();
+                    break;
+                case 'alertas':
+                    console.log('Página de alertas carregada');
+                    break;
+                case 'historico':
+                    console.log('Página de histórico carregada');
+                    break;
+                default:
+                    console.log(`Página ${pageId} carregada`);
+            }
+        }
+
+        // Funções utilitárias
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatRelativeTime(timestamp) {
+            const now = new Date();
+            const eventTime = new Date(timestamp);
+            const diffMs = now - eventTime;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffMins < 1) return 'Agora mesmo';
+            if (diffMins < 60) return `${diffMins} min atrás`;
+            if (diffHours < 24) return `${diffHours}h atrás`;
+            if (diffDays < 7) return `${diffDays} dias atrás`;
+            return formatDate(timestamp);
+        }
+
+        function showMessage(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${message}
+            `;
+            
+            const container = document.querySelector('.events-panel') || document.querySelector('.controls-panel');
+            if (container) {
+                container.insertBefore(alert, container.firstChild);
+                
+                setTimeout(() => {
+                    alert.remove();
+                }, 5000);
+            }
+        }
+
+        function updateLastUpdate() {
+            const element = document.getElementById('lastUpdate');
+            if (element) {
+                element.textContent = `Última atualização: ${new Date().toLocaleTimeString('pt-BR')}`;
+            }
+        }
+
+        // Carregar histórico
+        async function loadHistory() {
+            const userSelect = document.getElementById('userSelect');
+            if (!userSelect) return;
+            
+            const userId = userSelect.value;
+            if (!userId) {
+                showMessage('⚠️ Selecione um usuário primeiro', 'warning');
+                return;
+            }
+
+            if (isLoading) return;
+            isLoading = true;
+
+            const container = document.getElementById('eventsContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <h3>Carregando eventos...</h3>
+                        <p>Processando dados do usuário ${userId}</p>
+                    </div>
+                `;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/history`, {
+                    headers: {
+                        'x-user-id': userId
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                allEvents = data.items || [];
+                filteredEvents = [...allEvents];
+                
+                renderEvents();
+                updateStats();
+                updateLastUpdate();
+                
+                showMessage(`✅ ${allEvents.length} eventos carregados com sucesso`, 'success');
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+                if (container) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                            <h3>Erro ao carregar histórico</h3>
+                            <p>${error.message}</p>
+                        </div>
+                    `;
+                }
+                showMessage(`❌ ${error.message}`, 'error');
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        // Renderizar eventos
+        function renderEvents() {
+            const container = document.getElementById('eventsContainer');
+            if (!container) return;
+            
+            if (filteredEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhum evento encontrado</h3>
+                        <p>Tente ajustar os filtros de busca ou carregar mais dados</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const eventsHTML = filteredEvents.map(event => `
+                <div class="event-item">
+                    <div class="event-header">
+                        <span class="event-source">${event.fonte}</span>
+                        <span class="event-time">
+                            <i class="fas fa-clock"></i>
+                            ${formatRelativeTime(event.ts)}
+                        </span>
+                    </div>
+                    <div class="event-process">
+                        <i class="fas fa-file-alt"></i> ${event.processo}
+                    </div>
+                    <div class="event-movement">
+                        <i class="fas fa-arrow-right"></i> ${event.movimento}
+                    </div>
+                    ${event.texto ? `
+                        <div class="event-description">${event.texto}</div>
+                    ` : ''}
+                    ${event.link ? `
+                        <div class="event-link">
+                            <a href="${event.link}" target="_blank" rel="noopener">
+                                <i class="fas fa-external-link-alt"></i>
+                                Ver processo completo
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            container.innerHTML = eventsHTML;
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            const today = new Date().toDateString();
+            const todayEvents = allEvents.filter(event => 
+                new Date(event.ts).toDateString() === today
+            ).length;
+
+            const uniqueProcesses = new Set(allEvents.map(event => event.processo)).size;
+            const activeSources = new Set(allEvents.map(event => event.fonte)).size;
+
+            const totalEventsEl = document.getElementById('totalEvents');
+            const todayEventsEl = document.getElementById('todayEvents');
+            const uniqueProcessesEl = document.getElementById('uniqueProcesses');
+            const activeSourcesEl = document.getElementById('activeSources');
+
+            if (totalEventsEl) totalEventsEl.textContent = allEvents.length.toLocaleString('pt-BR');
+            if (todayEventsEl) todayEventsEl.textContent = todayEvents.toLocaleString('pt-BR');
+            if (uniqueProcessesEl) uniqueProcessesEl.textContent = uniqueProcesses.toLocaleString('pt-BR');
+            if (activeSourcesEl) activeSourcesEl.textContent = activeSources.toLocaleString('pt-BR');
+        }
+
+        // Filtrar eventos
+        function filterEvents() {
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+            
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                filteredEvents = [...allEvents];
+            } else {
+                filteredEvents = allEvents.filter(event =>
+                    event.processo.toLowerCase().includes(searchTerm) ||
+                    event.fonte.toLowerCase().includes(searchTerm) ||
+                    event.movimento.toLowerCase().includes(searchTerm) ||
+                    (event.texto && event.texto.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            renderEvents();
+            
+            if (searchTerm) {
+                showMessage(`🔍 ${filteredEvents.length} eventos encontrados para "${searchTerm}"`, 'info');
+            }
+        }
+
+        // Limpar filtro
+        function clearFilter() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            filteredEvents = [...allEvents];
+            renderEvents();
+        }
+
+        // Atualizar dados
+        function refreshData() {
+            const userSelect = document.getElementById('userSelect');
+            const userId = userSelect?.value;
+            if (userId) {
+                loadHistory();
+            } else {
+                updateLastUpdate();
+                showMessage('🔄 Dados atualizados', 'info');
+            }
+        }
+
+        // Enviar evento de teste
+        async function sendTestEvent() {
+            const userSelect = document.getElementById('userSelect');
+            const testProcesso = document.getElementById('testProcesso');
+            const testFonte = document.getElementById('testFonte');
+            
+            if (!userSelect) return;
+            
+            const userId = userSelect.value;
+            if (!userId) {
+                showMessage('⚠️ Selecione um usuário primeiro', 'warning');
+                return;
+            }
+
+            const processo = testProcesso?.value?.trim() || '';
+            const fonte = testFonte?.value || 'TJSP';
+
+            if (!processo) {
+                showMessage('⚠️ Digite um número de processo', 'warning');
+                return;
+            }
+
+            try {
+                const testEvent = {
+                    fonte: fonte,
+                    processo: processo,
+                    movimento: 'Evento de Teste - Sistema de Monitoramento',
+                    texto: `Evento de teste gerado automaticamente pelo sistema em ${new Date().toLocaleString('pt-BR')}. Este evento foi criado para validar o funcionamento do monitor jurídico.`,
+                    data: new Date().toISOString().split('T')[0]
+                };
+
+                const response = await fetch(`${API_BASE}/ingest`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-user-id': userId
+                    },
+                    body: JSON.stringify(testEvent)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.duplicate) {
+                    showMessage('⚠️ Evento duplicado detectado - já existe no histórico', 'warning');
+                } else {
+                    showMessage('✅ Evento de teste enviado com sucesso!', 'success');
+                    // Recarregar histórico automaticamente após 1 segundo
+                    setTimeout(() => {
+                        loadHistory();
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Erro ao enviar evento:', error);
+                showMessage(`❌ Erro ao enviar evento: ${error.message}`, 'error');
+            }
+        }
+
+        // Limpar histórico
+        async function clearHistory() {
+            const userSelect = document.getElementById('userSelect');
+            if (!userSelect) return;
+            
+            const userId = userSelect.value;
+            if (!userId) {
+                showMessage('⚠️ Selecione um usuário primeiro', 'warning');
+                return;
+            }
+
+            if (!confirm('⚠️ Tem certeza que deseja limpar todo o histórico?\n\nEsta ação não pode ser desfeita e todos os eventos serão permanentemente removidos.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/history`, {
+                    method: 'DELETE',
+                    headers: {
+                        'x-user-id': userId
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                }
+
+                allEvents = [];
+                filteredEvents = [];
+                renderEvents();
+                updateStats();
+                updateLastUpdate();
+                
+                showMessage('✅ Histórico limpo com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao limpar histórico:', error);
+                showMessage(`❌ Erro ao limpar histórico: ${error.message}`, 'error');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar search input
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        filterEvents();
+                    }
+                });
+
+                searchInput.addEventListener('input', function(e) {
+                    // Auto-filter enquanto digita (com debounce)
+                    clearTimeout(this.searchTimeout);
+                    this.searchTimeout = setTimeout(() => {
+                        if (this.value.trim()) {
+                            filterEvents();
+                        } else {
+                            clearFilter();
+                        }
+                    }, 300);
+                });
+            }
+            
+            // Inicializar página
+            updateLastUpdate();
+            updateStats();
+            showPage('dashboard');
+            
+            console.log('🚀 Monitor Jurídico Professional Interface carregada!');
+            console.log('📡 API Base:', API_BASE);
+            console.log('⚡ Sistema pronto para uso');
+        });
+
+        // Auto-refresh a cada 30 segundos se houver usuário selecionado
+        setInterval(() => {
+            const userSelect = document.getElementById('userSelect');
+            const userId = userSelect?.value;
+            if (userId && allEvents.length > 0 && !isLoading && currentPage === 'dashboard') {
+                refreshData();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

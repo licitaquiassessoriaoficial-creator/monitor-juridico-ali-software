@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferências - Monitor Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-brand">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="alertas.html" class="nav-item">Alertas</a>
+                    <a href="preferencias.html" class="nav-item active">Preferências</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <div class="page-header">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                        <span class="breadcrumb-separator">></span>
+                        <span class="breadcrumb-current">Preferências</span>
+                    </div>
+                    <h1 class="page-title">
+                        <i class="fas fa-cog"></i>
+                        Preferências do Sistema
+                    </h1>
+                    <p class="page-subtitle">Configure o sistema conforme suas necessidades</p>
+                </div>
+
+                <div class="grid">
+                    <!-- Configurações Gerais -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-sliders-h"></i>
+                                    Configurações Gerais
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="theme" class="form-label">Tema do Sistema</label>
+                                        <select id="theme" class="form-input">
+                                            <option value="light" selected>Claro</option>
+                                            <option value="dark">Escuro</option>
+                                            <option value="auto">Automático</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="language" class="form-label">Idioma</label>
+                                        <select id="language" class="form-input">
+                                            <option value="pt-BR" selected>Português (Brasil)</option>
+                                            <option value="en-US">English (US)</option>
+                                            <option value="es-ES">Español</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="timezone" class="form-label">Fuso Horário</label>
+                                        <select id="timezone" class="form-input">
+                                            <option value="America/Sao_Paulo" selected>Brasília (UTC-3)</option>
+                                            <option value="America/New_York">Nova York (UTC-5)</option>
+                                            <option value="Europe/London">Londres (UTC+0)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notificações -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-bell"></i>
+                                    Notificações
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-indicator"></span>
+                                            Notificar sobre novas movimentações
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-indicator"></span>
+                                            Alertas de prazo
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox">
+                                            <span class="checkbox-indicator"></span>
+                                            Notificações por SMS
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="emailFrequency" class="form-label">Frequência de Emails</label>
+                                        <select id="emailFrequency" class="form-input">
+                                            <option value="instant" selected>Imediata</option>
+                                            <option value="hourly">A cada hora</option>
+                                            <option value="daily">Diária</option>
+                                            <option value="weekly">Semanal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monitoramento -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-search"></i>
+                                    Configurações de Monitoramento
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="checkInterval" class="form-label">Intervalo de Verificação</label>
+                                        <select id="checkInterval" class="form-input">
+                                            <option value="5">5 minutos</option>
+                                            <option value="15" selected>15 minutos</option>
+                                            <option value="30">30 minutos</option>
+                                            <option value="60">1 hora</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maxProcesses" class="form-label">Máximo de Processos</label>
+                                        <input type="number" id="maxProcesses" class="form-input" value="100" min="1" max="1000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-indicator"></span>
+                                            Monitoramento automático
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox">
+                                            <span class="checkbox-indicator"></span>
+                                            Backup automático dos dados
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Segurança -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Segurança
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="sessionTimeout" class="form-label">Timeout da Sessão</label>
+                                        <select id="sessionTimeout" class="form-input">
+                                            <option value="30">30 minutos</option>
+                                            <option value="60" selected>1 hora</option>
+                                            <option value="120">2 horas</option>
+                                            <option value="480">8 horas</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-indicator"></span>
+                                            Autenticação de dois fatores
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox">
+                                            <span class="checkbox-indicator"></span>
+                                            Log de atividades detalhado
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-outline">
+                                            <i class="fas fa-key"></i>
+                                            Alterar Senha
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" onclick="savePreferences()">
+                                        <i class="fas fa-save"></i>
+                                        Salvar Preferências
+                                    </button>
+                                    <button class="btn btn-outline" onclick="resetPreferences()">
+                                        <i class="fas fa-undo"></i>
+                                        Restaurar Padrões
+                                    </button>
+                                    <button class="btn btn-danger" onclick="exportPreferences()">
+                                        <i class="fas fa-download"></i>
+                                        Exportar Configurações
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Funcionalidade das preferências
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPreferences();
+        });
+
+        function savePreferences() {
+            const preferences = {
+                theme: document.getElementById('theme').value,
+                language: document.getElementById('language').value,
+                timezone: document.getElementById('timezone').value,
+                emailFrequency: document.getElementById('emailFrequency').value,
+                checkInterval: document.getElementById('checkInterval').value,
+                maxProcesses: document.getElementById('maxProcesses').value,
+                sessionTimeout: document.getElementById('sessionTimeout').value
+            };
+
+            localStorage.setItem('userPreferences', JSON.stringify(preferences));
+            
+            // Mostrar notificação de sucesso
+            showNotification('Preferências salvas com sucesso!', 'success');
+        }
+
+        function loadPreferences() {
+            const savedPreferences = localStorage.getItem('userPreferences');
+            if (savedPreferences) {
+                const preferences = JSON.parse(savedPreferences);
+                
+                Object.keys(preferences).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = preferences[key];
+                    }
+                });
+            }
+        }
+
+        function resetPreferences() {
+            if (confirm('Tem certeza que deseja restaurar as configurações padrão?')) {
+                localStorage.removeItem('userPreferences');
+                location.reload();
+            }
+        }
+
+        function exportPreferences() {
+            const preferences = localStorage.getItem('userPreferences') || '{}';
+            const blob = new Blob([preferences], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'preferencias-monitor-juridico.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Verificar se o usuário está logado
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        // Verificar autenticação ao carregar a página
+        checkAuth();
+    </script>
+</body>
+</html>

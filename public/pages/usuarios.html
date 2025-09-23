@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários - Monitor Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-brand">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="usuarios.html" class="nav-item active">Usuários</a>
+                    <a href="preferencias.html" class="nav-item">Preferências</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <div class="page-header">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                        <span class="breadcrumb-separator">></span>
+                        <span class="breadcrumb-current">Usuários</span>
+                    </div>
+                    <h1 class="page-title">
+                        <i class="fas fa-users"></i>
+                        Gerenciamento de Usuários
+                    </h1>
+                    <p class="page-subtitle">Controle de acesso e permissões</p>
+                </div>
+
+                <div class="grid">
+                    <!-- Resumo de Usuários -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Resumo de Usuários
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">8</div>
+                                            <div class="stat-label">Total de Usuários</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-user-check"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">6</div>
+                                            <div class="stat-label">Ativos</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">2</div>
+                                            <div class="stat-label">Administradores</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">3</div>
+                                            <div class="stat-label">Online Agora</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Usuários -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-list"></i>
+                                    Lista de Usuários
+                                </h2>
+                                <div class="card-actions">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-filter"></i>
+                                        Filtrar
+                                    </button>
+                                    <button class="btn btn-sm btn-primary" onclick="showAddUserModal()">
+                                        <i class="fas fa-plus"></i>
+                                        Novo Usuário
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Email</th>
+                                                <th>Cargo</th>
+                                                <th>Status</th>
+                                                <th>Último Acesso</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="user-info">
+                                                        <div class="user-avatar">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                        <div class="user-details">
+                                                            <div class="user-name">João Silva</div>
+                                                            <div class="user-title">Administrador</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>joao.silva@exemplo.com</td>
+                                                <td>
+                                                    <span class="badge badge-admin">Administrador</span>
+                                                </td>
+                                                <td>
+                                                    <span class="status-badge online">Online</span>
+                                                </td>
+                                                <td>23/09/2024 13:45</td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="btn btn-sm btn-outline" title="Editar">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline" title="Permissões">
+                                                            <i class="fas fa-key"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger" title="Desativar">
+                                                            <i class="fas fa-ban"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="user-info">
+                                                        <div class="user-avatar">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                        <div class="user-details">
+                                                            <div class="user-name">Maria Santos</div>
+                                                            <div class="user-title">Usuária</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>maria.santos@exemplo.com</td>
+                                                <td>
+                                                    <span class="badge badge-user">Usuário</span>
+                                                </td>
+                                                <td>
+                                                    <span class="status-badge online">Online</span>
+                                                </td>
+                                                <td>23/09/2024 11:20</td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="btn btn-sm btn-outline" title="Editar">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline" title="Permissões">
+                                                            <i class="fas fa-key"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger" title="Desativar">
+                                                            <i class="fas fa-ban"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="user-info">
+                                                        <div class="user-avatar">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                        <div class="user-details">
+                                                            <div class="user-name">Carlos Oliveira</div>
+                                                            <div class="user-title">Advogado</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>carlos.oliveira@exemplo.com</td>
+                                                <td>
+                                                    <span class="badge badge-user">Usuário</span>
+                                                </td>
+                                                <td>
+                                                    <span class="status-badge offline">Offline</span>
+                                                </td>
+                                                <td>22/09/2024 18:30</td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <button class="btn btn-sm btn-outline" title="Editar">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline" title="Permissões">
+                                                            <i class="fas fa-key"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger" title="Desativar">
+                                                            <i class="fas fa-ban"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Adicionar Usuário -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar Novo Usuário</h3>
+                <button class="modal-close" onclick="hideAddUserModal()" title="Fechar modal de adicionar usuário" aria-label="Fechar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="userName" class="form-label">Nome Completo</label>
+                            <input type="text" id="userName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmail" class="form-label">Email</label>
+                            <input type="email" id="userEmail" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="userRole" class="form-label">Cargo</label>
+                            <select id="userRole" class="form-input" required>
+                                <option value="">Selecione um cargo</option>
+                                <option value="admin">Administrador</option>
+                                <option value="user">Usuário</option>
+                                <option value="readonly">Somente Leitura</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="userPassword" class="form-label">Senha Temporária</label>
+                            <input type="password" id="userPassword" class="form-input" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideAddUserModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="addUser()">Adicionar Usuário</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funcionalidade dos usuários
+        function showAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'flex';
+        }
+
+        function hideAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'none';
+            document.getElementById('addUserForm').reset();
+        }
+
+        function addUser() {
+            const form = document.getElementById('addUserForm');
+            const formData = new FormData(form);
+            
+            // Validar campos
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Simular adição do usuário
+            console.log('Adicionando usuário...');
+            hideAddUserModal();
+            
+            // Mostrar notificação de sucesso
+            showNotification('Usuário adicionado com sucesso!', 'success');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Verificar se o usuário está logado
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        // Verificar autenticação ao carregar a página
+        checkAuth();
+    </script>
+</body>
+</html>
