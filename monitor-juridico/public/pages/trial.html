@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Grátis - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+            </div>
+            
+            <h1 class="login-title">Comece seu teste grátis</h1>
+            <p class="login-subtitle">7 dias grátis, sem compromisso</p>
+            
+            <form id="trialForm" class="form">
+                <div class="form-group">
+                    <label for="name" class="form-label">Nome completo</label>
+                    <input type="text" id="name" name="name" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail profissional</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" class="form-label">Telefone</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="oab" class="form-label">OAB (opcional)</label>
+                    <input type="text" id="oab" name="oab" class="form-input" placeholder="Ex: SP123456">
+                </div>
+                
+                <div class="form-group">
+                    <label for="firm" class="form-label">Nome do escritório</label>
+                    <input type="text" id="firm" name="firm" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="terms" name="terms" class="form-checkbox" required>
+                        <label for="terms" class="checkbox-label">Aceito os termos de uso e política de privacidade</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">Iniciar teste grátis</button>
+            </form>
+            
+            <div class="login-links">
+                <p>Já tem uma conta? <a href="login.html" class="link">Fazer login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('trialForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Coletar dados do formulário
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                oab: document.getElementById('oab').value,
+                firm: document.getElementById('firm').value
+            };
+            
+            if (formData.name && formData.email && formData.phone && formData.firm) {
+                // Armazenar dados do usuário
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userEmail', formData.email);
+                localStorage.setItem('userName', formData.name);
+                localStorage.setItem('userFirm', formData.firm);
+                localStorage.setItem('trialUser', 'true');
+                localStorage.setItem('trialStartDate', new Date().toISOString());
+                
+                alert('Teste grátis iniciado com sucesso! Você tem 7 dias para explorar todas as funcionalidades. Bem-vindo ao Ali Software Jurídico.');
+                
+                // Redirecionar para o dashboard
+                window.location.href = 'dashboard.html';
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+            }
+        });
+    </script>
+</body>
+</html>

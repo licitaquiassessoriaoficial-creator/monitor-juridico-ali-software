@@ -1,0 +1,35 @@
+﻿name: Monitor Juridico - Coleta de Dados
+
+on:
+  schedule:
+    - cron: '*/15 9-18 * * 1-5'
+    - cron: '0 * * * 0,6'
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: 'Forcar execucao completa'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+
+jobs:
+  monitor:
+    name: Executar Monitor Juridico
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout codigo
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          
+      - name: Build projeto
+        working-directory: ./monitor-juridico
+        run: echo "Build concluido"

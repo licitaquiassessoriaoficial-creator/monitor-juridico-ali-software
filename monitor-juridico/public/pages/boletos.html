@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Financeira - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-item">Início</a>
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="financeiro.html" class="nav-item active">Financeiro</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <button onclick="logout()" class="btn btn-outline">Sair</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Gestão Financeira</h1>
+                    <p class="page-subtitle">Emita boletos com PIX e gerencie honorários</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-primary" onclick="showBoletoModal()">
+                        <i class="fas fa-plus"></i>
+                        Emitir Boleto
+                    </button>
+                </div>
+            </div>
+
+            <!-- Financial Stats -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-dollar-sign icon-success"></i>
+                    <div>
+                        <span class="stat-number">R$ 45.230</span>
+                        <span class="stat-label">Recebido este mês</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock icon-warning"></i>
+                    <div>
+                        <span class="stat-number">R$ 12.450</span>
+                        <span class="stat-label">Pendente recebimento</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-file-invoice icon-info"></i>
+                    <div>
+                        <span class="stat-number">23</span>
+                        <span class="stat-label">Boletos emitidos</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-credit-card icon-primary"></i>
+                    <div>
+                        <span class="stat-number">18</span>
+                        <span class="stat-label">Pagos via PIX</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Ações Rápidas</h3>
+                </div>
+                <div class="card-content">
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" onclick="showBoletoModal()">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Emitir Boleto</span>
+                        </button>
+                        <button class="quick-action-btn" onclick="generatePixCode()">
+                            <i class="fas fa-qrcode"></i>
+                            <span>Gerar PIX</span>
+                        </button>
+                        <button class="quick-action-btn" onclick="sendPaymentReminder()">
+                            <i class="fas fa-bell"></i>
+                            <span>Lembrete de Pagamento</span>
+                        </button>
+                        <button class="quick-action-btn" onclick="exportFinancialReport()">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Relatório Financeiro</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boletos Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Boletos e Cobranças</h3>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline" onclick="filterBoletos()">
+                            <i class="fas fa-filter"></i>
+                            Filtrar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Boleto</th>
+                                <th>Cliente</th>
+                                <th>Valor</th>
+                                <th>Vencimento</th>
+                                <th>Status</th>
+                                <th>Forma Pagamento</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="boletosTable">
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <strong>#BOL001</strong>
+                                        <small>Honorários advocatícios</small>
+                                    </div>
+                                </td>
+                                <td>Maria Silva Santos</td>
+                                <td><strong>R$ 2.500,00</strong></td>
+                                <td>25/09/2025</td>
+                                <td><span class="badge badge-success">Pago</span></td>
+                                <td><span class="payment-method"><i class="fas fa-credit-card"></i> PIX</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline" onclick="viewBoleto('BOL001')" title="Ver boleto">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="downloadBoleto('BOL001')" title="Download">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <strong>#BOL002</strong>
+                                        <small>Consultoria jurídica</small>
+                                    </div>
+                                </td>
+                                <td>João Pedro Oliveira</td>
+                                <td><strong>R$ 1.800,00</strong></td>
+                                <td>30/09/2025</td>
+                                <td><span class="badge badge-warning">Pendente</span></td>
+                                <td><span class="payment-method"><i class="fas fa-barcode"></i> Boleto</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline" onclick="viewBoleto('BOL002')" title="Ver boleto">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" onclick="sendReminder('BOL002')" title="Enviar lembrete">
+                                            <i class="fas fa-whatsapp"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <strong>#BOL003</strong>
+                                        <small>Acompanhamento processual</small>
+                                    </div>
+                                </td>
+                                <td>Ana Carolina Lima</td>
+                                <td><strong>R$ 3.200,00</strong></td>
+                                <td>05/10/2025</td>
+                                <td><span class="badge badge-info">Enviado</span></td>
+                                <td><span class="payment-method"><i class="fas fa-credit-card"></i> PIX + Boleto</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline" onclick="viewBoleto('BOL003')" title="Ver boleto">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="generatePixCode('BOL003')" title="Gerar PIX">
+                                            <i class="fas fa-qrcode"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Emitir Boleto -->
+    <div id="boletoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Emitir Boleto com PIX</h3>
+                <button class="modal-close" onclick="closeBoletoModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="boletoForm" class="form">
+                    <div class="form-group">
+                        <label for="clienteSelect" class="form-label">Cliente</label>
+                        <select id="clienteSelect" name="cliente" class="form-input" required>
+                            <option value="">Selecione um cliente</option>
+                            <option value="maria">Maria Silva Santos</option>
+                            <option value="joao">João Pedro Oliveira</option>
+                            <option value="ana">Ana Carolina Lima</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="valor" class="form-label">Valor (R$)</label>
+                            <input type="number" id="valor" name="valor" class="form-input" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vencimento" class="form-label">Vencimento</label>
+                            <input type="date" id="vencimento" name="vencimento" class="form-input" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea id="descricao" name="descricao" class="form-input" rows="3" placeholder="Ex: Honorários advocatícios - Processo 123456"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Opções de Pagamento</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" name="payment" value="boleto" checked>
+                                <span class="checkbox-label">Boleto Bancário</span>
+                            </label>
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" name="payment" value="pix" checked>
+                                <span class="checkbox-label">PIX (desconto 5%)</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeBoletoModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            Emitir Boleto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal PIX -->
+    <div id="pixModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>PIX Gerado</h3>
+                <button class="modal-close" onclick="closePixModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="pix-container">
+                    <div class="pix-qr">
+                        <div class="qr-code">
+                            <i class="fas fa-qrcode qr-icon"></i>
+                            <p>QR Code PIX</p>
+                        </div>
+                    </div>
+                    <div class="pix-info">
+                        <div class="form-group">
+                            <label class="form-label">Chave PIX</label>
+                            <div class="copy-field">
+                                <input type="text" id="pixKey" value="118bc9d0-9d2a-4dd2-b6db-224e282e47b9" readonly class="form-input" title="Chave PIX" placeholder="Chave PIX">
+                                <button class="btn btn-outline btn-sm" onclick="copyPixKey()" title="Copiar chave PIX">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Valor</label>
+                            <input type="text" id="pixValue" readonly class="form-input" title="Valor PIX" placeholder="Valor PIX">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Favorecido</label>
+                            <input type="text" value="Ali Software Jurídico LTDA" readonly class="form-input" title="Favorecido" placeholder="Favorecido">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" onclick="sendPixWhatsApp()">
+                        <i class="fab fa-whatsapp"></i>
+                        Enviar por WhatsApp
+                    </button>
+                    <button class="btn btn-primary" onclick="copyPixCode()">
+                        <i class="fas fa-copy"></i>
+                        Copiar Código PIX
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se usuário está logado
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        function showBoletoModal() {
+            document.getElementById('boletoModal').style.display = 'flex';
+        }
+
+        function closeBoletoModal() {
+            document.getElementById('boletoModal').style.display = 'none';
+        }
+
+        function closePixModal() {
+            document.getElementById('pixModal').style.display = 'none';
+        }
+
+        function generatePixCode(boletoId = null) {
+            const valor = boletoId ? 'R$ 3.200,00' : prompt('Digite o valor para o PIX:', 'R$ 1.000,00');
+            if (valor) {
+                document.getElementById('pixValue').value = valor;
+                document.getElementById('pixModal').style.display = 'flex';
+            }
+        }
+
+        function copyPixKey() {
+            const pixKey = document.getElementById('pixKey');
+            pixKey.select();
+            document.execCommand('copy');
+            alert('Chave PIX copiada!');
+        }
+
+        function copyPixCode() {
+            alert('Código PIX copiado para a área de transferência!');
+        }
+
+        function sendPixWhatsApp() {
+            const valor = document.getElementById('pixValue').value;
+            const message = `Olá! Segue os dados para pagamento via PIX:\n\nValor: ${valor}\nChave PIX: 118bc9d0-9d2a-4dd2-b6db-224e282e47b9\nFavorecido: Ali Software Jurídico LTDA\n\nObrigado!`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function sendReminder(boletoId) {
+            const message = `Olá! Este é um lembrete amigável sobre o boleto ${boletoId} que vence em breve. Para sua comodidade, você pode pagar via PIX usando a chave: 118bc9d0-9d2a-4dd2-b6db-224e282e47b9. Obrigado!`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function sendPaymentReminder() {
+            alert('Lembretes de pagamento enviados via WhatsApp para clientes com boletos pendentes!');
+        }
+
+        function exportFinancialReport() {
+            alert('Relatório financeiro exportado com sucesso!');
+        }
+
+        function viewBoleto(id) {
+            alert(`Visualizando boleto ${id}`);
+        }
+
+        function downloadBoleto(id) {
+            alert(`Download do boleto ${id} iniciado!`);
+        }
+
+        function filterBoletos() {
+            alert('Filtros aplicados à lista de boletos!');
+        }
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Handle form submission
+        document.getElementById('boletoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const cliente = formData.get('cliente');
+            const valor = formData.get('valor');
+            const vencimento = formData.get('vencimento');
+            const descricao = formData.get('descricao');
+            
+            // Simulate boleto creation
+            alert(`Boleto emitido com sucesso!\n\nCliente: ${cliente}\nValor: R$ ${valor}\nVencimento: ${vencimento}\n\nO boleto será enviado por email e WhatsApp.`);
+            
+            closeBoletoModal();
+            
+            // Add to table (simulation)
+            setTimeout(() => {
+                alert('Boleto adicionado à lista de cobranças!');
+            }, 1000);
+        });
+
+        console.log('💰 Sistema de Boletos + PIX carregado!');
+    </script>
+
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 2rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: white;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 54, 93, 0.1);
+        }
+
+        .quick-action-btn i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .pix-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .pix-qr {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-code {
+            text-align: center;
+            padding: 2rem;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+        }
+        .qr-icon {
+            font-size: 100px;
+            color: #1a365d;
+        }
+
+        .copy-field {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .copy-field input {
+            flex: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .pix-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</body>
+</html>

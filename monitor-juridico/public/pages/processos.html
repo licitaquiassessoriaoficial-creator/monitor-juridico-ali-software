@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processos - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="../js/AliSoftware.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item active">Processos</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Processos</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title-section">
+                    <h1>Gestão de Processos</h1>
+                    <p>Monitore e gerencie todos os seus processos em um só lugar</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="syncProcesses()" title="Sincronizar processos com o sistema judicial">
+                        <i class="fas fa-sync-alt"></i>
+                        Sincronizar
+                    </button>
+                    <button class="btn btn-primary" onclick="showNewProcessModal()" title="Adicionar novo processo">
+                        <i class="fas fa-plus"></i>
+                        Novo Processo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-section">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por número, cliente ou assunto...">
+                    <button class="btn btn-outline" onclick="searchProcesses()" title="Buscar processos">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="filter-section">
+                    <select id="statusFilter" class="form-select" title="Filtrar por status">
+                        <option value="">Todos os status</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="arquivado">Arquivado</option>
+                        <option value="suspenso">Suspenso</option>
+                    </select>
+                    
+                    <select id="courtFilter" class="form-select" title="Filtrar por tribunal">
+                        <option value="">Todos os tribunais</option>
+                        <option value="tjsp">TJSP</option>
+                        <option value="tjrj">TJRJ</option>
+                        <option value="stj">STJ</option>
+                        <option value="stf">STF</option>
+                    </select>
+                    
+                    <select id="typeFilter" class="form-select" title="Filtrar por tipo de processo">
+                        <option value="">Todos os tipos</option>
+                        <option value="civel">Cível</option>
+                        <option value="trabalhista">Trabalhista</option>
+                        <option value="criminal">Criminal</option>
+                        <option value="tributario">Tributário</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="process-stats">
+                <div class="stat-item">
+                    <i class="fas fa-gavel icon-primary"></i>
+                    <div>
+                        <span class="stat-number">24</span>
+                        <span class="stat-label">Processos Ativos</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-bell icon-warning"></i>
+                    <div>
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">Novos Andamentos</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock icon-info"></i>
+                    <div>
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Prazos Próximos</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar icon-success"></i>
+                    <div>
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Audiências</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Processes Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Lista de Processos</h3>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline" onclick="exportProcesses()" title="Exportar lista de processos">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Número do Processo</th>
+                                <th>Cliente</th>
+                                <th>Assunto</th>
+                                <th>Tribunal</th>
+                                <th>Status</th>
+                                <th>Último Andamento</th>
+                                <th>Próximo Prazo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="processesTableBody">
+                            <tr class="process-row" data-process-id="1">
+                                <td>
+                                    <a href="#" class="process-number" onclick="openProcessDetails('1234567-89.2024.8.26.0001')" title="Ver detalhes do processo">
+                                        1234567-89.2024.8.26.0001
+                                    </a>
+                                </td>
+                                <td>João Santos Silva</td>
+                                <td>Ação de Cobrança</td>
+                                <td>TJSP</td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <div class="last-movement">
+                                        <span>Contestação apresentada</span>
+                                        <small>há 2 dias</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="next-deadline urgent">
+                                        <span>Tríplica</span>
+                                        <small>15/01/2025</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline" onclick="openProcessDetails('1234567-89.2024.8.26.0001')" title="Ver detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="editProcess('1')" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="showProcessMenu('1')" title="Mais opções">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="process-row" data-process-id="2">
+                                <td>
+                                    <a href="#" class="process-number" onclick="openProcessDetails('2345678-90.2024.8.26.0003')" title="Ver detalhes do processo">
+                                        2345678-90.2024.8.26.0003
+                                    </a>
+                                </td>
+                                <td>Maria Silva Santos</td>
+                                <td>Divórcio Consensual</td>
+                                <td>TJSP</td>
+                                <td><span class="badge badge-warning">Aguardando</span></td>
+                                <td>
+                                    <div class="last-movement">
+                                        <span>Sentença publicada</span>
+                                        <small>há 5 dias</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="next-deadline normal">
+                                        <span>Registro</span>
+                                        <small>20/01/2025</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline" onclick="openProcessDetails('2345678-90.2024.8.26.0003')" title="Ver detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="editProcess('2')" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="showProcessMenu('2')" title="Mais opções">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="process-row" data-process-id="3">
+                                <td>
+                                    <a href="#" class="process-number" onclick="openProcessDetails('3456789-01.2024.8.26.0004')" title="Ver detalhes do processo">
+                                        3456789-01.2024.8.26.0004
+                                    </a>
+                                </td>
+                                <td>Empresa ABC Ltda</td>
+                                <td>Revisional de Aluguel</td>
+                                <td>TJSP</td>
+                                <td><span class="badge badge-info">Em análise</span></td>
+                                <td>
+                                    <div class="last-movement">
+                                        <span>Inicial distribuída</span>
+                                        <small>há 1 semana</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="next-deadline normal">
+                                        <span>Citação</span>
+                                        <small>25/01/2025</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline" onclick="openProcessDetails('3456789-01.2024.8.26.0004')" title="Ver detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="editProcess('3')" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline" onclick="showProcessMenu('3')" title="Mais opções">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Mostrando 1-3 de 24 processos
+                    </div>
+                    <div class="pagination">
+                        <button class="btn btn-sm btn-outline" disabled title="Página anterior">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-sm btn-primary" title="Página atual">1</button>
+                        <button class="btn btn-sm btn-outline" title="Ir para página 2">2</button>
+                        <button class="btn btn-sm btn-outline" title="Ir para página 3">3</button>
+                        <button class="btn btn-sm btn-outline" title="Próxima página">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Process Details Modal -->
+    <div id="processModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Detalhes do Processo</h3>
+                <button class="modal-close" onclick="closeProcessModal()" title="Fechar janela">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="processDetails">
+                    <!-- Process details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Check authentication
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Display user info
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Process management functions
+        function syncProcesses() {
+            const button = event.target.closest('button');
+            const icon = button.querySelector('i');
+            
+            icon.classList.add('fa-spin');
+            button.disabled = true;
+            
+            setTimeout(() => {
+                icon.classList.remove('fa-spin');
+                button.disabled = false;
+                AliSoftware.showAlert('Processos sincronizados com sucesso!', 'success');
+            }, 2000);
+        }
+
+        function searchProcesses() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const courtFilter = document.getElementById('courtFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            
+            // Implement search/filter logic here
+            console.log('Searching with:', { searchTerm, statusFilter, courtFilter, typeFilter });
+            AliSoftware.showAlert('Filtros aplicados!', 'info');
+        }
+
+        function showNewProcessModal() {
+            alert('Modal para criar novo processo seria aberto aqui');
+        }
+
+        function openProcessDetails(processNumber) {
+            document.getElementById('modalTitle').textContent = `Processo ${processNumber}`;
+            document.getElementById('processDetails').innerHTML = `
+                <div class="process-detail-section">
+                    <h4>Informações Básicas</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <label>Número:</label>
+                            <span>${processNumber}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Classe:</label>
+                            <span>Procedimento Comum Cível</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Assunto:</label>
+                            <span>Cobrança de Aluguéis</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Valor da Causa:</label>
+                            <span>R$ 15.000,00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="process-detail-section">
+                    <h4>Últimos Andamentos</h4>
+                    <div class="movements-list">
+                        <div class="movement-item">
+                            <div class="movement-date">15/01/2025</div>
+                            <div class="movement-text">Contestação apresentada pela parte requerida</div>
+                        </div>
+                        <div class="movement-item">
+                            <div class="movement-date">10/01/2025</div>
+                            <div class="movement-text">Mandado de citação expedido</div>
+                        </div>
+                        <div class="movement-item">
+                            <div class="movement-date">05/01/2025</div>
+                            <div class="movement-text">Petição inicial distribuída</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('processModal').style.display = 'flex';
+        }
+
+        function closeProcessModal() {
+            document.getElementById('processModal').style.display = 'none';
+        }
+
+        function editProcess(id) {
+            alert(`Editar processo ${id}`);
+        }
+
+        function showProcessMenu(id) {
+            alert(`Menu de opções para processo ${id}`);
+        }
+
+        function exportProcesses() {
+            AliSoftware.showAlert('Exportação iniciada! O arquivo será baixado em breve.', 'info');
+        }
+
+        // Global logout function
+        function logout() {
+            AliSoftware.logout();
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('processModal');
+            if (event.target === modal) {
+                closeProcessModal();
+            }
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com os processos no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

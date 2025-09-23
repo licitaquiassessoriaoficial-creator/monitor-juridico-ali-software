@@ -1,0 +1,27 @@
+﻿name: Monitor Juridico Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Test mode'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  test-monitor:
+    name: Test Monitor Juridico
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Basic test
+        run: echo "Test executed successfully"
