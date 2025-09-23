@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timesheet - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none !important;
+        }
+        .timer-widget {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid #dee2e6;
+        }
+        .timer-display {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .timer-time {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+        }
+        .timer-status {
+            font-size: 1.2rem;
+            color: var(--gray-600);
+            margin-top: 0.5rem;
+        }
+        .timer-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .timer-info {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .timer-info .form-select,
+        .timer-info .form-input {
+            flex: 1;
+            min-width: 200px;
+        }
+        .timer-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="timesheet.html" class="nav-item active">Timesheet</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Timesheet</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-stopwatch"></i> Controle de Tempo</h1>
+                    <p>Monitore o tempo gasto em atividades e projetos</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="exportTimesheet()" title="Exportar relatório de tempo">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <button class="btn btn-primary" onclick="startTimer()" title="Iniciar cronômetro" id="timerBtn">
+                        <i class="fas fa-play"></i> Iniciar Timer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Timer Widget -->
+            <div class="timer-widget">
+                <div class="timer-display">
+                    <div class="timer-time" id="timerDisplay">00:00:00</div>
+                    <div class="timer-status" id="timerStatus">Parado</div>
+                </div>
+                
+                <div class="timer-controls">
+                    <div class="timer-info">
+                        <select id="timerClient" class="form-select" title="Selecionar cliente">
+                            <option value="">Selecione o cliente</option>
+                            <option value="joao-silva">João Silva</option>
+                            <option value="maria-santos">Maria Santos</option>
+                            <option value="empresa-xyz">Empresa XYZ Ltda</option>
+                        </select>
+                        
+                        <select id="timerActivity" class="form-select" title="Selecionar atividade">
+                            <option value="">Selecione a atividade</option>
+                            <option value="reuniao">Reunião</option>
+                            <option value="pesquisa">Pesquisa jurídica</option>
+                            <option value="redacao">Redação de peças</option>
+                            <option value="audiencia">Audiência</option>
+                            <option value="analise">Análise processual</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                        
+                        <input type="text" id="timerDescription" class="form-input" placeholder="Descrição da atividade..." title="Descreva o que você está fazendo">
+                    </div>
+                    
+                    <div class="timer-buttons">
+                        <button class="btn btn-success" onclick="startTimer()" id="startBtn" title="Iniciar cronômetro">
+                            <i class="fas fa-play"></i> Iniciar
+                        </button>
+                        <button class="btn btn-warning hidden" onclick="pauseTimer()" id="pauseBtn" title="Pausar cronômetro">
+                            <i class="fas fa-pause"></i> Pausar
+                        </button>
+                        <button class="btn btn-danger hidden" onclick="stopTimer()" id="stopBtn" title="Parar e salvar">
+                            <i class="fas fa-stop"></i> Parar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-4 stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="todayHours">0h 0m</h3>
+                        <p>Hoje</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="weekHours">0h 0m</h3>
+                        <p>Esta Semana</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="monthHours">0h 0m</h3>
+                        <p>Este Mês</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="monthBilling">R$ 0</h3>
+                        <p>Faturamento</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label for="dateRange">Período:</label>
+                    <select id="dateRange" class="form-select" title="Selecionar período" onchange="filterTimeEntries()">
+                        <option value="today">Hoje</option>
+                        <option value="week" selected>Esta semana</option>
+                        <option value="month">Este mês</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="clientFilter">Cliente:</label>
+                    <select id="clientFilter" class="form-select" title="Filtrar por cliente" onchange="filterTimeEntries()">
+                        <option value="all">Todos</option>
+                        <option value="joao-silva">João Silva</option>
+                        <option value="maria-santos">Maria Santos</option>
+                        <option value="empresa-xyz">Empresa XYZ Ltda</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="activityFilter">Atividade:</label>
+                    <select id="activityFilter" class="form-select" title="Filtrar por atividade" onchange="filterTimeEntries()">
+                        <option value="all">Todas</option>
+                        <option value="reuniao">Reunião</option>
+                        <option value="pesquisa">Pesquisa jurídica</option>
+                        <option value="redacao">Redação de peças</option>
+                        <option value="audiencia">Audiência</option>
+                        <option value="analise">Análise processual</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Time Entries Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-list"></i> Registros de Tempo</h3>
+                    <button class="btn btn-outline btn-sm" onclick="addManualEntry()" title="Adicionar entrada manual">
+                        <i class="fas fa-plus"></i> Entrada Manual
+                    </button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Atividade</th>
+                            <th>Descrição</th>
+                            <th>Início</th>
+                            <th>Fim</th>
+                            <th>Duração</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timeEntriesTable">
+                        <tr>
+                            <td>20/01/2025</td>
+                            <td>João Silva</td>
+                            <td>Reunião</td>
+                            <td>Reunião inicial para análise do caso</td>
+                            <td>09:00</td>
+                            <td>10:30</td>
+                            <td>1h 30m</td>
+                            <td>R$ 450,00</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="editTimeEntry(1)" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="deleteTimeEntry(1)" title="Excluir">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>19/01/2025</td>
+                            <td>Maria Santos</td>
+                            <td>Pesquisa jurídica</td>
+                            <td>Pesquisa de jurisprudência trabalhista</td>
+                            <td>14:00</td>
+                            <td>16:45</td>
+                            <td>2h 45m</td>
+                            <td>R$ 825,00</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="editTimeEntry(2)" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="deleteTimeEntry(2)" title="Excluir">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>18/01/2025</td>
+                            <td>Empresa XYZ Ltda</td>
+                            <td>Redação de peças</td>
+                            <td>Elaboração de contrato de prestação de serviços</td>
+                            <td>08:30</td>
+                            <td>11:15</td>
+                            <td>2h 45m</td>
+                            <td>R$ 825,00</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="editTimeEntry(3)" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="deleteTimeEntry(3)" title="Excluir">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Entrada Manual -->
+    <div id="entryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Entrada Manual de Tempo</h3>
+                <button class="modal-close" onclick="closeEntryModal()" title="Fechar modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="entryForm" class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entryDate" class="form-label">Data *</label>
+                            <input type="date" id="entryDate" name="entryDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="entryClient" class="form-label">Cliente *</label>
+                            <select id="entryClient" name="entryClient" class="form-select" required>
+                                <option value="">Selecione o cliente</option>
+                                <option value="joao-silva">João Silva</option>
+                                <option value="maria-santos">Maria Santos</option>
+                                <option value="empresa-xyz">Empresa XYZ Ltda</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entryActivity" class="form-label">Atividade *</label>
+                            <select id="entryActivity" name="entryActivity" class="form-select" required>
+                                <option value="">Selecione a atividade</option>
+                                <option value="reuniao">Reunião</option>
+                                <option value="pesquisa">Pesquisa jurídica</option>
+                                <option value="redacao">Redação de peças</option>
+                                <option value="audiencia">Audiência</option>
+                                <option value="analise">Análise processual</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="entryRate" class="form-label">Valor/Hora (R$)</label>
+                            <input type="number" id="entryRate" name="entryRate" class="form-input" step="0.01" value="300.00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entryStartTime" class="form-label">Início *</label>
+                            <input type="time" id="entryStartTime" name="entryStartTime" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="entryEndTime" class="form-label">Fim *</label>
+                            <input type="time" id="entryEndTime" name="entryEndTime" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entryDescription" class="form-label">Descrição da Atividade *</label>
+                        <textarea id="entryDescription" name="entryDescription" class="form-textarea" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entryNotes" class="form-label">Observações</label>
+                        <textarea id="entryNotes" name="entryNotes" class="form-textarea" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="entryBillable" name="entryBillable" class="form-checkbox" checked>
+                            <span class="checkbox-label">Tempo faturável</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeEntryModal()" title="Cancelar operação">Cancelar</button>
+                <button type="submit" form="entryForm" class="btn btn-primary">Salvar Entrada</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Variáveis do timer
+        let timerInterval;
+        let timerStartTime;
+        let timerElapsedTime = 0;
+        let isTimerRunning = false;
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            setMinDate();
+        });
+
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('entryDate').value = today;
+        }
+
+        // Funções do timer
+        function startTimer() {
+            if (!isTimerRunning) {
+                const client = document.getElementById('timerClient').value;
+                const activity = document.getElementById('timerActivity').value;
+                
+                if (!client || !activity) {
+                    alert('Selecione o cliente e a atividade antes de iniciar o timer');
+                    return;
+                }
+
+                isTimerRunning = true;
+                timerStartTime = Date.now() - timerElapsedTime;
+                
+                timerInterval = setInterval(updateTimerDisplay, 1000);
+                
+                document.getElementById('startBtn').classList.add('hidden');
+                document.getElementById('pauseBtn').classList.remove('hidden');
+                document.getElementById('stopBtn').classList.remove('hidden');
+                document.getElementById('timerStatus').textContent = 'Em execução';
+                
+                // Desabilitar selects durante timer
+                document.getElementById('timerClient').disabled = true;
+                document.getElementById('timerActivity').disabled = true;
+            }
+        }
+
+        function pauseTimer() {
+            if (isTimerRunning) {
+                isTimerRunning = false;
+                clearInterval(timerInterval);
+                
+                document.getElementById('startBtn').classList.remove('hidden');
+                document.getElementById('pauseBtn').classList.add('hidden');
+                document.getElementById('timerStatus').textContent = 'Pausado';
+            }
+        }
+
+        function stopTimer() {
+            if (confirm('Deseja parar o timer e salvar o registro?')) {
+                isTimerRunning = false;
+                clearInterval(timerInterval);
+                
+                // Salvar registro
+                saveTimerEntry();
+                
+                // Reset timer
+                timerElapsedTime = 0;
+                updateTimerDisplay();
+                
+                document.getElementById('startBtn').classList.remove('hidden');
+                document.getElementById('pauseBtn').classList.add('hidden');
+                document.getElementById('stopBtn').classList.add('hidden');
+                document.getElementById('timerStatus').textContent = 'Parado';
+                
+                // Habilitar selects
+                document.getElementById('timerClient').disabled = false;
+                document.getElementById('timerActivity').disabled = false;
+                
+                // Limpar campos
+                document.getElementById('timerClient').value = '';
+                document.getElementById('timerActivity').value = '';
+                document.getElementById('timerDescription').value = '';
+            }
+        }
+
+        function updateTimerDisplay() {
+            if (isTimerRunning) {
+                timerElapsedTime = Date.now() - timerStartTime;
+            }
+            
+            const hours = Math.floor(timerElapsedTime / 3600000);
+            const minutes = Math.floor((timerElapsedTime % 3600000) / 60000);
+            const seconds = Math.floor((timerElapsedTime % 60000) / 1000);
+            
+            const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timerDisplay').textContent = display;
+        }
+
+        function saveTimerEntry() {
+            const client = document.getElementById('timerClient').value;
+            const activity = document.getElementById('timerActivity').value;
+            const description = document.getElementById('timerDescription').value;
+            
+            const duration = Math.floor(timerElapsedTime / 60000); // em minutos
+            
+            console.log('Salvando entrada de tempo:', {
+                client,
+                activity,
+                description,
+                duration: `${Math.floor(duration / 60)}h ${duration % 60}m`,
+                value: duration * 5 // R$ 5 por minuto como exemplo
+            });
+            
+            alert('Registro de tempo salvo com sucesso!');
+            updateStats();
+        }
+
+        function updateStats() {
+            // Simulação de dados
+            document.getElementById('todayHours').textContent = '6h 30m';
+            document.getElementById('weekHours').textContent = '32h 15m';
+            document.getElementById('monthHours').textContent = '128h 45m';
+            document.getElementById('monthBilling').textContent = 'R$ 38.615';
+        }
+
+        function addManualEntry() {
+            document.getElementById('entryModal').style.display = 'flex';
+        }
+
+        function closeEntryModal() {
+            document.getElementById('entryModal').style.display = 'none';
+            document.getElementById('entryForm').reset();
+            setMinDate();
+        }
+
+        function editTimeEntry(entryId) {
+            alert(`Editando entrada ${entryId}`);
+        }
+
+        function deleteTimeEntry(entryId) {
+            if (confirm('Tem certeza que deseja excluir esta entrada?')) {
+                alert(`Entrada ${entryId} excluída`);
+            }
+        }
+
+        function filterTimeEntries() {
+            const dateRange = document.getElementById('dateRange').value;
+            const client = document.getElementById('clientFilter').value;
+            const activity = document.getElementById('activityFilter').value;
+            
+            console.log('Filtrando por:', { dateRange, client, activity });
+        }
+
+        function exportTimesheet() {
+            alert('Exportando relatório de timesheet...');
+        }
+
+        // Submissão do formulário de entrada manual
+        document.getElementById('entryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const entryData = Object.fromEntries(formData.entries());
+            
+            console.log('Nova entrada manual:', entryData);
+            alert('Entrada de tempo salva com sucesso!');
+            closeEntryModal();
+            updateStats();
+        });
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('entryModal');
+            if (event.target === modal) {
+                closeEntryModal();
+            }
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com o timesheet no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

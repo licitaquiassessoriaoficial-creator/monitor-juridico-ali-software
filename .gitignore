@@ -1,0 +1,62 @@
+# Dependências
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# Build
+dist/
+build/
+.next/
+
+# Dados temporários
+data/
+temp/
+*.tmp
+*.temp
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+.parcel-cache/
+.vscode/
+.idea/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Backup
+backup-*.tar.gz
+*.backup
+
+# Runtime
+.pid
+.seed
+.pid.lock
+
+# Coverage
+coverage/
+nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# Netlify
+.netlify/
+
+# Arquivos de debug
+debug.log
+error.log

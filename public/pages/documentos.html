@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelos de Documentos - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="documentos.html" class="nav-item active">Documentos</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Modelos de Documentos</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-file-alt"></i> Modelos de Documentos</h1>
+                    <p>Crie e gerencie modelos de documentos jurídicos</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="importTemplate()" title="Importar modelo">
+                        <i class="fas fa-upload"></i> Importar
+                    </button>
+                    <button class="btn btn-primary" onclick="createTemplate()" title="Criar novo modelo">
+                        <i class="fas fa-plus"></i> Novo Modelo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-4 stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>24</h3>
+                        <p>Total de Modelos</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>8</h3>
+                        <p>Mais Utilizados</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>156</h3>
+                        <p>Documentos Gerados</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>3h 45m</h3>
+                        <p>Tempo Economizado</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories-section">
+                <h3><i class="fas fa-folder"></i> Categorias de Modelos</h3>
+                <div class="category-grid">
+                    <div class="category-card" onclick="filterByCategory('peticoes')">
+                        <div class="category-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <h4>Petições</h4>
+                        <p>12 modelos</p>
+                    </div>
+
+                    <div class="category-card" onclick="filterByCategory('contratos')">
+                        <div class="category-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h4>Contratos</h4>
+                        <p>8 modelos</p>
+                    </div>
+
+                    <div class="category-card" onclick="filterByCategory('procuracoes')">
+                        <div class="category-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h4>Procurações</h4>
+                        <p>4 modelos</p>
+                    </div>
+
+                    <div class="category-card" onclick="filterByCategory('pareceres')">
+                        <div class="category-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h4>Pareceres</h4>
+                        <p>6 modelos</p>
+                    </div>
+
+                    <div class="category-card" onclick="filterByCategory('outros')">
+                        <div class="category-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <h4>Outros</h4>
+                        <p>3 modelos</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="search-group">
+                    <input type="text" id="templateSearch" class="form-input" placeholder="Buscar modelo..." title="Digite para buscar modelo">
+                    <button class="btn btn-outline" onclick="searchTemplates()" title="Buscar">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="categoryFilter">Categoria:</label>
+                    <select id="categoryFilter" class="form-select" title="Filtrar por categoria" onchange="filterTemplates()">
+                        <option value="all">Todas</option>
+                        <option value="peticoes">Petições</option>
+                        <option value="contratos">Contratos</option>
+                        <option value="procuracoes">Procurações</option>
+                        <option value="pareceres">Pareceres</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sortBy">Ordenar por:</label>
+                    <select id="sortBy" class="form-select" title="Ordenar modelos" onchange="sortTemplates()">
+                        <option value="name">Nome</option>
+                        <option value="date">Data de criação</option>
+                        <option value="usage">Mais utilizados</option>
+                        <option value="modified">Última modificação</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Templates Grid -->
+            <div class="templates-grid">
+                <div class="template-card">
+                    <div class="template-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <div class="template-content">
+                        <h4>Petição Inicial - Ação de Cobrança</h4>
+                        <p class="template-description">Modelo para ação de cobrança de valores inadimplidos</p>
+                        <div class="template-meta">
+                            <span class="template-category">Petições</span>
+                            <span class="template-usage">Usado 23 vezes</span>
+                        </div>
+                        <div class="template-date">Criado em 15/12/2024</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-sm btn-primary" onclick="useTemplate(1)" title="Usar modelo">
+                            <i class="fas fa-file-plus"></i> Usar
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="previewTemplate(1)" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="editTemplate(1)" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="duplicateTemplate(1)" title="Duplicar">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="template-content">
+                        <h4>Contrato de Prestação de Serviços</h4>
+                        <p class="template-description">Modelo padrão para contratos de serviços advocatícios</p>
+                        <div class="template-meta">
+                            <span class="template-category">Contratos</span>
+                            <span class="template-usage">Usado 45 vezes</span>
+                        </div>
+                        <div class="template-date">Criado em 10/11/2024</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-sm btn-primary" onclick="useTemplate(2)" title="Usar modelo">
+                            <i class="fas fa-file-plus"></i> Usar
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="previewTemplate(2)" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="editTemplate(2)" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="duplicateTemplate(2)" title="Duplicar">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="template-content">
+                        <h4>Procuração Ad Judicia</h4>
+                        <p class="template-description">Procuração para representação em juízo</p>
+                        <div class="template-meta">
+                            <span class="template-category">Procurações</span>
+                            <span class="template-usage">Usado 67 vezes</span>
+                        </div>
+                        <div class="template-date">Criado em 20/10/2024</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-sm btn-primary" onclick="useTemplate(3)" title="Usar modelo">
+                            <i class="fas fa-file-plus"></i> Usar
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="previewTemplate(3)" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="editTemplate(3)" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="duplicateTemplate(3)" title="Duplicar">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="template-content">
+                        <h4>Parecer Jurídico</h4>
+                        <p class="template-description">Modelo para elaboração de pareceres jurídicos</p>
+                        <div class="template-meta">
+                            <span class="template-category">Pareceres</span>
+                            <span class="template-usage">Usado 12 vezes</span>
+                        </div>
+                        <div class="template-date">Criado em 05/09/2024</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-sm btn-primary" onclick="useTemplate(4)" title="Usar modelo">
+                            <i class="fas fa-file-plus"></i> Usar
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="previewTemplate(4)" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="editTemplate(4)" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="duplicateTemplate(4)" title="Duplicar">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <div class="template-content">
+                        <h4>Recurso de Apelação</h4>
+                        <p class="template-description">Modelo para recurso de apelação cível</p>
+                        <div class="template-meta">
+                            <span class="template-category">Petições</span>
+                            <span class="template-usage">Usado 34 vezes</span>
+                        </div>
+                        <div class="template-date">Criado em 18/08/2024</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-sm btn-primary" onclick="useTemplate(5)" title="Usar modelo">
+                            <i class="fas fa-file-plus"></i> Usar
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="previewTemplate(5)" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="editTemplate(5)" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="duplicateTemplate(5)" title="Duplicar">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="template-content">
+                        <h4>Contrato de Sociedade</h4>
+                        <p class="template-description">Modelo para contrato social de empresas</p>
+                        <div class="template-meta">
+                            <span class="template-category">Contratos</span>
+                            <span class="template-usage">Usado 18 vezes</span>
+                        </div>
+                        <div class="template-date">Criado em 22/07/2024</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-sm btn-primary" onclick="useTemplate(6)" title="Usar modelo">
+                            <i class="fas fa-file-plus"></i> Usar
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="previewTemplate(6)" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="editTemplate(6)" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="duplicateTemplate(6)" title="Duplicar">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Criar/Editar Modelo -->
+    <div id="templateModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="modalTitle">Novo Modelo de Documento</h3>
+                <button class="modal-close" onclick="closeTemplateModal()" title="Fechar modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="templateForm" class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="templateName" class="form-label">Nome do Modelo *</label>
+                            <input type="text" id="templateName" name="templateName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="templateCategory" class="form-label">Categoria *</label>
+                            <select id="templateCategory" name="templateCategory" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="peticoes">Petições</option>
+                                <option value="contratos">Contratos</option>
+                                <option value="procuracoes">Procurações</option>
+                                <option value="pareceres">Pareceres</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="templateDescription" class="form-label">Descrição</label>
+                        <textarea id="templateDescription" name="templateDescription" class="form-textarea" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="templateContent" class="form-label">Conteúdo do Modelo *</label>
+                        <div class="editor-toolbar">
+                            <button type="button" class="btn btn-sm btn-outline" onclick="insertVariable('{{CLIENTE_NOME}}')" title="Inserir nome do cliente">
+                                <i class="fas fa-user"></i> Cliente
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="insertVariable('{{ADVOGADO_NOME}}')" title="Inserir nome do advogado">
+                                <i class="fas fa-user-tie"></i> Advogado
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="insertVariable('{{DATA_ATUAL}}')" title="Inserir data atual">
+                                <i class="fas fa-calendar"></i> Data
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="insertVariable('{{PROCESSO_NUMERO}}')" title="Inserir número do processo">
+                                <i class="fas fa-gavel"></i> Processo
+                            </button>
+                        </div>
+                        <textarea id="templateContent" name="templateContent" class="form-textarea editor" rows="15" required placeholder="Digite o conteúdo do modelo aqui. Use variáveis como {{CLIENTE_NOME}} para campos que serão preenchidos automaticamente."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="templateTags" class="form-label">Tags (separadas por vírgula)</label>
+                        <input type="text" id="templateTags" name="templateTags" class="form-input" placeholder="Ex: cível, cobrança, inicial">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="templateFavorite" name="templateFavorite" class="form-checkbox">
+                            <span class="checkbox-label">Marcar como favorito</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeTemplateModal()" title="Cancelar operação">Cancelar</button>
+                <button type="button" class="btn btn-outline" onclick="previewTemplate()" title="Visualizar modelo">
+                    <i class="fas fa-eye"></i> Pré-visualizar
+                </button>
+                <button type="submit" form="templateForm" class="btn btn-primary">Salvar Modelo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Funções dos modelos
+        function createTemplate() {
+            document.getElementById('modalTitle').textContent = 'Novo Modelo de Documento';
+            document.getElementById('templateForm').reset();
+            document.getElementById('templateModal').style.display = 'flex';
+        }
+
+        function closeTemplateModal() {
+            document.getElementById('templateModal').style.display = 'none';
+            document.getElementById('templateForm').reset();
+        }
+
+        function useTemplate(templateId) {
+            alert(`Usando modelo ${templateId} para criar novo documento...`);
+            // Aqui seria redirecionado para editor de documento com o modelo carregado
+        }
+
+        function previewTemplate(templateId) {
+            if (templateId) {
+                alert(`Visualizando modelo ${templateId}...`);
+            } else {
+                // Preview do modelo em edição
+                const content = document.getElementById('templateContent').value;
+                if (!content) {
+                    alert('Digite o conteúdo do modelo primeiro');
+                    return;
+                }
+                alert('Pré-visualização do modelo:\n\n' + content.substring(0, 200) + '...');
+            }
+        }
+
+        function editTemplate(templateId) {
+            document.getElementById('modalTitle').textContent = 'Editar Modelo de Documento';
+            
+            // Simular carregamento de dados do modelo
+            document.getElementById('templateName').value = 'Petição Inicial - Ação de Cobrança';
+            document.getElementById('templateCategory').value = 'peticoes';
+            document.getElementById('templateDescription').value = 'Modelo para ação de cobrança de valores inadimplidos';
+            document.getElementById('templateContent').value = 'EXCELENTÍSSIMO SENHOR DOUTOR JUIZ DE DIREITO...\n\n{{ADVOGADO_NOME}}, advogado, inscrito na OAB...';
+            
+            document.getElementById('templateModal').style.display = 'flex';
+        }
+
+        function duplicateTemplate(templateId) {
+            if (confirm('Deseja duplicar este modelo?')) {
+                alert(`Modelo ${templateId} duplicado com sucesso!`);
+            }
+        }
+
+        function filterByCategory(category) {
+            document.getElementById('categoryFilter').value = category;
+            filterTemplates();
+        }
+
+        function searchTemplates() {
+            const searchTerm = document.getElementById('templateSearch').value;
+            alert(`Buscando por: ${searchTerm}`);
+        }
+
+        function filterTemplates() {
+            const category = document.getElementById('categoryFilter').value;
+            console.log('Filtrando por categoria:', category);
+        }
+
+        function sortTemplates() {
+            const sortBy = document.getElementById('sortBy').value;
+            console.log('Ordenando por:', sortBy);
+        }
+
+        function importTemplate() {
+            alert('Selecione um arquivo .docx ou .pdf para importar como modelo');
+        }
+
+        function insertVariable(variable) {
+            const textarea = document.getElementById('templateContent');
+            const cursorPosition = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPosition);
+            const textAfter = textarea.value.substring(cursorPosition);
+            
+            textarea.value = textBefore + variable + textAfter;
+            textarea.focus();
+            textarea.setSelectionRange(cursorPosition + variable.length, cursorPosition + variable.length);
+        }
+
+        // Submissão do formulário
+        document.getElementById('templateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const templateData = Object.fromEntries(formData.entries());
+            
+            console.log('Salvando modelo:', templateData);
+            alert('Modelo salvo com sucesso!');
+            closeTemplateModal();
+        });
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('templateModal');
+            if (event.target === modal) {
+                closeTemplateModal();
+            }
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com os modelos de documentos no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

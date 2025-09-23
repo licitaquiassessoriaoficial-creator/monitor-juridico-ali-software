@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.c                      <a href="../monitor.html" target="_blank" class="link">
+                          <i class="fas fa-external-link-alt"></i> Abrir Monitor
+                      </a>ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .monitor-card {
+            margin-bottom: 2rem;
+        }
+        
+        .monitor-card .card-title i {
+            color: #1a365d;
+            margin-right: 0.5rem;
+        }
+        
+        .monitor-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .monitor-info {
+            flex: 1;
+        }
+        
+        .monitor-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .monitor-stats .stat-item {
+            text-align: center;
+        }
+        
+        .monitor-stats .stat-number {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a365d;
+        }
+        
+        .monitor-stats .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .monitor-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .monitor-status-indicator {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .status-badge.active {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        
+        .status-badge.error {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        
+        @media (max-width: 768px) {
+            .monitor-status {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .monitor-stats {
+                justify-content: space-around;
+            }
+        }
+    </style>
+    <script src="../js/AliSoftware.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item active">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <a href="central.html" class="nav-item">
+                        <i class="fas fa-th-large"></i>
+                        Central de Sistemas
+                    </a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <span class="breadcrumb-item active">Dashboard</span>
+            </div>
+
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 id="welcomeTitle">Bem-vindo ao Ali Software Jurídico</h1>
+                <p>Aqui está um resumo das suas atividades jurídicas</p>
+            </div>
+
+            <!-- Legal Alerts Section -->
+            <div class="card legal-alerts-section">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-bell legal-alerts-icon"></i>
+                        Alertas Jurídicos
+                    </h3>
+                    <span class="badge badge-warning">3 novos</span>
+                </div>
+                <div class="card-content">
+                    <div id="alertsContainer">
+                        <!-- Alertas serão carregados pelo JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-4 stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-gavel icon-primary"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">24</h3>
+                        <p class="stat-label">Processos Ativos</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks icon-warning"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">8</h3>
+                        <p class="stat-label">Tarefas Pendentes</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-alt icon-info"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">3</h3>
+                        <p class="stat-label">Audiências Esta Semana</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign icon-success"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">R$ 45.200</h3>
+                        <p class="stat-label">Receita Mensal</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid grid-cols-2 content-grid">
+                <!-- Recent Tasks -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Tarefas Recentes</h3>
+                        <a href="tarefas.html" class="link">Ver todas</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="task-list">
+                            <div class="task-item">
+                                <div class="task-info">
+                                    <h4>Revisar petição inicial</h4>
+                                    <p>Processo: 1234567-89.2024.8.26.0001</p>
+                                </div>
+                                <div class="task-meta">
+                                    <span class="badge badge-warning">Urgente</span>
+                                    <span class="task-date">Hoje</span>
+                                </div>
+                            </div>
+                            
+                            <div class="task-item">
+                                <div class="task-info">
+                                    <h4>Preparar documentos para audiência</h4>
+                                    <p>Cliente: Maria Silva Santos</p>
+                                </div>
+                                <div class="task-meta">
+                                    <span class="badge badge-info">Normal</span>
+                                    <span class="task-date">Amanhã</span>
+                                </div>
+                            </div>
+                            
+                            <div class="task-item">
+                                <div class="task-info">
+                                    <h4>Analisar manifestação da parte contrária</h4>
+                                    <p>Processo: 9876543-21.2024.8.26.0002</p>
+                                </div>
+                                <div class="task-meta">
+                                    <span class="badge badge-success">Baixa</span>
+                                    <span class="task-date">15/01</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Processes -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Processos Recentes</h3>
+                        <a href="processos.html" class="link">Ver todos</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="process-list">
+                            <div class="process-item">
+                                <div class="process-info">
+                                    <h4>Ação de Cobrança</h4>
+                                    <p>1234567-89.2024.8.26.0001</p>
+                                    <span class="process-client">João Santos</span>
+                                </div>
+                                <div class="process-status">
+                                    <span class="badge badge-success">Em andamento</span>
+                                </div>
+                            </div>
+                            
+                            <div class="process-item">
+                                <div class="process-info">
+                                    <h4>Divórcio Consensual</h4>
+                                    <p>2345678-90.2024.8.26.0003</p>
+                                    <span class="process-client">Maria e Pedro</span>
+                                </div>
+                                <div class="process-status">
+                                    <span class="badge badge-warning">Aguardando</span>
+                                </div>
+                            </div>
+                            
+                            <div class="process-item">
+                                <div class="process-info">
+                                    <h4>Revisional de Aluguel</h4>
+                                    <p>3456789-01.2024.8.26.0004</p>
+                                    <span class="process-client">Empresa XYZ</span>
+                                </div>
+                                <div class="process-status">
+                                    <span class="badge badge-info">Análise</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitor Jurídico Section -->
+            <div class="card monitor-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-line"></i>
+                        Monitor Jurídico
+                    </h3>
+                    <a href="../monitor.html" target="_blank" class="link">
+                        <i class="fas fa-external-link-alt"></i> Abrir Monitor
+                    </a>
+                </div>
+                <div class="card-content">
+                    <div class="monitor-status">
+                        <div class="monitor-info">
+                            <div class="monitor-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number" id="monitorProcesses">--</span>
+                                    <span class="stat-label">Processos Monitorados</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="monitorEvents">--</span>
+                                    <span class="stat-label">Eventos Hoje</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="monitorSources">--</span>
+                                    <span class="stat-label">Fontes Ativas</span>
+                                </div>
+                            </div>
+                            
+                            <div class="monitor-actions">
+                                <button class="btn btn-sm btn-primary" onclick="openMonitorConfig()" title="Configurar Monitor">
+                                    <i class="fas fa-cog"></i> Configurar
+                                </button>
+                                <button class="btn btn-sm btn-outline" onclick="openMonitorDashboard()" title="Ver Dashboard">
+                                    <i class="fas fa-chart-bar"></i> Dashboard
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="monitor-status-indicator">
+                            <div class="status-badge" id="monitorStatus">
+                                <i class="fas fa-clock"></i>
+                                <span>Status: Verificando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar and Notifications -->
+            <div class="grid grid-cols-2 content-grid">
+                <!-- Calendar -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Próximos Compromissos</h3>
+                        <a href="agenda.html" class="link">Ver agenda</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="calendar-list">
+                            <div class="calendar-item">
+                                <div class="calendar-date">
+                                    <span class="day">15</span>
+                                    <span class="month">Jan</span>
+                                </div>
+                                <div class="calendar-info">
+                                    <h4>Audiência de Conciliação</h4>
+                                    <p>14:00 - Fórum Central</p>
+                                    <span class="calendar-client">João Santos</span>
+                                </div>
+                            </div>
+                            
+                            <div class="calendar-item">
+                                <div class="calendar-date">
+                                    <span class="day">18</span>
+                                    <span class="month">Jan</span>
+                                </div>
+                                <div class="calendar-info">
+                                    <h4>Reunião com Cliente</h4>
+                                    <p>10:00 - Escritório</p>
+                                    <span class="calendar-client">Maria Silva</span>
+                                </div>
+                            </div>
+                            
+                            <div class="calendar-item">
+                                <div class="calendar-date">
+                                    <span class="day">20</span>
+                                    <span class="month">Jan</span>
+                                </div>
+                                <div class="calendar-info">
+                                    <h4>Prazo para Contestação</h4>
+                                    <p>Até 23:59</p>
+                                    <span class="calendar-client">Processo 123456</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ações Rápidas</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="quick-actions">
+                            <a href="processos.html" class="action-item">
+                                <i class="fas fa-plus"></i>
+                                <span>Novo Processo</span>
+                            </a>
+                            
+                            <a href="tarefas.html" class="action-item">
+                                <i class="fas fa-tasks"></i>
+                                <span>Nova Tarefa</span>
+                            </a>
+                            
+                            <a href="clientes.html" class="action-item">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Novo Cliente</span>
+                            </a>
+                            
+                            <a href="financeiro.html" class="action-item">
+                                <i class="fas fa-file-invoice"></i>
+                                <span>Gerar Boleto</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Verificar se usuário está logado
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName');
+        const userFirm = localStorage.getItem('userFirm');
+
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        if (userName) {
+            document.getElementById('welcomeTitle').textContent = `Bem-vindo, ${userName}!`;
+        }
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Funções do Monitor Jurídico
+        function openMonitorConfig() {
+            window.open('monitor-config.html', '_blank');
+        }
+
+          function openMonitorDashboard() {
+              window.open('../monitor.html', '_blank');
+          }        // Verificar status do Monitor Jurídico
+        async function checkMonitorStatus() {
+            try {
+                const monitorConfig = localStorage.getItem('monitorConfig');
+                const statusElement = document.getElementById('monitorStatus');
+                
+                if (!monitorConfig) {
+                    statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Não Configurado</span>';
+                    statusElement.className = 'status-badge error';
+                    document.getElementById('monitorProcesses').textContent = '0';
+                    document.getElementById('monitorEvents').textContent = '0';
+                    document.getElementById('monitorSources').textContent = '0';
+                    return;
+                }
+
+                // Tentar conectar com o serviço do Monitor
+                try {
+                    const response = await fetch('http://localhost:3000/health');
+                    if (response.ok) {
+                        statusElement.innerHTML = '<i class="fas fa-check-circle"></i><span>Ativo</span>';
+                        statusElement.className = 'status-badge active';
+                        
+                        // Simular dados (em produção, seria uma chamada real à API)
+                        const config = JSON.parse(monitorConfig);
+                        document.getElementById('monitorProcesses').textContent = '127';
+                        document.getElementById('monitorEvents').textContent = '8';
+                        document.getElementById('monitorSources').textContent = config.tribunals ? config.tribunals.length : '0';
+                    } else {
+                        throw new Error('Service unavailable');
+                    }
+                } catch (error) {
+                    statusElement.innerHTML = '<i class="fas fa-pause-circle"></i><span>Inativo</span>';
+                    statusElement.className = 'status-badge';
+                    document.getElementById('monitorProcesses').textContent = '--';
+                    document.getElementById('monitorEvents').textContent = '--';
+                    document.getElementById('monitorSources').textContent = '--';
+                }
+            } catch (error) {
+                console.error('Erro ao verificar status do monitor:', error);
+            }
+        }
+
+        // Inicializar verificação do Monitor
+        document.addEventListener('DOMContentLoaded', function() {
+            checkMonitorStatus();
+            // Verificar novamente a cada 30 segundos
+            setInterval(checkMonitorStatus, 30000);
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de suporte com o Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fontes - Monitor Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-brand">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="fontes.html" class="nav-item active">Fontes</a>
+                    <a href="preferencias.html" class="nav-item">Preferências</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <div class="page-header">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                        <span class="breadcrumb-separator">></span>
+                        <span class="breadcrumb-current">Fontes</span>
+                    </div>
+                    <h1 class="page-title">
+                        <i class="fas fa-database"></i>
+                        Fontes de Dados Jurídicos
+                    </h1>
+                    <p class="page-subtitle">Configuração e gerenciamento das fontes de dados</p>
+                </div>
+
+                <div class="grid">
+                    <!-- Status das Fontes -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-chart-pie"></i>
+                                    Status das Fontes
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-database"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">15</div>
+                                            <div class="stat-label">Total de Fontes</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card success">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">12</div>
+                                            <div class="stat-label">Ativas</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card warning">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">2</div>
+                                            <div class="stat-label">Com Problemas</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card danger">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-times-circle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">1</div>
+                                            <div class="stat-label">Inativas</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Tribunais -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-gavel"></i>
+                                    Tribunais Monitorados
+                                </h2>
+                                <div class="card-actions">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-sync"></i>
+                                        Testar Conexões
+                                    </button>
+                                    <button class="btn btn-sm btn-primary">
+                                        <i class="fas fa-plus"></i>
+                                        Adicionar Fonte
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="tribunal-list">
+                                    <div class="tribunal-item active">
+                                        <div class="tribunal-icon">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <div class="tribunal-info">
+                                            <div class="tribunal-name">TJSP - Tribunal de Justiça de São Paulo</div>
+                                            <div class="tribunal-url">https://esaj.tjsp.jus.br</div>
+                                            <div class="tribunal-stats">
+                                                <span class="stat">5.234 processos</span>
+                                                <span class="stat">Última verificação: 13:45</span>
+                                            </div>
+                                        </div>
+                                        <div class="tribunal-status">
+                                            <span class="status-badge online">Online</span>
+                                        </div>
+                                        <div class="tribunal-actions">
+                                            <button class="btn btn-sm btn-outline" title="Configurar">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline" title="Testar">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="tribunal-item active">
+                                        <div class="tribunal-icon">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <div class="tribunal-info">
+                                            <div class="tribunal-name">TJRJ - Tribunal de Justiça do Rio de Janeiro</div>
+                                            <div class="tribunal-url">http://www4.tjrj.jus.br</div>
+                                            <div class="tribunal-stats">
+                                                <span class="stat">1.876 processos</span>
+                                                <span class="stat">Última verificação: 13:42</span>
+                                            </div>
+                                        </div>
+                                        <div class="tribunal-status">
+                                            <span class="status-badge online">Online</span>
+                                        </div>
+                                        <div class="tribunal-actions">
+                                            <button class="btn btn-sm btn-outline" title="Configurar">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline" title="Testar">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="tribunal-item warning">
+                                        <div class="tribunal-icon">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <div class="tribunal-info">
+                                            <div class="tribunal-name">TST - Tribunal Superior do Trabalho</div>
+                                            <div class="tribunal-url">https://tst.jus.br</div>
+                                            <div class="tribunal-stats">
+                                                <span class="stat">892 processos</span>
+                                                <span class="stat">Última verificação: 12:15</span>
+                                            </div>
+                                        </div>
+                                        <div class="tribunal-status">
+                                            <span class="status-badge warning">Lento</span>
+                                        </div>
+                                        <div class="tribunal-actions">
+                                            <button class="btn btn-sm btn-outline" title="Configurar">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline" title="Testar">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="tribunal-item error">
+                                        <div class="tribunal-icon">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <div class="tribunal-info">
+                                            <div class="tribunal-name">STF - Supremo Tribunal Federal</div>
+                                            <div class="tribunal-url">https://stf.jus.br</div>
+                                            <div class="tribunal-stats">
+                                                <span class="stat">245 processos</span>
+                                                <span class="stat">Última verificação: 11:30</span>
+                                            </div>
+                                        </div>
+                                        <div class="tribunal-status">
+                                            <span class="status-badge error">Erro de Conexão</span>
+                                        </div>
+                                        <div class="tribunal-actions">
+                                            <button class="btn btn-sm btn-outline" title="Configurar">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline" title="Testar">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configurações de Coleta -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-cogs"></i>
+                                    Configurações de Coleta
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="collectionInterval" class="form-label">Intervalo de Coleta</label>
+                                        <select id="collectionInterval" class="form-input">
+                                            <option value="5">5 minutos</option>
+                                            <option value="15" selected>15 minutos</option>
+                                            <option value="30">30 minutos</option>
+                                            <option value="60">1 hora</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maxRetries" class="form-label">Tentativas Máximas</label>
+                                        <select id="maxRetries" class="form-input">
+                                            <option value="1">1 tentativa</option>
+                                            <option value="3" selected>3 tentativas</option>
+                                            <option value="5">5 tentativas</option>
+                                            <option value="10">10 tentativas</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="timeout" class="form-label">Timeout (segundos)</label>
+                                        <input type="number" id="timeout" class="form-input" value="30" min="10" max="300">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-indicator"></span>
+                                            Coleta automática ativa
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-save"></i>
+                                        Salvar Configurações
+                                    </button>
+                                    <button class="btn btn-outline">
+                                        <i class="fas fa-sync"></i>
+                                        Testar Todas as Fontes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Funcionalidade das fontes
+        document.addEventListener('DOMContentLoaded', function() {
+            // Testar conexão individual
+            const testButtons = document.querySelectorAll('.tribunal-actions .btn:last-child');
+            testButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tribunalItem = this.closest('.tribunal-item');
+                    const tribunalName = tribunalItem.querySelector('.tribunal-name').textContent;
+                    
+                    // Simular teste de conexão
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                    button.disabled = true;
+                    
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-play"></i>';
+                        button.disabled = false;
+                        
+                        // Mostrar resultado do teste
+                        showNotification(`Teste de conexão com ${tribunalName} concluído`, 'info');
+                    }, 2000);
+                });
+            });
+        });
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Verificar se o usuário está logado
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        // Verificar autenticação ao carregar a página
+        checkAuth();
+    </script>
+</body>
+</html>
