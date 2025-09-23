@@ -86,6 +86,85 @@
             border-color: #f5c6cb;
         }
         
+        /* Alert Styles */
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid;
+        }
+        
+        .alert-alto {
+            background: #fef2f2;
+            border-color: #dc2626;
+        }
+        
+        .alert-medio {
+            background: #fffbeb;
+            border-color: #d97706;
+        }
+        
+        .alert-baixo {
+            background: #f0f9ff;
+            border-color: #0284c7;
+        }
+        
+        .alert-icon {
+            font-size: 1.25rem;
+            width: 2rem;
+            text-align: center;
+        }
+        
+        .alert-alto .alert-icon {
+            color: #dc2626;
+        }
+        
+        .alert-medio .alert-icon {
+            color: #d97706;
+        }
+        
+        .alert-baixo .alert-icon {
+            color: #0284c7;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-content h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .alert-content p {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        .alert-badge {
+            margin-left: auto;
+        }
+        
+        .badge-error {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .badge-warning {
+            background: #d97706;
+            color: white;
+        }
+        
+        .badge-info {
+            background: #0284c7;
+            color: white;
+        }
+        
         @media (max-width: 768px) {
             .monitor-status {
                 flex-direction: column;
@@ -104,10 +183,9 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">A</div>
-                    <span class="logo-text">Ali Software Jurídico</span>
-                </div>
+                <a href="../index.html" class="logo" aria-label="Voltar à página inicial">
+                    <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+                </a>
                 
                 <nav class="nav-menu">
                     <a href="dashboard.html" class="nav-item active">Dashboard</a>
@@ -422,16 +500,17 @@
         </div>
     </main>
 
+    <script src="../js/api.js"></script>
+    <script src="../js/AliSoftware.js"></script>
     <script>
-        // Verificar se usuário está logado
-        if (!localStorage.getItem('userLoggedIn')) {
-            window.location.href = 'login.html';
+        // Verificar autenticação ao carregar a página
+        if (!checkAuth()) {
+            return;
         }
 
         // Exibir dados do usuário
         const userEmail = localStorage.getItem('userEmail');
         const userName = localStorage.getItem('userName');
-        const userFirm = localStorage.getItem('userFirm');
 
         if (userEmail) {
             document.getElementById('userEmail').textContent = userEmail;
@@ -441,13 +520,199 @@
             document.getElementById('welcomeTitle').textContent = `Bem-vindo, ${userName}!`;
         }
 
+        // Função de logout
         function logout() {
-            localStorage.removeItem('userLoggedIn');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('userFirm');
-            localStorage.removeItem('trialUser');
-            window.location.href = 'login.html';
+            AuthAPI.logout();
+        }
+
+        // Carregar dados do dashboard
+        async function carregarDashboard() {
+            try {
+                // Carregar estatísticas
+                const dashboard = await api.get('/dashboard');
+                atualizarEstatisticas(dashboard.resumo);
+                
+                // Carregar tarefas do dia
+                atualizarTarefasRecentes(dashboard.tarefasHoje);
+                
+                // Carregar processos recentes
+                atualizarProcessosRecentes(dashboard.processosRecentes);
+                
+                // Carregar alertas
+                const alertas = await api.get('/dashboard/alertas');
+                atualizarAlertas(alertas.alertas);
+                
+                // Carregar agenda do dia
+                const agenda = await api.get('/dashboard/agenda');
+                atualizarCompromissos(agenda.tarefas);
+                
+            } catch (error) {
+                console.error('Erro ao carregar dashboard:', error);
+                UIUtils.showError('Erro ao carregar dados do dashboard.');
+            }
+        }
+
+        // Atualizar estatísticas
+        function atualizarEstatisticas(resumo) {
+            if (resumo) {
+                const elementos = document.querySelectorAll('.stat-number');
+                if (elementos[0]) elementos[0].textContent = resumo.processos?.ativos || '0';
+                if (elementos[1]) elementos[1].textContent = resumo.tarefas?.pendentes || '0';
+                if (elementos[2]) elementos[2].textContent = resumo.tarefas?.hoje || '0';
+                if (elementos[3]) elementos[3].textContent = UIUtils.formatCurrency(resumo.financeiro?.saldoPago || 0);
+            }
+        }
+
+        // Atualizar alertas
+        function atualizarAlertas(alertas) {
+            const container = document.getElementById('alertsContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!alertas || alertas.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">Nenhum alerta no momento.</p>';
+                return;
+            }
+            
+            alertas.forEach(alerta => {
+                const alertaDiv = document.createElement('div');
+                alertaDiv.className = `alert-item alert-${alerta.nivel}`;
+                alertaDiv.innerHTML = `
+                    <div class="alert-icon">
+                        <i class="fas fa-${getAlertIcon(alerta.tipo)}"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h4>${alerta.titulo}</h4>
+                        <p>${alerta.descricao}</p>
+                    </div>
+                    <div class="alert-badge">
+                        <span class="badge badge-${alerta.nivel === 'alto' ? 'error' : alerta.nivel === 'medio' ? 'warning' : 'info'}">
+                            ${alerta.count}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(alertaDiv);
+            });
+        }
+
+        function getAlertIcon(tipo) {
+            switch (tipo) {
+                case 'tarefa_vencida': return 'exclamation-triangle';
+                case 'conta_vencida': return 'credit-card';
+                case 'receita_vencendo': return 'money-bill';
+                case 'processo_parado': return 'pause-circle';
+                default: return 'info-circle';
+            }
+        }
+
+        // Atualizar tarefas recentes
+        function atualizarTarefasRecentes(tarefas) {
+            const container = document.querySelector('.task-list');
+            if (!container || !tarefas) return;
+            
+            container.innerHTML = '';
+            
+            tarefas.forEach(tarefa => {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                taskItem.innerHTML = `
+                    <div class="task-info">
+                        <h4>${tarefa.titulo}</h4>
+                        <p>${tarefa.descricao || `Processo: ${tarefa.processo?.numero || 'N/A'}`}</p>
+                    </div>
+                    <div class="task-meta">
+                        <span class="badge badge-${getBadgeClass(tarefa.prioridade)}">${getPrioridadeText(tarefa.prioridade)}</span>
+                        <span class="task-date">${UIUtils.formatDate(tarefa.dataVencimento)}</span>
+                    </div>
+                `;
+                container.appendChild(taskItem);
+            });
+        }
+
+        // Atualizar processos recentes
+        function atualizarProcessosRecentes(processos) {
+            const container = document.querySelector('.process-list');
+            if (!container || !processos) return;
+            
+            container.innerHTML = '';
+            
+            processos.forEach(processo => {
+                const processItem = document.createElement('div');
+                processItem.className = 'process-item';
+                processItem.innerHTML = `
+                    <div class="process-info">
+                        <h4>${processo.titulo}</h4>
+                        <p>${processo.numero}</p>
+                        <span class="process-client">${processo.cliente?.nome || 'Cliente não informado'}</span>
+                    </div>
+                    <div class="process-status">
+                        <span class="badge badge-${getStatusBadgeClass(processo.status)}">${processo.status}</span>
+                    </div>
+                `;
+                container.appendChild(processItem);
+            });
+        }
+
+        // Atualizar compromissos
+        function atualizarCompromissos(compromissos) {
+            const container = document.querySelector('.calendar-list');
+            if (!container || !compromissos) return;
+            
+            container.innerHTML = '';
+            
+            compromissos.forEach(compromisso => {
+                const calendarItem = document.createElement('div');
+                calendarItem.className = 'calendar-item';
+                
+                const data = new Date(compromisso.data);
+                const dia = data.getDate().toString().padStart(2, '0');
+                const mes = data.toLocaleDateString('pt-BR', { month: 'short' });
+                
+                calendarItem.innerHTML = `
+                    <div class="calendar-date">
+                        <span class="day">${dia}</span>
+                        <span class="month">${mes}</span>
+                    </div>
+                    <div class="calendar-info">
+                        <h4>${compromisso.titulo}</h4>
+                        <p>${compromisso.hora} - ${compromisso.local || 'Local não informado'}</p>
+                        <span class="calendar-client">${compromisso.cliente?.nome || compromisso.observacoes || ''}</span>
+                    </div>
+                `;
+                container.appendChild(calendarItem);
+            });
+        }
+
+        // Funções auxiliares
+        function getBadgeClass(prioridade) {
+            switch (prioridade) {
+                case 'alta': return 'warning';
+                case 'media': return 'info';
+                case 'baixa': return 'success';
+                default: return 'info';
+            }
+        }
+
+        function getPrioridadeText(prioridade) {
+            switch (prioridade) {
+                case 'alta': return 'Urgente';
+                case 'media': return 'Normal';
+                case 'baixa': return 'Baixa';
+                default: return 'Normal';
+            }
+        }
+
+        function getStatusBadgeClass(status) {
+            switch (status?.toLowerCase()) {
+                case 'ativo': 
+                case 'em andamento': return 'success';
+                case 'aguardando':
+                case 'pendente': return 'warning';
+                case 'arquivado':
+                case 'finalizado': return 'info';
+                default: return 'info';
+            }
         }
 
         // Funções do Monitor Jurídico
@@ -455,9 +720,11 @@
             window.open('monitor-config.html', '_blank');
         }
 
-          function openMonitorDashboard() {
-              window.open('../monitor.html', '_blank');
-          }        // Verificar status do Monitor Jurídico
+        function openMonitorDashboard() {
+            window.open('../monitor.html', '_blank');
+        }
+
+        // Verificar status do Monitor Jurídico
         async function checkMonitorStatus() {
             try {
                 const monitorConfig = localStorage.getItem('monitorConfig');
@@ -499,8 +766,9 @@
             }
         }
 
-        // Inicializar verificação do Monitor
+        // Inicializar aplicação
         document.addEventListener('DOMContentLoaded', function() {
+            carregarDashboard();
             checkMonitorStatus();
             // Verificar novamente a cada 30 segundos
             setInterval(checkMonitorStatus, 30000);

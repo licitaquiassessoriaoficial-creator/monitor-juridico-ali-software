@@ -1,8 +1,10 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { body, validationResult } = require('express-validator');
 const { User } = require('../models');
 const { CustomError } = require('../middleware/errorHandler');
+const { enviarBoasVindas, enviarRecuperacaoSenha } = require('../services/emailService');
 
 const router = express.Router();
 
@@ -112,6 +114,11 @@ router.post('/register', registerValidation, async (req, res, next) => {
     // Remover senha da resposta
     const userResponse = user.toJSON();
     delete userResponse.password;
+
+    // Enviar email de boas-vindas (não bloquear a resposta)
+    enviarBoasVindas(user.name, user.email)
+      .then(() => console.log(`📧 Email de boas-vindas enviado para ${user.email}`))
+      .catch(err => console.error(`❌ Erro ao enviar email de boas-vindas: ${err.message}`));
 
     res.status(201).json({
       message: 'Usuário criado com sucesso',
@@ -353,6 +360,112 @@ router.post('/change-password', async (req, res, next) => {
         code: 'INVALID_TOKEN'
       });
     }
+    next(error);
+  }
+});
+
+// POST /api/auth/forgot-password - Recuperação de senha
+router.post('/forgot-password', [
+  body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Email deve ter formato válido')
+], async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error: 'Dados inválidos',
+        code: 'VALIDATION_ERROR',
+        details: errors.array()
+      });
+    }
+
+    const { email } = req.body;
+
+    // Buscar usuário
+    const user = await User.findByEmail(email);
+    if (!user) {
+      // Por segurança, sempre retorna sucesso mesmo se o email não existir
+      return res.json({
+        message: 'Se o email existir em nossa base, você receberá instruções para recuperação'
+      });
+    }
+
+    // Gerar token de recuperação
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
+    const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+
+    // Salvar token no usuário
+    user.resetPasswordToken = resetTokenHash;
+    user.resetPasswordExpiry = resetTokenExpiry;
+    await user.save();
+
+    // Enviar email de recuperação
+    enviarRecuperacaoSenha(user.name, user.email, resetToken)
+      .then(() => console.log(`📧 Email de recuperação enviado para ${user.email}`))
+      .catch(err => console.error(`❌ Erro ao enviar email de recuperação: ${err.message}`));
+
+    res.json({
+      message: 'Se o email existir em nossa base, você receberá instruções para recuperação'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/auth/reset-password - Redefinir senha
+router.post('/reset-password', [
+  body('token')
+    .notEmpty()
+    .withMessage('Token é obrigatório'),
+  body('password')
+    .isLength({ min: 8 })
+    .withMessage('Senha deve ter pelo menos 8 caracteres')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+    .withMessage('Senha deve conter pelo menos: 1 letra minúscula, 1 maiúscula e 1 número')
+], async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error: 'Dados inválidos',
+        code: 'VALIDATION_ERROR',
+        details: errors.array()
+      });
+    }
+
+    const { token, password } = req.body;
+
+    // Hash do token para comparar
+    const resetTokenHash = crypto.createHash('sha256').update(token).digest('hex');
+
+    // Buscar usuário com token válido
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: resetTokenHash,
+        resetPasswordExpiry: { [User.sequelize.Sequelize.Op.gt]: new Date() }
+      }
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        error: 'Token inválido ou expirado',
+        code: 'INVALID_RESET_TOKEN'
+      });
+    }
+
+    // Atualizar senha e limpar token
+    user.password = password;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpiry = null;
+    await user.save();
+
+    res.json({
+      message: 'Senha redefinida com sucesso'
+    });
+  } catch (error) {
     next(error);
   }
 });

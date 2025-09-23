@@ -11,10 +11,9 @@
     <div class="login-container">
         <div class="login-card">
             <div class="login-logo">
-                <div class="logo">
-                    <div class="logo-icon">A</div>
-                    <span class="logo-text">Ali Software Jurídico</span>
-                </div>
+                <a href="../index.html" class="logo" aria-label="Voltar à página inicial">
+                    <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+                </a>
             </div>
             
             <h1 class="login-title">Comece seu teste grátis</h1>
@@ -62,35 +61,46 @@
         </div>
     </div>
 
+    <script src="../js/api.js"></script>
     <script>
-        document.getElementById('trialForm').addEventListener('submit', function(e) {
+        document.getElementById('trialForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Coletar dados do formulário
             const formData = {
-                name: document.getElementById('name').value,
+                nome: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
+                telefone: document.getElementById('phone').value,
                 oab: document.getElementById('oab').value,
-                firm: document.getElementById('firm').value
+                escritorio: document.getElementById('firm').value,
+                senha: 'teste123' // Senha temporária para teste
             };
             
-            if (formData.name && formData.email && formData.phone && formData.firm) {
-                // Armazenar dados do usuário
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', formData.email);
-                localStorage.setItem('userName', formData.name);
-                localStorage.setItem('userFirm', formData.firm);
-                localStorage.setItem('trialUser', 'true');
-                localStorage.setItem('trialStartDate', new Date().toISOString());
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            
+            // Validação básica
+            if (!formData.nome || !formData.email || !formData.telefone || !formData.escritorio) {
+                UIUtils.showError('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            try {
+                // Mostrar loading
+                UIUtils.showLoading(submitButton);
                 
-                alert('Teste grátis iniciado com sucesso! Você tem 7 dias para explorar todas as funcionalidades. Bem-vindo ao Ali Software Jurídico.');
+                // Registrar via API
+                await AuthAPI.register(formData);
                 
-                // Redirecionar para o dashboard
-                window.location.href = 'dashboard.html';
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Por favor, preencha todos os campos obrigatórios.');
+                UIUtils.showSuccess('Conta criada com sucesso! Bem-vindo ao Ali Software Jurídico.');
+                
+                // Aguardar um pouco para mostrar a mensagem
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                UIUtils.showError(error.message || 'Erro ao criar conta. Tente novamente.');
+                UIUtils.hideLoading(submitButton, originalText);
             }
         });
     </script>

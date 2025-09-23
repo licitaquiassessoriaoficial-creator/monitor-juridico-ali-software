@@ -16,8 +16,11 @@ const clientRoutes = require('./routes/clientes');
 const financeRoutes = require('./routes/financeiro');
 const dashboardRoutes = require('./routes/dashboard');
 const monitorRoutes = require('./routes/monitor');
+const emailRoutes = require('./routes/email');
 const { authenticateToken } = require('./middleware/auth');
 const errorHandler = require('./middleware/errorHandler');
+const { verificarConexao } = require('./services/emailService');
+const { iniciarAgendamentos, pararAgendamentos } = require('./services/notificationService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -86,6 +89,7 @@ app.use('/api/clientes', authenticateToken, clientRoutes);
 app.use('/api/financeiro', authenticateToken, financeRoutes);
 app.use('/api/dashboard', authenticateToken, dashboardRoutes);
 app.use('/api/monitor', authenticateToken, monitorRoutes);
+app.use('/api/email', authenticateToken, emailRoutes);
 
 // Rota catch-all para SPA (deve vir por último)
 app.get('*', (req, res) => {
@@ -105,6 +109,12 @@ async function startServer() {
     await sequelize.sync({ force: false });
     console.log('✅ Modelos sincronizados com o banco de dados.');
     
+    // Verificar conexão de email
+    await verificarConexao();
+    
+    // Iniciar agendamentos de notificações
+    iniciarAgendamentos();
+    
     app.listen(PORT, () => {
       console.log(`🚀 Servidor rodando na porta ${PORT}`);
       console.log(`📊 Dashboard: http://localhost:${PORT}`);
@@ -120,12 +130,14 @@ async function startServer() {
 // Graceful shutdown
 process.on('SIGTERM', async () => {
   console.log('🔄 Recebido SIGTERM, encerrando servidor...');
+  pararAgendamentos();
   await sequelize.close();
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
   console.log('🔄 Recebido SIGINT, encerrando servidor...');
+  pararAgendamentos();
   await sequelize.close();
   process.exit(0);
 });

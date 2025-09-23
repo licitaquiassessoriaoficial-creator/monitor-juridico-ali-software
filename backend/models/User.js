@@ -77,6 +77,14 @@ const User = sequelize.define('User', {
   planType: {
     type: DataTypes.ENUM('trial', 'basic', 'professional', 'enterprise'),
     defaultValue: 'trial'
+  },
+  resetPasswordToken: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  resetPasswordExpiry: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 }, {
   hooks: {

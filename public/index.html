@@ -44,10 +44,9 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">A</div>
-                    <span class="logo-text">Ali Software Jurídico</span>
-                </div>
+                <a href="#" class="logo" aria-label="Voltar ao topo">
+                    <img src="logo.png" alt="Ali Software Jurídico" class="logo-image">
+                </a>
                 
                 <nav class="nav-menu" role="navigation" aria-label="Menu principal">
                     <a href="#funcionalidades" class="nav-item" aria-label="Ver funcionalidades do sistema">Funcionalidades</a>
@@ -329,10 +328,9 @@
         <div class="container">
             <div class="grid grid-cols-4 footer-grid-container">
                 <div>
-                    <div class="logo footer-logo">
-                        <div class="logo-icon">A</div>
-                        <span class="logo-text">Ali Software Jurídico</span>
-                    </div>
+                    <a href="#" class="logo footer-logo" aria-label="Voltar ao topo">
+                        <img src="logo.png" alt="Ali Software Jurídico" class="logo-image">
+                    </a>
                     <p class="footer-description-text">
                         Software jurídico completo para advogados e escritórios.
                     </p>
@@ -391,6 +389,17 @@
                         block: 'start'
                     });
                 }
+            });
+        });
+
+        // Logo click - scroll to top
+        document.querySelectorAll('.logo').forEach(logo => {
+            logo.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
         });
     </script>

@@ -104,6 +104,10 @@ const Financeiro = sequelize.define('Financeiro', {
       model: 'Users',
       key: 'id'
     }
+  },
+  alertaEnviado: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   indexes: [

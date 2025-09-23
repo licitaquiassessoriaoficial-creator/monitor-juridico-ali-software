@@ -90,6 +90,10 @@ const Tarefa = sequelize.define('Tarefa', {
       model: 'Users',
       key: 'id'
     }
+  },
+  lembreteEnviado: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   indexes: [

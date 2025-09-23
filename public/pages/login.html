@@ -11,10 +11,9 @@
     <div class="login-container">
         <div class="login-card">
             <div class="login-logo">
-                <div class="logo">
-                    <div class="logo-icon">A</div>
-                    <span class="logo-text">Ali Software Jurídico</span>
-                </div>
+                <a href="../index.html" class="logo" aria-label="Voltar à página inicial">
+                    <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+                </a>
             </div>
             
             <h1 class="login-title">Bem-vindo de volta!</h1>
@@ -48,23 +47,52 @@
         </div>
     </div>
 
+    <script src="../js/api.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Simular login
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
             
-            if (email && password) {
-                // Armazenar dados do usuário
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
+            try {
+                // Mostrar loading
+                UIUtils.showLoading(submitButton);
                 
-                // Redirecionar para o dashboard
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Por favor, preencha todos os campos.');
+                // Fazer login via API
+                await AuthAPI.login(email, password);
+                
+                UIUtils.showSuccess('Login realizado com sucesso!');
+                
+                // Aguardar um pouco para mostrar a mensagem
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                UIUtils.showError(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
+                UIUtils.hideLoading(submitButton, originalText);
+            }
+        });
+
+        // Link para recuperação de senha
+        document.querySelector('a[href="#"]').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            
+            if (!email) {
+                UIUtils.showError('Digite seu e-mail para recuperar a senha.');
+                return;
+            }
+            
+            try {
+                await AuthAPI.forgotPassword(email);
+                UIUtils.showSuccess('Instruções de recuperação enviadas para seu e-mail!');
+            } catch (error) {
+                UIUtils.showError(error.message || 'Erro ao solicitar recuperação de senha.');
             }
         });
     </script>
