@@ -5,7 +5,7 @@
 
 // Configurações da API
 const API_CONFIG = {
-    baseURL: 'http://localhost:3001/api',
+    baseURL: typeof API_URL !== 'undefined' ? API_URL : 'http://localhost:3001/api',
     timeout: 10000
 };
 

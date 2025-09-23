@@ -124,7 +124,7 @@ class AuthSystem {
     async loadDashboardStats() {
         try {
             // Tentar carregar dados reais da API
-            const response = await fetch('/api/dashboard');
+            const response = await fetch(`${API_URL}/dashboard`, { credentials: 'include' });
             if (response.ok) {
                 const stats = await response.json();
                 this.updateStats(stats);
