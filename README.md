@@ -1,123 +1,242 @@
-# 🏛️ Monitor Jurídico - Ali Software# 🏛️ Monitor Jurídico - Ali Software
+# Ali Software Jurídico - Sistema de Gestão Legal# 🏛️ Monitor Jurídico - Ali Software# 🏛️ Monitor Jurídico - Ali Software
 
 
 
-Sistema completo de monitoramento jurídico para acompanhamento automatizado de processos, com interface web profissional e notificações por email.Sistema de monitoramento de processos jurídicos em tempo real, sem banco de dados, utilizando armazenamento baseado em arquivos JSON.
+## 🚀 Sistema Completo Estilo Astrea
 
 
 
-## 🚀 Características Principais## 📋 Visão Geral
+Sistema jurídico profissional com automação avançada para escritórios de advocacia.Sistema completo de monitoramento jurídico para acompanhamento automatizado de processos, com interface web profissional e notificações por email.Sistema de monitoramento de processos jurídicos em tempo real, sem banco de dados, utilizando armazenamento baseado em arquivos JSON.
 
 
 
-- ✅ **Interface Web Profissional** - Dashboard moderno com navegação por páginasO Monitor Jurídico é um sistema completo para acompanhamento automatizado de processos legais nos principais tribunais brasileiros. O sistema oferece:
+### ✨ Funcionalidades Principais
 
-- ✅ **Sistema de Notificações** - Envio automático de emails via Gmail SMTP
 
-- ✅ **Monitoramento Automatizado** - Coleta de dados jurídicos em tempo real- ✅ **Monitoramento em Tempo Real** - Coleta de movimentações processuais a cada 15 minutos
+
+- **💰 Sistema de Boletos + PIX**: Gestão financeira completa com geração automática de PIX e QR codes## 🚀 Características Principais## 📋 Visão Geral
+
+- **📱 Integração WhatsApp**: Comunicação automatizada com clientes via templates e agendamento
+
+- **🤖 Robôs de Busca Processual**: Monitoramento automático OAB/CNJ com descoberta de processos
+
+- **📊 Dashboard de Produtividade**: Métricas avançadas estilo Astrea com controles de automação
+
+- **🔔 Alertas Automáticos**: Sistema de notificações em tempo real para eventos críticos- ✅ **Interface Web Profissional** - Dashboard moderno com navegação por páginasO Monitor Jurídico é um sistema completo para acompanhamento automatizado de processos legais nos principais tribunais brasileiros. O sistema oferece:
+
+- **📋 Gestão de Processos**: Controle completo de andamentos e prazos
+
+- **👥 Gestão de Clientes**: CRM integrado com histórico de comunicações- ✅ **Sistema de Notificações** - Envio automático de emails via Gmail SMTP
+
+- **📅 Agenda Jurídica**: Calendário com compromissos e prazos processuais
+
+- **✅ Gestão de Tarefas**: Sistema de produtividade com timesheet- ✅ **Monitoramento Automatizado** - Coleta de dados jurídicos em tempo real- ✅ **Monitoramento em Tempo Real** - Coleta de movimentações processuais a cada 15 minutos
+
+- **📈 Relatórios Avançados**: Análises detalhadas de produtividade e financeiro
 
 - ✅ **Deploy Pronto** - Configurado para Netlify, Railway e GitHub Actions- ✅ **Armazenamento Baseado em Arquivos** - Sem dependência de banco de dados
 
+### 🛠 Tecnologias
+
 - ✅ **Zero Dependências Externas** - Funciona sem banco de dados- ✅ **Dashboard Profissional** - Interface moderna para visualização de dados
 
-- ✅ **Código Limpo** - TypeScript, ESLint, estrutura organizada- ✅ **API RESTful** - Endpoints para integração e consulta
+- **Frontend**: HTML5, CSS3, JavaScript ES6+
 
-- ✅ **Deduplicação Inteligente** - Sistema de hash para evitar eventos duplicados
+- **Backend**: Node.js 20 + TypeScript- ✅ **Código Limpo** - TypeScript, ESLint, estrutura organizada- ✅ **API RESTful** - Endpoints para integração e consulta
+
+- **Deploy**: Netlify Functions + GitHub Actions
+
+- **Integração**: PIX, WhatsApp Web, APIs dos Tribunais- ✅ **Deduplicação Inteligente** - Sistema de hash para evitar eventos duplicados
+
+- **Design**: Interface responsiva e moderna
 
 ## 🎯 Funcionalidades- ✅ **Notificações Automáticas** - Email e WhatsApp para eventos importantes
 
+### 📦 Deploy no Netlify
+
 - ✅ **Configuração Pós-Compra** - Flow de setup com dados da OAB
+
+#### Opção 1: Deploy Automático via GitHub
 
 ### 📊 Dashboard Principal
 
-- Painel de métricas e estatísticas## 🏗️ Arquitetura
+1. Acesse [netlify.com](https://netlify.com) e faça login
 
-- Acompanhamento de processos em tempo real
+2. Clique em "New site from Git"- Painel de métricas e estatísticas## 🏗️ Arquitetura
 
-- Interface responsiva e intuitiva```text
+3. Conecte ao GitHub e selecione o repositório: `alisoftwarejuridico`
 
-monitor-juridico/
+4. Configure as opções de build:- Acompanhamento de processos em tempo real
 
-### 📧 Sistema de Notificações├── src/
+   - **Branch to deploy**: `master`
 
-- Configuração automática do Gmail SMTP│   ├── server.ts        # API Express principal
+   - **Build command**: `echo 'Static site ready'`- Interface responsiva e intuitiva```text
 
-- Notificações de novos processos│   ├── fontes.ts        # Lista de tribunais e fontes
+   - **Publish directory**: `monitor-juridico/public`
 
-- Alertas de prazos e delegações│   ├── notify.ts        # Sistema de notificações
-
-- Sistema de teste de configuração│   └── auth.ts          # Autenticação (futuro JWT)
-
-├── scripts/
-
-### 🤖 Automação│   └── worker.ts        # Worker de coleta de dados
-
-- Coleta automática de dados jurídicos├── netlify/functions/   # Netlify Functions
-
-- Execução via GitHub Actions├── public/
-
-- Agendamento flexível (15 min em horário comercial)│   ├── index.html       # Dashboard principal
-
-- Limpeza automática de dados antigos│   └── monitor-config.html # Configuração OAB
-
-└── data/                # Armazenamento JSON
-
-## 🛠️ Tecnologias Utilizadas    └── users/
-
-        └── <userId>/
-
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)            ├── history.json  # Histórico de eventos
-
-- **Backend**: Node.js, TypeScript, Express            └── seen.json     # Controle de duplicatas
-
-- **Email**: Nodemailer com Gmail SMTP```
-
-- **Deploy**: Netlify Functions, GitHub Actions
-
-- **Ferramentas**: ESLint, TypeScript, pnpm## 🚀 Tecnologias
+5. Clique em "Deploy site"monitor-juridico/
 
 
 
-## 📦 Instalação e Configuração- **Backend**: Node.js 20 + Express + TypeScript
-
-- **Build**: pnpm 10 + tsx + tsc
-
-### 1. Clone o Repositório- **Deploy**: Netlify Functions + GitHub Actions
-
-```bash- **Storage**: Sistema de arquivos JSON
-
-git clone https://github.com/seu-usuario/monitor-juridico.git- **Automation**: GitHub Actions Cron (a cada 15min)
-
-cd monitor-juridico
-
-```## 📦 Instalação
+#### Opção 2: Deploy Manual### 📧 Sistema de Notificações├── src/
 
 
 
-### 2. Instale as Dependências### 1. Pré-requisitos
+1. Baixe o projeto:- Configuração automática do Gmail SMTP│   ├── server.ts        # API Express principal
 
 ```bash
 
-pnpm install```bash
+git clone https://github.com/licitaquiassessoriaoficial-creator/alisoftwarejuridico.git- Notificações de novos processos│   ├── fontes.ts        # Lista de tribunais e fontes
 
-```# Node.js 20+
+cd alisoftwarejuridico
+
+```- Alertas de prazos e delegações│   ├── notify.ts        # Sistema de notificações
+
+
+
+2. Comprima a pasta `monitor-juridico/public`:- Sistema de teste de configuração│   └── auth.ts          # Autenticação (futuro JWT)
+
+```bash
+
+zip -r ali-software-juridico.zip monitor-juridico/public/├── scripts/
+
+```
+
+### 🤖 Automação│   └── worker.ts        # Worker de coleta de dados
+
+3. No Netlify:
+
+   - Acesse o dashboard- Coleta automática de dados jurídicos├── netlify/functions/   # Netlify Functions
+
+   - Arraste e solte o arquivo ZIP na área "Deploy manually"
+
+- Execução via GitHub Actions├── public/
+
+### ⚙️ Configuração Pós-Deploy
+
+- Agendamento flexível (15 min em horário comercial)│   ├── index.html       # Dashboard principal
+
+1. **Variáveis de Ambiente**:
+
+   - `PIX_KEY`: Chave PIX para integração financeira- Limpeza automática de dados antigos│   └── monitor-config.html # Configuração OAB
+
+   - `WHATSAPP_TOKEN`: Token para integração WhatsApp
+
+   - `OAB_API_KEY`: Chave para APIs dos tribunais└── data/                # Armazenamento JSON
+
+
+
+2. **Configuração de Domínio**:## 🛠️ Tecnologias Utilizadas    └── users/
+
+   - Configure seu domínio personalizado
+
+   - Ative HTTPS automático        └── <userId>/
+
+   - Configure redirects personalizados
+
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)            ├── history.json  # Histórico de eventos
+
+3. **Functions Serverless**:
+
+   - As functions estão em `monitor-juridico/netlify/functions/`- **Backend**: Node.js, TypeScript, Express            └── seen.json     # Controle de duplicatas
+
+   - Deploy automático com agendamento de workers
+
+- **Email**: Nodemailer com Gmail SMTP```
+
+### 🔗 Estrutura de URLs
+
+- **Deploy**: Netlify Functions, GitHub Actions
+
+- `/` - Página inicial
+
+- `/login` - Login do sistema- **Ferramentas**: ESLint, TypeScript, pnpm## 🚀 Tecnologias
+
+- `/dashboard` - Dashboard principal
+
+- `/processos` - Gestão de processos
+
+- `/clientes` - Gestão de clientes
+
+- `/agenda` - Calendário jurídico## 📦 Instalação e Configuração- **Backend**: Node.js 20 + Express + TypeScript
+
+- `/tarefas` - Gestão de tarefas
+
+- `/financeiro` - Controle financeiro- **Build**: pnpm 10 + tsx + tsc
+
+- `/boletos` - Sistema de boletos + PIX
+
+- `/whatsapp` - Central WhatsApp### 1. Clone o Repositório- **Deploy**: Netlify Functions + GitHub Actions
+
+- `/robos` - Robôs de busca processual
+
+- `/relatorios` - Relatórios avançados```bash- **Storage**: Sistema de arquivos JSON
+
+
+
+### 🎯 Status do Projetogit clone https://github.com/seu-usuario/monitor-juridico.git- **Automation**: GitHub Actions Cron (a cada 15min)
+
+
+
+- ✅ Sistema de Boletos + PIX implementadocd monitor-juridico
+
+- ✅ Integração WhatsApp completa
+
+- ✅ Robôs de busca processual ativos```## 📦 Instalação
+
+- ✅ Dashboard de produtividade funcional
+
+- ✅ Sistema de alertas implementado
+
+- ✅ Interface responsiva e moderna
+
+- ✅ Deploy pronto para produção### 2. Instale as Dependências### 1. Pré-requisitos
+
+
+
+### 📱 Responsividade```bash
+
+
+
+O sistema é totalmente responsivo e funciona perfeitamente em:pnpm install```bash
+
+- 💻 Desktop (1920px+)
+
+- 📱 Tablet (768px - 1024px)```# Node.js 20+
+
+- 📱 Mobile (320px - 767px)
 
 node --version  # v20.0.0+
 
+### 🔐 Segurança
+
 ### 3. Configure o Gmail SMTP
 
-No arquivo `src/infra/notificacoes-automacoes.ts`, configure:# pnpm 10+
+- Headers de segurança configurados
 
-```typescriptpnpm --version  # 10.0.0+
+- CSP (Content Security Policy) ativaNo arquivo `src/infra/notificacoes-automacoes.ts`, configure:# pnpm 10+
+
+- Proteção XSS e CSRF
+
+- HTTPS obrigatório```typescriptpnpm --version  # 10.0.0+
+
+- Validação de inputs
 
 const gmailConfig = {```
 
+### 📞 Suporte
+
   user: 'seu-email@gmail.com',
+
+Para dúvidas ou suporte técnico, consulte a documentação completa no repositório ou entre em contato com a equipe de desenvolvimento.
 
   pass: 'sua-senha-de-app'  // Senha de app do Gmail### 2. Instalação
 
+---
+
 };
 
+**Ali Software Jurídico** - Transformando a advocacia com tecnologia avançada 🚀
 ``````bash
 
 # Instalar dependências
