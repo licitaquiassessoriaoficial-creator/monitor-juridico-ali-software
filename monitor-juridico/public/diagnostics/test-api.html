@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico da API - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="test-api.css?v=v-2025-09-23-1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-stethoscope"></i> Diagnóstico da API</h1>
+            <p>Ferramenta para testar a conectividade entre frontend e backend</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-box">
+                <h4><i class="fas fa-info-circle"></i> Como usar este diagnóstico</h4>
+                <p>Esta página testa a conectividade entre o frontend (Netlify) e o backend (Railway). 
+                Use os botões abaixo para verificar se a API está respondendo corretamente.</p>
+            </div>
+
+            <div class="config-display">
+                <div><strong>API_URL:</strong> <span id="apiUrl">Carregando...</span></div>
+                <div><strong>Frontend:</strong> <span id="frontendUrl">Carregando...</span></div>
+                <div><strong>Versão Assets:</strong> <span id="assetVersion">Carregando...</span></div>
+            </div>
+
+            <div class="grid">
+                <div class="test-section">
+                    <h3>
+                        <span class="status-indicator" id="healthStatus"></span>
+                        <i class="fas fa-heart"></i> 
+                        Teste de Saúde da API
+                    </h3>
+                    <p>Verifica se o endpoint básico da API está respondendo</p>
+                    <button class="btn" onclick="testHealth()">
+                        <i class="fas fa-play"></i> Testar /api/hello
+                    </button>
+                    <div id="healthResult" class="result result-hidden"></div>
+                </div>
+
+                <div class="test-section">
+                    <h3>
+                        <span class="status-indicator" id="corsStatus"></span>
+                        <i class="fas fa-globe"></i> 
+                        Teste de CORS
+                    </h3>
+                    <p>Verifica se as configurações de CORS estão corretas</p>
+                    <button class="btn" onclick="testCORS()">
+                        <i class="fas fa-exchange-alt"></i> Testar CORS
+                    </button>
+                    <div id="corsResult" class="result result-hidden"></div>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h3>
+                    <span class="status-indicator" id="fullStatus"></span>
+                    <i class="fas fa-rocket"></i> 
+                    Teste Completo
+                </h3>
+                <p>Executa todos os testes em sequência</p>
+                <button class="btn" onclick="runFullTest()">
+                    <i class="fas fa-cogs"></i> Executar Teste Completo
+                </button>
+                <button class="btn btn-success" onclick="clearResults()" disabled>
+                    <i class="fas fa-trash"></i> Limpar Resultados
+                </button>
+                <div id="fullResult" class="result result-hidden"></div>
+            </div>
+
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Interpretação dos Resultados</h4>
+                <ul>
+                    <li><strong>Status 200:</strong> ✅ API funcionando corretamente</li>
+                    <li><strong>CORS Error:</strong> ❌ Problema de configuração de CORS no backend</li>
+                    <li><strong>Network Error:</strong> ❌ Backend inacessível ou URL incorreta</li>
+                    <li><strong>Timeout:</strong> ⏱️ Resposta demorada (possível problema de rede)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuração da API -->
+    <script src="../config.js?v=v-2025-09-23-1"></script>
+    
+    <script>
+        // Atualizar informações de configuração na tela
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('apiUrl').textContent = typeof API_URL !== 'undefined' ? API_URL : 'Não definida';
+            document.getElementById('frontendUrl').textContent = window.location.origin;
+            document.getElementById('assetVersion').textContent = typeof ASSET_VERSION !== 'undefined' ? ASSET_VERSION : 'Não definida';
+        });
+
+        function updateStatus(elementId, status) {
+            const element = document.getElementById(elementId);
+            element.className = `status-indicator ${status}`;
+        }
+
+        function showResult(elementId, content, type = 'loading') {
+            const element = document.getElementById(elementId);
+            element.classList.remove('result-hidden');
+            element.className = `result ${type}`;
+            element.textContent = content;
+            
+            // Habilitar botão de limpar após mostrar resultado
+            document.querySelector('button[onclick="clearResults()"]').disabled = false;
+        }
+
+        async function testHealth() {
+            const resultElement = 'healthResult';
+            updateStatus('healthStatus', 'checking');
+            showResult(resultElement, '🔄 Testando conectividade com /api/hello...', 'loading');
+
+            try {
+                const startTime = Date.now();
+                const response = await fetch(`${API_URL}/hello`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateStatus('healthStatus', 'online');
+                    showResult(resultElement, 
+                        `✅ API Health Check - Sucesso!\n\n` +
+                        `Status: ${response.status} ${response.statusText}\n` +
+                        `Tempo de resposta: ${responseTime}ms\n` +
+                        `Resposta: ${JSON.stringify(data, null, 2)}`, 'success');
+                } else {
+                    updateStatus('healthStatus', 'offline');
+                    showResult(resultElement, 
+                        `❌ API Health Check - Erro HTTP\n\n` +
+                        `Status: ${response.status} ${response.statusText}\n` +
+                        `Tempo de resposta: ${responseTime}ms`, 'error');
+                }
+            } catch (error) {
+                updateStatus('healthStatus', 'offline');
+                showResult(resultElement, 
+                    `❌ API Health Check - Falha na Conexão\n\n` +
+                    `Erro: ${error.message}\n` +
+                    `Possíveis causas:\n` +
+                    `• Backend offline\n` +
+                    `• URL da API incorreta\n` +
+                    `• Problema de rede\n` +
+                    `• Configuração de CORS`, 'error');
+            }
+        }
+
+        async function testCORS() {
+            const resultElement = 'corsResult';
+            updateStatus('corsStatus', 'checking');
+            showResult(resultElement, '🔄 Testando configuração de CORS...', 'loading');
+
+            try {
+                const response = await fetch(`${API_URL}/hello`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Test-Header': 'CORS-Test'
+                    }
+                });
+
+                if (response.ok) {
+                    updateStatus('corsStatus', 'online');
+                    showResult(resultElement, 
+                        `✅ CORS - Configurado Corretamente!\n\n` +
+                        `• Requisição cross-origin permitida\n` +
+                        `• Headers personalizados aceitos\n` +
+                        `• Credentials incluídos com sucesso`, 'success');
+                } else {
+                    updateStatus('corsStatus', 'offline');
+                    showResult(resultElement, 
+                        `⚠️ CORS - Resposta Recebida mas com Erro\n\n` +
+                        `Status: ${response.status}\n` +
+                        `Possível problema no backend`, 'error');
+                }
+            } catch (error) {
+                updateStatus('corsStatus', 'offline');
+                if (error.message.includes('CORS')) {
+                    showResult(resultElement, 
+                        `❌ CORS - Configuração Incorreta\n\n` +
+                        `Erro: ${error.message}\n\n` +
+                        `Solução:\n` +
+                        `• Verificar FRONTEND_URL no Railway\n` +
+                        `• Confirmar cors({ credentials: true, origin: ... })\n` +
+                        `• Verificar se o backend está rodando`, 'error');
+                } else {
+                    showResult(resultElement, 
+                        `❌ CORS - Erro de Conexão\n\n` +
+                        `Erro: ${error.message}\n` +
+                        `Backend pode estar offline`, 'error');
+                }
+            }
+        }
+
+        async function runFullTest() {
+            const resultElement = 'fullResult';
+            updateStatus('fullStatus', 'checking');
+            showResult(resultElement, '🚀 Executando bateria completa de testes...\n', 'loading');
+
+            let results = [];
+            
+            // Teste 1: Health Check
+            try {
+                const healthResponse = await fetch(`${API_URL}/hello`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (healthResponse.ok) {
+                    const data = await healthResponse.json();
+                    results.push('✅ Health Check: API online');
+                    results.push(`   └─ Resposta: ${JSON.stringify(data)}`);
+                } else {
+                    results.push(`❌ Health Check: Status ${healthResponse.status}`);
+                }
+            } catch (error) {
+                results.push(`❌ Health Check: ${error.message}`);
+            }
+
+            // Teste 2: Configuração
+            results.push('\n📋 Configuração:');
+            results.push(`   └─ API_URL: ${API_URL}`);
+            results.push(`   └─ Frontend: ${window.location.origin}`);
+            results.push(`   └─ Asset Version: ${typeof ASSET_VERSION !== 'undefined' ? ASSET_VERSION : 'N/D'}`);
+
+            // Teste 3: Conectividade de Rede
+            results.push('\n🌐 Teste de Conectividade:');
+            try {
+                const pingStart = Date.now();
+                const pingResponse = await fetch(`${API_URL}/hello`);
+                const pingTime = Date.now() - pingStart;
+                results.push(`✅ Ping: ${pingTime}ms`);
+            } catch (error) {
+                results.push(`❌ Ping: Falha na conexão`);
+            }
+
+            const finalResult = results.join('\n');
+            const hasErrors = finalResult.includes('❌');
+            
+            if (hasErrors) {
+                updateStatus('fullStatus', 'offline');
+                showResult(resultElement, finalResult + '\n\n⚠️ Alguns testes falharam. Verifique a configuração.', 'error');
+            } else {
+                updateStatus('fullStatus', 'online');
+                showResult(resultElement, finalResult + '\n\n🎉 Todos os testes passaram! Sistema funcionando corretamente.', 'success');
+            }
+        }
+
+        function clearResults() {
+            const resultElements = ['healthResult', 'corsResult', 'fullResult'];
+            resultElements.forEach(id => {
+                const element = document.getElementById(id);
+                element.classList.add('result-hidden');
+                element.textContent = '';
+            });
+            
+            const statusElements = ['healthStatus', 'corsStatus', 'fullStatus'];
+            statusElements.forEach(id => {
+                document.getElementById(id).className = 'status-indicator';
+            });
+            
+            document.querySelector('button[onclick="clearResults()"]').disabled = true;
+        }
+
+        // Auto-executar teste básico ao carregar a página
+        window.addEventListener('load', () => {
+            console.log('🔧 Diagnóstico da API carregado');
+            console.log('📡 API_URL configurada:', typeof API_URL !== 'undefined' ? API_URL : 'Não definida');
+        });
+    </script>
+</body>
+</html>
