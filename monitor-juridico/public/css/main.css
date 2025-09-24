@@ -147,6 +147,44 @@ a:hover {
     letter-spacing: -0.025em;
 }
 
+/* Logo Image - Controle de Tamanho Específico */
+.logo-image {
+    width: 35px !important;
+    height: 35px !important;
+    max-width: 35px !important;
+    max-height: 35px !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+/* Logo Image - Responsivo */
+@media (max-width: 640px) {
+    .logo-image {
+        width: 30px !important;
+        height: 30px !important;
+        max-width: 30px !important;
+        max-height: 30px !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .logo-image {
+        width: 38px !important;
+        height: 38px !important;
+        max-width: 38px !important;
+        max-height: 38px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .logo-image {
+        width: 55px !important;
+        height: 55px !important;
+        max-width: 55px !important;
+        max-height: 55px !important;
+    }
+}
+
 /* Layout */
 .container {
     max-width: 1200px;
@@ -1818,6 +1856,15 @@ input:checked + .toggle-slider:before {
 
 .whatsapp-float i {
     margin: 0;
+    color: white !important;
+    font-size: 28px;
+}
+
+/* Fallback para ícone WhatsApp */
+.whatsapp-float .fab.fa-whatsapp,
+.whatsapp-float .fa-whatsapp {
+    color: white !important;
+    display: inline-block !important;
 }
 
 /* Banner Styles */
