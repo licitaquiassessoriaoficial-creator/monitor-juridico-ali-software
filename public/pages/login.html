@@ -67,9 +67,36 @@
                 
                 UIUtils.showSuccess('Login realizado com sucesso!');
                 
+                // Verificar se usuário tem acesso pago
+                const paidUser = localStorage.getItem('paidUser');
+                const trialUser = localStorage.getItem('trialUser');
+                
+                let redirectUrl = 'dashboard.html';
+                
+                // Se não é usuário pago, verificar trial
+                if (!paidUser) {
+                    if (trialUser) {
+                        const trialStart = localStorage.getItem('trialStartDate');
+                        if (trialStart) {
+                            const trialDate = new Date(trialStart);
+                            const currentDate = new Date();
+                            const daysDiff = Math.ceil((currentDate - trialDate) / (1000 * 60 * 60 * 24));
+                            
+                            if (daysDiff > 7) {
+                                // Trial expirado
+                                redirectUrl = 'planos.html';
+                                UIUtils.showError('Seu período de teste gratuito expirou. Escolha um plano para continuar.');
+                            }
+                        }
+                    } else {
+                        // Não tem trial nem pagamento
+                        redirectUrl = 'planos.html';
+                    }
+                }
+                
                 // Aguardar um pouco para mostrar a mensagem
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = redirectUrl;
                 }, 1000);
                 
             } catch (error) {

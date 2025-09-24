@@ -92,7 +92,14 @@
                 // Registrar via API
                 await AuthAPI.register(formData);
                 
-                UIUtils.showSuccess('Conta criada com sucesso! Bem-vindo ao Ali Software Jurídico.');
+                // Definir usuário em período de teste
+                localStorage.setItem('trialUser', 'true');
+                localStorage.setItem('trialStartDate', new Date().toISOString());
+                localStorage.setItem('userEmail', formData.email);
+                localStorage.setItem('userName', formData.nome);
+                localStorage.setItem('userFirm', formData.escritorio);
+                
+                UIUtils.showSuccess('Conta criada com sucesso! Seu período de teste de 7 dias começou.');
                 
                 // Aguardar um pouco para mostrar a mensagem
                 setTimeout(() => {

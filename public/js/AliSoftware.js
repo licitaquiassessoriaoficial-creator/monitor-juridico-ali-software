@@ -3,11 +3,9 @@ const AliSoftware = {
     // Verificar autenticação
     checkAuth: function() {
         const userLoggedIn = localStorage.getItem('userLoggedIn');
-        const trialUser = localStorage.getItem('trialUser');
-        const paidUser = localStorage.getItem('paidUser');
         
-        // Permitir acesso se for usuário logado, em teste grátis ou pago
-        if (!userLoggedIn && !trialUser && !paidUser) {
+        // Para páginas protegidas, exige login
+        if (!userLoggedIn) {
             window.location.href = 'login.html';
             return false;
         }
@@ -16,23 +14,30 @@ const AliSoftware = {
 
     // Verificar se precisa de plano pago
     checkPaidAccess: function() {
-        const trialUser = localStorage.getItem('trialUser');
         const paidUser = localStorage.getItem('paidUser');
+        const trialUser = localStorage.getItem('trialUser');
         
-        if (trialUser && !paidUser) {
-            // Verificar se o trial expirou (7 dias)
-            const trialStart = localStorage.getItem('trialStartDate');
-            if (trialStart) {
-                const trialDate = new Date(trialStart);
-                const currentDate = new Date();
-                const daysDiff = Math.ceil((currentDate - trialDate) / (1000 * 60 * 60 * 24));
-                
-                if (daysDiff > 7) {
-                    alert('Seu período de teste gratuito expirou. Assine um plano para continuar.');
-                    window.location.href = 'planos.html';
-                    return false;
+        // Se não é usuário pago, redirecionar para planos
+        if (!paidUser) {
+            // Verificar se está em período de trial válido
+            if (trialUser) {
+                const trialStart = localStorage.getItem('trialStartDate');
+                if (trialStart) {
+                    const trialDate = new Date(trialStart);
+                    const currentDate = new Date();
+                    const daysDiff = Math.ceil((currentDate - trialDate) / (1000 * 60 * 60 * 24));
+                    
+                    // Trial válido por 7 dias
+                    if (daysDiff <= 7) {
+                        return true;
+                    }
                 }
             }
+            
+            // Não é usuário pago e não tem trial válido
+            alert('Acesso restrito! Para usar o Ali Software Jurídico, você precisa escolher um plano.');
+            window.location.href = 'planos.html';
+            return false;
         }
         return true;
     },

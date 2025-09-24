@@ -75,6 +75,25 @@
             position: relative;
             overflow: hidden;
         }
+        
+        .back-to-dashboard {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+        
+        .back-link {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            font-size: 0.9rem;
+            transition: opacity 0.3s ease;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+            text-decoration: none;
+            color: white;
+        }
 
         .config-header::before {
             content: '';
@@ -692,6 +711,11 @@
         <div class="config-wrapper">
             <!-- Header -->
             <div class="config-header">
+                <div class="back-to-dashboard">
+                    <a href="dashboard.html" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Dashboard
+                    </a>
+                </div>
                 <h1><i class="fas fa-shield-alt"></i> Monitor Jurídico</h1>
                 <p>Configure seus dados profissionais para ativação do monitoramento automatizado</p>
             </div>
