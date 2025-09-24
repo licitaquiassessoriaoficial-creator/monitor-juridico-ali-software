@@ -5,10 +5,18 @@ const AliSoftware = {
         const userLoggedIn = localStorage.getItem('userLoggedIn');
         const trialUser = localStorage.getItem('trialUser');
         const paidUser = localStorage.getItem('paidUser');
-        
+        const monitorConfigured = localStorage.getItem('monitorConfigured');
+
         // Permitir acesso se for usuário logado, em teste grátis ou pago
         if (!userLoggedIn && !trialUser && !paidUser) {
             window.location.href = 'login.html';
+            return false;
+        }
+
+        // Se for usuário pago, exigir cadastro completo
+        if (paidUser && monitorConfigured !== 'true') {
+            alert('Finalize seu cadastro para acessar o sistema.');
+            window.location.href = 'monitor-config.html';
             return false;
         }
         return true;
@@ -104,7 +112,7 @@ const AliSoftware = {
         }
     },
 
-    // Sistema de alertas jurídicos (similar ao Astrea)
+    // Sistema de alertas jurídicos
     legalAlerts: {
         // Simulação de alertas de tribunais
         checkTribunalUpdates: function() {

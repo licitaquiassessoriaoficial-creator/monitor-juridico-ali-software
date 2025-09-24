@@ -4,64 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Ali Software Jurídico</title>
-    <link rel="stylesheet" href="../css/main.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Acesse sua conta no Ali Software Jurídico. Login seguro e rápido.">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <meta name="keywords" content="login, acesso, advocacia, software jurídico">
+    <meta name="author" content="Ali Software Jurídico">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preload" href="../css/main.css?v=v-2025-09-23-1" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style">
+    <link rel="stylesheet" href="../css/main.css?v=v-2025-09-23-1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-logo">
-                <div class="logo">
-                    <div class="logo-icon">A</div>
-                    <span class="logo-text">Ali Software Jurídico</span>
-                </div>
-            </div>
-            
-            <h1 class="login-title">Bem-vindo de volta!</h1>
-            <p class="login-subtitle">Faça login em sua conta para continuar</p>
-            
-            <form id="loginForm" class="form">
-                <div class="form-group">
-                    <label for="email" class="form-label">E-mail</label>
-                    <input type="email" id="email" name="email" class="form-input" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password" class="form-label">Senha</label>
-                    <input type="password" id="password" name="password" class="form-input" required>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="remember" name="remember" class="form-checkbox">
-                        <label for="remember" class="checkbox-label">Lembrar de mim</label>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-full">Entrar</button>
-            </form>
-            
-            <div class="login-links">
-                <a href="#" class="link">Esqueceu sua senha?</a>
-                <p>Não tem uma conta? <a href="trial.html" class="link">Comece grátis</a></p>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                    <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image">
+                </a>
+                <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                    <a href="../pages/planos.html" class="nav-item">Planos</a>
+                    <a href="../pages/trial.html" class="btn btn-primary">Experimentar grátis</a>
+                </nav>
             </div>
         </div>
-    </div>
-
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <div class="login-bg">
+                <div class="login-center">
+                    <div class="login-card-modern">
+                        <!-- Logo removida para evitar duplicidade, já existe no header -->
+                        <h1 class="login-title">Acesse sua conta</h1>
+                        <p class="login-subtitle">Bem-vindo! Entre para acessar o painel completo.</p>
+                        <form id="loginForm" class="form-modern">
+                            <div class="form-group">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required autofocus>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="form-label">Senha</label>
+                                <input type="password" id="password" name="password" class="form-input" placeholder="Digite sua senha" required>
+                            </div>
+                            <div class="form-group form-remember">
+                                <input type="checkbox" id="remember" name="remember" class="form-checkbox">
+                                <label for="remember" class="checkbox-label">Lembrar de mim</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+                        </form>
+                        <div class="login-links-modern">
+                            <a href="#" class="link">Esqueceu a senha?</a>
+                            <span>Não tem conta? <a href="trial.html" class="link">Comece grátis</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <style>
+        .logo-login-img { height: 48px; }
+    </style>
+    <footer class="footer-section">
+        <div class="container">
+            <div class="grid grid-cols-4 footer-grid-container">
+                <div>
+                    <a href="../index.html" class="logo footer-logo" aria-label="Voltar ao topo">
+                        <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image">
+                    </a>
+                    <p class="footer-description-text">
+                        Software jurídico completo para advogados e escritórios.
+                    </p>
+                </div>
+                <div>
+                    <h6 class="footer-title">Produto</h6>
+                    <ul class="footer-list">
+                        <li class="footer-list-item"><a href="../index.html#funcionalidades" class="footer-link">Funcionalidades</a></li>
+                        <li class="footer-list-item"><a href="../pages/planos.html" class="footer-link">Planos</a></li>
+                        <li class="footer-list-item"><a href="../pages/trial.html" class="footer-link">Teste grátis</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="footer-title">Empresa</h6>
+                    <ul class="footer-list">
+                        <li class="footer-list-item"><a href="../index.html#sobre" class="footer-link">Sobre</a></li>
+                        <li class="footer-list-item"><a href="../index.html#contato" class="footer-link">Contato</a></li>
+                        <li class="footer-list-item"><a href="#" class="footer-link">Suporte</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="footer-title">Legal</h6>
+                    <ul class="footer-list">
+                        <li class="footer-list-item"><a href="#" class="footer-link">Termos de Uso</a></li>
+                        <li class="footer-list-item"><a href="#" class="footer-link">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom-section">
+                <p class="footer-bottom-text">
+                    © 2025 Ali Software Jurídico. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <a href="https://wa.me/5519991821389?text=Olá! Gostaria de saber mais sobre o Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       aria-label="Falar conosco pelo WhatsApp"
+       title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    </a>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             // Simular login
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
             if (email && password) {
-                // Armazenar dados do usuário
                 localStorage.setItem('userLoggedIn', 'true');
                 localStorage.setItem('userEmail', email);
-                
-                // Redirecionar para o dashboard
                 window.location.href = 'dashboard.html';
             } else {
                 alert('Por favor, preencha todos os campos.');

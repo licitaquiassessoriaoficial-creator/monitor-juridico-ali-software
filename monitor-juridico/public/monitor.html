@@ -624,6 +624,12 @@
     </style>
 </head>
 <body>
+    <script>
+        // Exigir login obrigatório
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'pages/login.html';
+        }
+    </script>
     <div class="app-container">
         <!-- Sidebar -->
         <nav class="sidebar">

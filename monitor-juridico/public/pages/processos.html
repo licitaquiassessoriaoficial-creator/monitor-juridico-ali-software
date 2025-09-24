@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script src="../js/AliSoftware.js?v=v-2025-09-23-1"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processos - Ali Software Jurídico</title>
@@ -10,6 +11,12 @@
     <script src="../js/AliSoftware.js?v=v-2025-09-23-1"></script>
 </head>
 <body>
+    <script>
+        // Proteger acesso: exigir login/cadastro completo
+        if (typeof AliSoftware !== 'undefined') {
+            AliSoftware.checkAuth();
+        }
+    </script>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -63,6 +70,7 @@
 
             <!-- Filter Bar -->
             <div class="filter-bar">
+    <!DOCTYPE html>
                 <div class="filter-section">
                     <input type="text" id="searchInput" class="search-input" placeholder="Buscar por número, cliente ou assunto...">
                     <button class="btn btn-outline" onclick="searchProcesses()" title="Buscar processos">
@@ -98,28 +106,28 @@
 
             <!-- Quick Stats -->
             <div class="process-stats">
-                <div class="stat-item">
+                <div class="stat-item stat-filter" onclick="filterByStat('ativos')" title="Filtrar Processos Ativos">
                     <i class="fas fa-gavel icon-primary"></i>
                     <div>
                         <span class="stat-number">24</span>
                         <span class="stat-label">Processos Ativos</span>
                     </div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item stat-filter" onclick="filterByStat('novos')" title="Filtrar Novos Andamentos">
                     <i class="fas fa-bell icon-warning"></i>
                     <div>
                         <span class="stat-number">5</span>
                         <span class="stat-label">Novos Andamentos</span>
                     </div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item stat-filter" onclick="filterByStat('prazos')" title="Filtrar Prazos Próximos">
                     <i class="fas fa-clock icon-info"></i>
                     <div>
                         <span class="stat-number">8</span>
                         <span class="stat-label">Prazos Próximos</span>
                     </div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item stat-filter" onclick="filterByStat('audiencias')" title="Filtrar Audiências">
                     <i class="fas fa-calendar icon-success"></i>
                     <div>
                         <span class="stat-number">3</span>
@@ -173,7 +181,7 @@
                                 </td>
                                 <td>
                                     <div class="next-deadline urgent">
-                                        <span>Tríplica</span>
+                                        <span>Manifestação</span>
                                         <small>15/01/2025</small>
                                     </div>
                                 </td>
@@ -309,8 +317,13 @@
 
     <script src="../js/main.js?v=v-2025-09-23-1"></script>
     <script>
-        // Check authentication
-        if (!localStorage.getItem('userLoggedIn')) {
+        // Check authentication (sempre exigir login, inclusive se storage for false ou inválido)
+        try {
+            const logged = localStorage.getItem('userLoggedIn');
+            if (!logged || logged !== 'true') {
+                window.location.href = 'login.html';
+            }
+        } catch (e) {
             window.location.href = 'login.html';
         }
 
@@ -340,10 +353,47 @@
             const statusFilter = document.getElementById('statusFilter').value;
             const courtFilter = document.getElementById('courtFilter').value;
             const typeFilter = document.getElementById('typeFilter').value;
-            
-            // Implement search/filter logic here
-            console.log('Searching with:', { searchTerm, statusFilter, courtFilter, typeFilter });
+            filterProcessRows({ searchTerm, statusFilter, courtFilter, typeFilter });
             AliSoftware.showAlert('Filtros aplicados!', 'info');
+        }
+
+        // Filtro automático pelos cards
+        function filterByStat(stat) {
+            let filter = {};
+            if (stat === 'ativos') {
+                filter.status = 'Ativo';
+            } else if (stat === 'novos') {
+                filter.lastMovement = 'novo'; // Exemplo, ajuste conforme estrutura real
+            } else if (stat === 'prazos') {
+                filter.hasDeadline = true;
+            } else if (stat === 'audiencias') {
+                filter.hasAudience = true;
+            }
+            filterProcessRows(filter);
+        }
+
+        function filterProcessRows(filter) {
+            const rows = document.querySelectorAll('#processesTableBody tr');
+            rows.forEach(row => {
+                let show = true;
+                if (filter.status) {
+                    const status = row.querySelector('td:nth-child(5) .badge');
+                    if (!status || status.textContent.trim() !== filter.status) show = false;
+                }
+                if (filter.lastMovement) {
+                    const last = row.querySelector('.last-movement span');
+                    if (!last || !last.textContent.toLowerCase().includes('novo')) show = false;
+                }
+                if (filter.hasDeadline) {
+                    const deadline = row.querySelector('.next-deadline');
+                    if (!deadline || deadline.classList.contains('normal')) show = false;
+                }
+                if (filter.hasAudience) {
+                    const assunto = row.querySelector('td:nth-child(3)');
+                    if (!assunto || !assunto.textContent.toLowerCase().includes('audi')) show = false;
+                }
+                row.style.display = show ? '' : 'none';
+            });
         }
 
         function showNewProcessModal() {

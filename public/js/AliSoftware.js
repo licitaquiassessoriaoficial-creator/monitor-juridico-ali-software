@@ -109,7 +109,7 @@ const AliSoftware = {
         }
     },
 
-    // Sistema de alertas jurídicos (similar ao Astrea)
+    // Sistema de alertas jurídicos
     legalAlerts: {
         // Simulação de alertas de tribunais
         checkTribunalUpdates: function() {
