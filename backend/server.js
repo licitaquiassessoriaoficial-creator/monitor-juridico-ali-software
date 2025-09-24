@@ -53,6 +53,7 @@ app.use(limiter);
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://alisoftwarejuridico.netlify.app',
     'http://localhost:5500', // Live Server
     'https://localhost:5500'
   ],
