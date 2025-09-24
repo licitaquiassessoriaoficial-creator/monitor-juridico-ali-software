@@ -1300,7 +1300,7 @@
         let currentPage = 'dashboard';
 
         // Configuração da API
-        const API_BASE = window.location.origin;
+        const API_BASE = typeof API_URL !== 'undefined' ? API_URL : window.location.origin;
 
         // Navegação entre páginas
         function showPage(pageId) {
@@ -1429,7 +1429,9 @@
 
             try {
                 const response = await fetch(`${API_BASE}/history`, {
+                    credentials: 'include',
                     headers: {
+                        'Content-Type': 'application/json',
                         'x-user-id': userId
                     }
                 });
@@ -1613,6 +1615,7 @@
 
                 const response = await fetch(`${API_BASE}/ingest`, {
                     method: 'POST',
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                         'x-user-id': userId
@@ -1659,7 +1662,9 @@
             try {
                 const response = await fetch(`${API_BASE}/history`, {
                     method: 'DELETE',
+                    credentials: 'include',
                     headers: {
+                        'Content-Type': 'application/json',
                         'x-user-id': userId
                     }
                 });
@@ -1724,5 +1729,8 @@
             }
         }, 30000);
     </script>
+    
+    <!-- API Configuration -->
+    <script src="./config.js?v=v-2025-09-23-1"></script>
 </body>
 </html>
