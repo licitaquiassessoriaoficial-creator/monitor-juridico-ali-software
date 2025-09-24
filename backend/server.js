@@ -17,13 +17,14 @@ const financeRoutes = require('./routes/financeiro');
 const dashboardRoutes = require('./routes/dashboard');
 const monitorRoutes = require('./routes/monitor');
 const emailRoutes = require('./routes/email');
+const billingRoutes = require('./routes/billing');
 const { authenticateToken } = require('./middleware/auth');
 const errorHandler = require('./middleware/errorHandler');
 const { verificarConexao } = require('./services/emailService');
 const { iniciarAgendamentos, pararAgendamentos } = require('./services/notificationService');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
 // Middlewares de segurança
 app.use(helmet({
@@ -100,7 +101,9 @@ app.use('/api/clientes', authenticateToken, clientRoutes);
 app.use('/api/financeiro', authenticateToken, financeRoutes);
 app.use('/api/dashboard', authenticateToken, dashboardRoutes);
 app.use('/api/monitor', authenticateToken, monitorRoutes);
+
 app.use('/api/email', authenticateToken, emailRoutes);
+app.use('/api/billing', authenticateToken, billingRoutes);
 
 // Rota catch-all para SPA (deve vir por último)
 app.get('*', (req, res) => {
