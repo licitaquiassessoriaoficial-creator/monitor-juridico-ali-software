@@ -124,6 +124,17 @@ a:hover {
     transition: opacity 0.2s ease;
 }
 
+/* Forçar tamanho correto da logo em qualquer situação */
+.header .logo-image,
+.logo-image,
+img[src*="logo.png"] {
+    width: 120px !important;
+    height: auto !important;
+    max-height: 35px !important;
+    max-width: 120px !important;
+    object-fit: contain !important;
+}
+
 .logo:hover {
     opacity: 0.8;
     text-decoration: none;
@@ -143,9 +154,10 @@ a:hover {
 }
 
 .logo-image {
-    width: 140px;
-    height: auto;
-    max-height: 45px;
+    width: 120px !important;
+    height: auto !important;
+    max-height: 35px !important;
+    max-width: 120px !important;
     object-fit: contain;
     transition: all 0.3s ease;
 }
@@ -3312,12 +3324,13 @@ h1, h2, h3 {
     
     /* Logo */
     .logo-image {
-        width: 110px;
-        max-height: 32px;
+        width: 90px !important;
+        max-height: 28px !important;
+        max-width: 90px !important;
     }
     
     .logo {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
     }
     
     /* Hero Section */
@@ -3635,12 +3648,13 @@ h1, h2, h3 {
 /* Tablet */
 @media (min-width: 769px) and (max-width: 1024px) {
     .logo-image {
-        width: 130px;
-        max-height: 40px;
+        width: 100px !important;
+        max-height: 32px !important;
+        max-width: 100px !important;
     }
     
     .logo {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
 }
 
@@ -3651,7 +3665,8 @@ h1, h2, h3 {
     }
     
     .logo-image {
-        width: 150px;
-        max-height: 50px;
+        width: 110px !important;
+        max-height: 35px !important;
+        max-width: 110px !important;
     }
 }
