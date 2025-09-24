@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="agenda.html" class="nav-item active">Agenda</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Agenda</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-calendar-alt"></i> Agenda & Tarefas</h1>
+                    <p>Gerencie seus compromissos, prazos e tarefas</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="syncCalendar()" title="Sincronizar calendário">
+                        <i class="fas fa-sync-alt"></i> Sincronizar
+                    </button>
+                    <button class="btn btn-primary" onclick="addNewEvent()" title="Adicionar novo evento">
+                        <i class="fas fa-plus"></i> Novo Evento
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label for="viewType">Visualização:</label>
+                    <select id="viewType" class="form-select" title="Selecionar modo de visualização do calendário">
+                        <option value="day">Dia</option>
+                        <option value="week" selected>Semana</option>
+                        <option value="month">Mês</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="eventType">Tipo:</label>
+                    <select id="eventType" class="form-select" title="Filtrar por tipo de evento">
+                        <option value="all">Todos</option>
+                        <option value="audiencia">Audiências</option>
+                        <option value="prazo">Prazos</option>
+                        <option value="tarefa">Tarefas</option>
+                        <option value="reuniao">Reuniões</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="priority">Prioridade:</label>
+                    <select id="priority" class="form-select" title="Filtrar por prioridade">
+                        <option value="all">Todas</option>
+                        <option value="urgent">Urgente</option>
+                        <option value="high">Alta</option>
+                        <option value="normal">Normal</option>
+                        <option value="low">Baixa</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Calendar View -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <button class="btn btn-outline btn-sm" onclick="previousWeek()" title="Semana anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h2 id="currentPeriod">16 - 22 Janeiro 2025</h2>
+                    <button class="btn btn-outline btn-sm" onclick="nextWeek()" title="Próxima semana">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="calendar-day">
+                        <div class="day-header">
+                            <span class="day-name">Segunda</span>
+                            <span class="day-date">16</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event urgent">
+                                <span class="event-time">09:00</span>
+                                <span class="event-title">Audiência - Silva vs Santos</span>
+                                <span class="event-type">Audiência</span>
+                            </div>
+                            <div class="event normal">
+                                <span class="event-time">14:30</span>
+                                <span class="event-title">Reunião com cliente</span>
+                                <span class="event-type">Reunião</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calendar-day">
+                        <div class="day-header">
+                            <span class="day-name">Terça</span>
+                            <span class="day-date">17</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event high">
+                                <span class="event-time">10:00</span>
+                                <span class="event-title">Prazo contestação</span>
+                                <span class="event-type">Prazo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calendar-day">
+                        <div class="day-header">
+                            <span class="day-name">Quarta</span>
+                            <span class="day-date">18</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event normal">
+                                <span class="event-time">15:00</span>
+                                <span class="event-title">Análise de contratos</span>
+                                <span class="event-type">Tarefa</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calendar-day">
+                        <div class="day-header">
+                            <span class="day-name">Quinta</span>
+                            <span class="day-date">19</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event urgent">
+                                <span class="event-time">11:00</span>
+                                <span class="event-title">Audiência - Costa vs Lima</span>
+                                <span class="event-type">Audiência</span>
+                            </div>
+                            <div class="event normal">
+                                <span class="event-time">16:00</span>
+                                <span class="event-title">Revisão de petição</span>
+                                <span class="event-type">Tarefa</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calendar-day">
+                        <div class="day-header">
+                            <span class="day-name">Sexta</span>
+                            <span class="day-date">20</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event high">
+                                <span class="event-time">08:30</span>
+                                <span class="event-title">Prazo recursal</span>
+                                <span class="event-type">Prazo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calendar-day weekend">
+                        <div class="day-header">
+                            <span class="day-name">Sábado</span>
+                            <span class="day-date">21</span>
+                        </div>
+                        <div class="day-events">
+                            <!-- Sem eventos -->
+                        </div>
+                    </div>
+
+                    <div class="calendar-day weekend">
+                        <div class="day-header">
+                            <span class="day-name">Domingo</span>
+                            <span class="day-date">22</span>
+                        </div>
+                        <div class="day-events">
+                            <!-- Sem eventos -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Tasks -->
+            <div class="tasks-section">
+                <h3><i class="fas fa-tasks"></i> Próximas Tarefas</h3>
+                
+                <div class="tasks-list">
+                    <div class="task-item urgent">
+                        <div class="task-priority"></div>
+                        <div class="task-content">
+                            <h4>Prazo para contestação - Processo 123456</h4>
+                            <p>Vence hoje às 18:00</p>
+                            <div class="task-meta">
+                                <span class="task-client">Cliente: João Silva</span>
+                                <span class="task-type">Cível</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn btn-sm btn-outline" onclick="markComplete(1)" title="Marcar como concluída">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="editTask(1)" title="Editar tarefa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="task-item high">
+                        <div class="task-priority"></div>
+                        <div class="task-content">
+                            <h4>Preparar audiência de conciliação</h4>
+                            <p>Vence amanhã às 09:00</p>
+                            <div class="task-meta">
+                                <span class="task-client">Cliente: Maria Santos</span>
+                                <span class="task-type">Trabalhista</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn btn-sm btn-outline" onclick="markComplete(2)" title="Marcar como concluída">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="editTask(2)" title="Editar tarefa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="task-item normal">
+                        <div class="task-priority"></div>
+                        <div class="task-content">
+                            <h4>Revisar contrato de prestação de serviços</h4>
+                            <p>Vence em 2 dias</p>
+                            <div class="task-meta">
+                                <span class="task-client">Cliente: Empresa XYZ</span>
+                                <span class="task-type">Empresarial</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn btn-sm btn-outline" onclick="markComplete(3)" title="Marcar como concluída">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="editTask(3)" title="Editar tarefa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Novo Evento -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Evento</h3>
+                <button class="modal-close" onclick="closeEventModal()" title="Fechar janela">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="eventForm" class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTitle" class="form-label">Título *</label>
+                            <input type="text" id="eventTitle" name="eventTitle" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventDate" class="form-label">Data *</label>
+                            <input type="date" id="eventDate" name="eventDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventTime" class="form-label">Horário *</label>
+                            <input type="time" id="eventTime" name="eventTime" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTypeModal" class="form-label">Tipo *</label>
+                            <select id="eventTypeModal" name="eventType" class="form-select" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="audiencia">Audiência</option>
+                                <option value="prazo">Prazo</option>
+                                <option value="tarefa">Tarefa</option>
+                                <option value="reuniao">Reunião</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventPriority" class="form-label">Prioridade *</label>
+                            <select id="eventPriority" name="eventPriority" class="form-select" required>
+                                <option value="normal">Normal</option>
+                                <option value="high">Alta</option>
+                                <option value="urgent">Urgente</option>
+                                <option value="low">Baixa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventClient" class="form-label">Cliente</label>
+                        <input type="text" id="eventClient" name="eventClient" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDescription" class="form-label">Descrição</label>
+                        <textarea id="eventDescription" name="eventDescription" class="form-textarea" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="eventReminder" name="eventReminder" class="form-checkbox">
+                            <span class="checkbox-label">Lembrete por email/WhatsApp</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeEventModal()" title="Cancelar operação">Cancelar</button>
+                <button type="submit" form="eventForm" class="btn btn-primary">Salvar Evento</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Funções da agenda
+        function addNewEvent() {
+            document.getElementById('eventModal').style.display = 'flex';
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').style.display = 'none';
+            document.getElementById('eventForm').reset();
+        }
+
+        function syncCalendar() {
+            alert('Sincronizando agenda com tribunais...');
+        }
+
+        function previousWeek() {
+            alert('Navegando para semana anterior...');
+        }
+
+        function nextWeek() {
+            alert('Navegando para próxima semana...');
+        }
+
+        function markComplete(taskId) {
+            if (confirm('Marcar tarefa como concluída?')) {
+                alert(`Tarefa ${taskId} marcada como concluída!`);
+            }
+        }
+
+        function editTask(taskId) {
+            alert(`Editando tarefa ${taskId}...`);
+        }
+
+        // Submissão do formulário
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const eventData = Object.fromEntries(formData.entries());
+            
+            console.log('Novo evento:', eventData);
+            alert('Evento salvo com sucesso!');
+            closeEventModal();
+        });
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('eventModal');
+            if (event.target === modal) {
+                closeEventModal();
+            }
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com a agenda no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

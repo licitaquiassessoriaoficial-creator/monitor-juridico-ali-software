@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financeiro - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .tab-navigation {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        
+        .tab-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            color: #666;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .tab-button:hover {
+            background: #f8f9fa;
+            color: #1a365d;
+        }
+        
+        .tab-button.active {
+            background: #1a365d;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .financial-overview {
+            background: white;
+            border-radius: 12px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none !important;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal.show {
+            display: block !important;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #1a365d;
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background-color: #e9ecef;
+            color: #1a365d;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .financial-overview {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .overview-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .overview-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 4px solid #ddd;
+            transition: transform 0.2s;
+        }
+        
+        .overview-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .overview-card.revenue {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f8fff8 100%);
+        }
+        
+        .overview-card.expenses {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fde8e8 0%, #fff8f8 100%);
+        }
+        
+        .overview-card.profit {
+            border-left-color: #007bff;
+            background: linear-gradient(135deg, #e8f4ff 0%, #f8fcff 100%);
+        }
+        
+        .overview-card.pending {
+            border-left-color: #ffc107;
+            background: linear-gradient(135deg, #fff8e1 0%, #fffef8 100%);
+        }
+        
+        .card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(26, 54, 93, 0.1);
+            color: #1a365d;
+            margin-bottom: 1rem;
+        }
+        
+        .card-content h3 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+            font-size: 1rem;
+        }
+        
+        .card-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1a365d;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-change {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .card-change.positive {
+            color: #28a745;
+        }
+        
+        .card-change.negative {
+            color: #dc3545;
+        }
+        
+        .card-change.neutral {
+            color: #666;
+        }
+        
+        .dashboard-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .recent-transactions {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .recent-transactions h3 {
+            margin-top: 0;
+            color: #1a365d;
+            margin-bottom: 1rem;
+        }
+        
+        .transaction-list {
+            margin-bottom: 1.5rem;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: transform 0.2s;
+        }
+        
+        .transaction-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .transaction-info {
+            flex: 1;
+        }
+        
+        .transaction-desc {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+        
+        .transaction-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .transaction-amount.positive {
+            color: #28a745;
+        }
+        
+        .transaction-amount.negative {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item active">Financeiro</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Financeiro</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-dollar-sign"></i> Gestão Financeira</h1>
+                    <p>Controle suas receitas, despesas e faturamento</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="generateFinancialReport()" title="Gerar relatório financeiro">
+                        <i class="fas fa-chart-bar"></i> Relatório
+                    </button>
+                    <button class="btn btn-outline" onclick="exportFinancialData()" title="Exportar dados financeiros">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <button class="btn btn-primary" onclick="addNewTransaction()" title="Adicionar nova transação">
+                        <i class="fas fa-plus"></i> Nova Transação
+                    </button>
+                </div>
+            </div>
+
+            <!-- Financial Summary -->
+            <div class="grid grid-cols-4 stats-grid">
+                <div class="stat-card success">
+                    <div class="stat-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalIncome">R$ 0,00</h3>
+                        <p>Receitas do Mês</p>
+                    </div>
+                </div>
+
+                <div class="stat-card danger">
+                    <div class="stat-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalExpenses">R$ 0,00</h3>
+                        <p>Despesas do Mês</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="netProfit">R$ 0,00</h3>
+                        <p>Lucro Líquido</p>
+                    </div>
+                </div>
+
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="pendingReceivables">R$ 0,00</h3>
+                        <p>A Receber</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Navigation Tabs -->
+            <div class="tab-navigation">
+                <button class="tab-button active" onclick="showTab('dashboard')" title="Dashboard Financeiro">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </button>
+                <button class="tab-button" onclick="showTab('receivables')" title="Contas a Receber">
+                    <i class="fas fa-money-check"></i> Contas a Receber
+                </button>
+                <button class="tab-button" onclick="showTab('payables')" title="Contas a Pagar">
+                    <i class="fas fa-file-invoice-dollar"></i> Contas a Pagar
+                </button>
+                <button class="tab-button" onclick="showTab('boletos')" title="Boletos e PIX">
+                    <i class="fas fa-receipt"></i> Boletos e PIX
+                </button>
+                <button class="tab-button" onclick="showTab('cashflow')" title="Fluxo de Caixa">
+                    <i class="fas fa-chart-area"></i> Fluxo de Caixa
+                </button>
+                <button class="tab-button" onclick="showTab('reports')" title="Relatórios">
+                    <i class="fas fa-file-alt"></i> Relatórios
+                </button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboardTab" class="tab-content active">
+                <div class="financial-overview">
+                    <div class="overview-cards">
+                        <div class="overview-card revenue">
+                            <div class="card-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Receitas do Mês</h3>
+                                <div class="card-value">R$ 15.750,00</div>
+                                <div class="card-change positive">+12.5% vs mês anterior</div>
+                            </div>
+                        </div>
+
+                        <div class="overview-card expenses">
+                            <div class="card-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Despesas do Mês</h3>
+                                <div class="card-value">R$ 8.420,00</div>
+                                <div class="card-change negative">+5.2% vs mês anterior</div>
+                            </div>
+                        </div>
+
+                        <div class="overview-card profit">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Lucro Líquido</h3>
+                                <div class="card-value">R$ 7.330,00</div>
+                                <div class="card-change positive">+18.7% vs mês anterior</div>
+                            </div>
+                        </div>
+
+                        <div class="overview-card pending">
+                            <div class="card-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>A Receber</h3>
+                                <div class="card-value">R$ 12.890,00</div>
+                                <div class="card-change neutral">23 faturas pendentes</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-actions">
+                        <button class="btn btn-primary" onclick="generateBoleto()" title="Gerar novo boleto com PIX">
+                            <i class="fas fa-plus"></i> Gerar Boleto com PIX
+                        </button>
+                        <button class="btn btn-success" onclick="addReceivable()" title="Adicionar conta a receber">
+                            <i class="fas fa-money-check"></i> Nova Conta a Receber
+                        </button>
+                        <button class="btn btn-warning" onclick="addExpense()" title="Registrar despesa">
+                            <i class="fas fa-minus"></i> Registrar Despesa
+                        </button>
+                        <button class="btn btn-info" onclick="showCashFlow()" title="Ver fluxo de caixa completo">
+                            <i class="fas fa-chart-area"></i> Ver Fluxo de Caixa
+                        </button>
+                    </div>
+
+                    <div class="recent-transactions">
+                        <h3><i class="fas fa-history"></i> Transações Recentes</h3>
+                        <div class="transaction-list">
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <div class="transaction-desc">Honorários - João Silva</div>
+                                    <div class="transaction-date">Hoje, 14:30</div>
+                                </div>
+                                <div class="transaction-amount positive">+R$ 2.500,00</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <div class="transaction-desc">Aluguel do Escritório</div>
+                                    <div class="transaction-date">Ontem, 09:15</div>
+                                </div>
+                                <div class="transaction-amount negative">-R$ 1.800,00</div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <div class="transaction-desc">Consultoria - Maria Santos</div>
+                                    <div class="transaction-date">20/09/2025, 16:45</div>
+                                </div>
+                                <div class="transaction-amount positive">+R$ 800,00</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" onclick="showTab('transactions')">
+                            Ver Todas as Transações
+                        </button>
+                    </div>
+                </div>
+            </div>
+                <div class="filters-section">
+                    <div class="search-group">
+                        <input type="text" id="transactionSearch" class="form-input" placeholder="Buscar transação..." title="Digite para buscar transação">
+                        <button class="btn btn-outline" onclick="searchTransactions()" title="Buscar transações">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="typeFilter">Tipo:</label>
+                        <select id="typeFilter" class="form-select" onchange="filterTransactions()" title="Filtrar por tipo de transação">
+                            <option value="all">Todos</option>
+                            <option value="income">Receita</option>
+                            <option value="expense">Despesa</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="periodFilter">Período:</label>
+                        <select id="periodFilter" class="form-select" onchange="filterTransactions()" title="Filtrar por período">
+                            <option value="month">Este Mês</option>
+                            <option value="quarter">Este Trimestre</option>
+                            <option value="year">Este Ano</option>
+                            <option value="all">Todos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Cliente</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody">
+                            <!-- Transactions will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Receivables Tab -->
+            <div id="receivablesTab" class="tab-content">
+                <div class="filters-section">
+                    <div class="search-group">
+                        <input type="text" id="receivableSearch" class="form-input" placeholder="Buscar conta a receber..." title="Digite para buscar conta a receber">
+                        <button class="btn btn-outline" onclick="searchReceivables()" title="Buscar contas a receber">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="receivableStatusFilter">Status:</label>
+                        <select id="receivableStatusFilter" class="form-select" onchange="filterReceivables()" title="Filtrar por status das contas a receber">
+                            <option value="all">Todos</option>
+                            <option value="pending">Pendente</option>
+                            <option value="overdue">Vencida</option>
+                            <option value="paid">Paga</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vencimento</th>
+                                <th>Cliente</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receivablesTableBody">
+                            <!-- Receivables will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payables Tab -->
+            <div id="payablesTab" class="tab-content">
+                <div class="filters-section">
+                    <div class="search-group">
+                        <input type="text" id="payableSearch" class="form-input" placeholder="Buscar conta a pagar..." title="Digite para buscar conta a pagar">
+                        <button class="btn btn-outline" onclick="searchPayables()" title="Buscar contas a pagar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="payableStatusFilter">Status:</label>
+                        <select id="payableStatusFilter" class="form-select" onchange="filterPayables()" title="Filtrar por status das contas a pagar">
+                            <option value="all">Todos</option>
+                            <option value="pending">Pendente</option>
+                            <option value="overdue">Vencida</option>
+                            <option value="paid">Paga</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vencimento</th>
+                                <th>Fornecedor</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payablesTableBody">
+                            <!-- Payables will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Boletos Tab -->
+            <div id="boletosTab" class="tab-content">
+                <div class="page-actions boletos-actions">
+                    <button class="btn btn-primary" onclick="generateBoleto()" title="Gerar novo boleto">
+                        <i class="fas fa-plus"></i> Gerar Boleto
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Vencimento</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="boletosTableBody">
+                            <!-- Boletos will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Nova Transação -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="transactionModalTitle">Nova Transação</h3>
+                <button class="modal-close" onclick="closeTransactionModal()" title="Fechar janela">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="transactionForm" class="form">
+                    <input type="hidden" id="transactionId" name="transactionId">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionType" class="form-label">Tipo *</label>
+                            <select id="transactionType" name="transactionType" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="income">Receita</option>
+                                <option value="expense">Despesa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionValue" class="form-label">Valor *</label>
+                            <input type="number" id="transactionValue" name="transactionValue" class="form-input" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionDescription" class="form-label">Descrição *</label>
+                        <input type="text" id="transactionDescription" name="transactionDescription" class="form-input" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionCategory" class="form-label">Categoria *</label>
+                            <select id="transactionCategory" name="transactionCategory" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="honorarios">Honorários</option>
+                                <option value="consultoria">Consultoria</option>
+                                <option value="custas">Custas Processuais</option>
+                                <option value="aluguel">Aluguel</option>
+                                <option value="energia">Energia Elétrica</option>
+                                <option value="telefone">Telefone/Internet</option>
+                                <option value="material">Material de Escritório</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionDate" class="form-label">Data *</label>
+                            <input type="date" id="transactionDate" name="transactionDate" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionClient" class="form-label">Cliente</label>
+                        <select id="transactionClient" name="transactionClient" class="form-select">
+                            <option value="">Selecione um cliente</option>
+                            <option value="joao-silva">João Silva</option>
+                            <option value="maria-santos">Maria Santos</option>
+                            <option value="empresa-xyz">Empresa XYZ Ltda</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionPaymentMethod" class="form-label">Forma de Pagamento</label>
+                        <select id="transactionPaymentMethod" name="transactionPaymentMethod" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="dinheiro">Dinheiro</option>
+                            <option value="pix">PIX</option>
+                            <option value="cartao">Cartão</option>
+                            <option value="transferencia">Transferência</option>
+                            <option value="boleto">Boleto</option>
+                            <option value="cheque">Cheque</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionNotes" class="form-label">Observações</label>
+                        <textarea id="transactionNotes" name="transactionNotes" class="form-textarea" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeTransactionModal()" title="Cancelar operação">Cancelar</button>
+                <button type="submit" form="transactionForm" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Gerar Boleto -->
+    <div id="boletoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Gerar Boleto</h3>
+                <button class="modal-close" onclick="closeBoletoModal()" title="Fechar janela">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="boletoForm" class="form">
+                    <div class="form-group">
+                        <label for="boletoClient" class="form-label">Cliente *</label>
+                        <select id="boletoClient" name="boletoClient" class="form-select" required>
+                            <option value="">Selecione um cliente</option>
+                            <option value="joao-silva">João Silva</option>
+                            <option value="maria-santos">Maria Santos</option>
+                            <option value="empresa-xyz">Empresa XYZ Ltda</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="boletoValue" class="form-label">Valor *</label>
+                            <input type="number" id="boletoValue" name="boletoValue" class="form-input" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="boletoDueDate" class="form-label">Vencimento *</label>
+                            <input type="date" id="boletoDueDate" name="boletoDueDate" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="boletoDescription" class="form-label">Descrição *</label>
+                        <input type="text" id="boletoDescription" name="boletoDescription" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="boletoInstructions" class="form-label">Instruções</label>
+                        <textarea id="boletoInstructions" name="boletoInstructions" class="form-textarea" rows="3" placeholder="Instruções para pagamento..."></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeBoletoModal()" title="Cancelar operação">Cancelar</button>
+                <button type="submit" form="boletoForm" class="btn btn-primary">Gerar Boleto</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Arrays para armazenar dados financeiros
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let receivables = JSON.parse(localStorage.getItem('receivables')) || [];
+        let payables = JSON.parse(localStorage.getItem('payables')) || [];
+        let boletos = JSON.parse(localStorage.getItem('boletos')) || [];
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Garantir que os modais estejam fechados
+            document.getElementById('transactionModal').style.display = 'none';
+            document.getElementById('boletoModal').style.display = 'none';
+            
+            loadTransactions();
+            loadReceivables();
+            loadPayables();
+            loadBoletos();
+            updateFinancialSummary();
+            setMinDate();
+            // Garantir que a aba dashboard esteja ativa por padrão
+            showTab('dashboard');
+        });
+
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transactionDate').value = today;
+            document.getElementById('boletoDueDate').min = today;
+        }
+
+        function showTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Add active class to selected tab button
+            const activeButton = document.querySelector(`.tab-button[onclick="showTab('${tabName}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+            
+            // Add active class to selected tab content
+            const activeContent = document.getElementById(tabName + 'Tab');
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
+        }
+
+        function updateFinancialSummary() {
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+
+            const monthlyTransactions = transactions.filter(t => {
+                const transDate = new Date(t.date);
+                return transDate.getMonth() === currentMonth && transDate.getFullYear() === currentYear;
+            });
+
+            const income = monthlyTransactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + parseFloat(t.value), 0);
+
+            const expenses = monthlyTransactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + parseFloat(t.value), 0);
+
+            const pendingReceivablesAmount = receivables
+                .filter(r => r.status === 'pending')
+                .reduce((sum, r) => sum + parseFloat(r.value), 0);
+
+            document.getElementById('totalIncome').textContent = formatCurrency(income);
+            document.getElementById('totalExpenses').textContent = formatCurrency(expenses);
+            document.getElementById('netProfit').textContent = formatCurrency(income - expenses);
+            document.getElementById('pendingReceivables').textContent = formatCurrency(pendingReceivablesAmount);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        function loadTransactions() {
+            const tbody = document.getElementById('transactionsTableBody');
+            tbody.innerHTML = '';
+
+            transactions.forEach(transaction => {
+                const row = createTransactionRow(transaction);
+                tbody.appendChild(row);
+            });
+        }
+
+        function createTransactionRow(transaction) {
+            const row = document.createElement('tr');
+            const isIncome = transaction.type === 'income';
+            
+            row.innerHTML = `
+                <td>${formatDate(transaction.date)}</td>
+                <td>${transaction.description}</td>
+                <td>${transaction.category}</td>
+                <td>${transaction.client || '-'}</td>
+                <td>
+                    <span class="badge ${isIncome ? 'badge-success' : 'badge-danger'}">
+                        ${isIncome ? 'Receita' : 'Despesa'}
+                    </span>
+                </td>
+                <td class="${isIncome ? 'text-success' : 'text-danger'}">
+                    ${isIncome ? '+' : '-'} ${formatCurrency(transaction.value)}
+                </td>
+                <td>
+                    <span class="badge badge-success">Confirmado</span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline" onclick="editTransaction('${transaction.id}')" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline" onclick="deleteTransaction('${transaction.id}')" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            
+            return row;
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('pt-BR');
+        }
+
+        function addNewTransaction() {
+            document.getElementById('transactionModalTitle').textContent = 'Nova Transação';
+            document.getElementById('transactionForm').reset();
+            document.getElementById('transactionId').value = '';
+            setMinDate();
+            const modal = document.getElementById('transactionModal');
+            modal.style.display = 'block';
+            modal.classList.add('show');
+        }
+
+        function closeTransactionModal() {
+            const modal = document.getElementById('transactionModal');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        }
+
+        function editTransaction(transactionId) {
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (!transaction) return;
+
+            document.getElementById('transactionModalTitle').textContent = 'Editar Transação';
+            document.getElementById('transactionId').value = transaction.id;
+            document.getElementById('transactionType').value = transaction.type;
+            document.getElementById('transactionValue').value = transaction.value;
+            document.getElementById('transactionDescription').value = transaction.description;
+            document.getElementById('transactionCategory').value = transaction.category;
+            document.getElementById('transactionDate').value = transaction.date;
+            document.getElementById('transactionClient').value = transaction.client || '';
+            document.getElementById('transactionPaymentMethod').value = transaction.paymentMethod || '';
+            document.getElementById('transactionNotes').value = transaction.notes || '';
+
+            const modal = document.getElementById('transactionModal');
+            modal.style.display = 'block';
+            modal.classList.add('show');
+        }
+
+        function deleteTransaction(transactionId) {
+            if (confirm('Tem certeza que deseja excluir esta transação?')) {
+                transactions = transactions.filter(t => t.id !== transactionId);
+                saveTransactions();
+                loadTransactions();
+                updateFinancialSummary();
+            }
+        }
+
+        function saveTransactions() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+        }
+
+        function generateTransactionId() {
+            return 'trans_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Form submission for transactions
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const transactionData = Object.fromEntries(formData.entries());
+            
+            const transactionId = transactionData.transactionId;
+            
+            if (transactionId) {
+                // Edit existing transaction
+                const transactionIndex = transactions.findIndex(t => t.id === transactionId);
+                if (transactionIndex !== -1) {
+                    transactions[transactionIndex] = {
+                        ...transactions[transactionIndex],
+                        ...transactionData,
+                        value: parseFloat(transactionData.transactionValue),
+                        updatedAt: new Date().toISOString()
+                    };
+                }
+            } else {
+                // New transaction
+                const newTransaction = {
+                    id: generateTransactionId(),
+                    type: transactionData.transactionType,
+                    value: parseFloat(transactionData.transactionValue),
+                    description: transactionData.transactionDescription,
+                    category: transactionData.transactionCategory,
+                    date: transactionData.transactionDate,
+                    client: transactionData.transactionClient,
+                    paymentMethod: transactionData.transactionPaymentMethod,
+                    notes: transactionData.transactionNotes,
+                    createdAt: new Date().toISOString()
+                };
+                transactions.push(newTransaction);
+            }
+            
+            saveTransactions();
+            loadTransactions();
+            updateFinancialSummary();
+            closeTransactionModal();
+        });
+
+        function loadReceivables() {
+            const tbody = document.getElementById('receivablesTableBody');
+            tbody.innerHTML = '';
+
+            if (receivables.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma conta a receber encontrada</td></tr>';
+                return;
+            }
+
+            receivables.forEach(receivable => {
+                const row = createReceivableRow(receivable);
+                tbody.appendChild(row);
+            });
+        }
+
+        function createReceivableRow(receivable) {
+            const row = document.createElement('tr');
+            const isOverdue = new Date(receivable.dueDate) < new Date() && receivable.status === 'pending';
+            
+            row.innerHTML = `
+                <td class="${isOverdue ? 'text-danger' : ''}">${formatDate(receivable.dueDate)}</td>
+                <td>${receivable.client}</td>
+                <td>${receivable.description}</td>
+                <td>${formatCurrency(receivable.value)}</td>
+                <td>
+                    <span class="badge ${getStatusBadgeClass(receivable.status, isOverdue)}">
+                        ${getStatusText(receivable.status, isOverdue)}
+                    </span>
+                </td>
+                <td>
+                    ${receivable.status === 'pending' ? `
+                        <button class="btn btn-sm btn-success" onclick="markAsReceived('${receivable.id}')" title="Marcar como recebido">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    ` : ''}
+                    <button class="btn btn-sm btn-outline" onclick="editReceivable('${receivable.id}')" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            `;
+            
+            return row;
+        }
+
+        function getStatusBadgeClass(status, isOverdue) {
+            if (isOverdue) return 'badge-danger';
+            switch(status) {
+                case 'pending': return 'badge-warning';
+                case 'paid': return 'badge-success';
+                default: return 'badge-secondary';
+            }
+        }
+
+        function getStatusText(status, isOverdue) {
+            if (isOverdue) return 'Vencida';
+            switch(status) {
+                case 'pending': return 'Pendente';
+                case 'paid': return 'Paga';
+                default: return status;
+            }
+        }
+
+        function loadPayables() {
+            const tbody = document.getElementById('payablesTableBody');
+            tbody.innerHTML = '';
+
+            if (payables.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma conta a pagar encontrada</td></tr>';
+                return;
+            }
+
+            payables.forEach(payable => {
+                const row = createPayableRow(payable);
+                tbody.appendChild(row);
+            });
+        }
+
+        function createPayableRow(payable) {
+            const row = document.createElement('tr');
+            const isOverdue = new Date(payable.dueDate) < new Date() && payable.status === 'pending';
+            
+            row.innerHTML = `
+                <td class="${isOverdue ? 'text-danger' : ''}">${formatDate(payable.dueDate)}</td>
+                <td>${payable.supplier}</td>
+                <td>${payable.description}</td>
+                <td>${formatCurrency(payable.value)}</td>
+                <td>
+                    <span class="badge ${getStatusBadgeClass(payable.status, isOverdue)}">
+                        ${getStatusText(payable.status, isOverdue)}
+                    </span>
+                </td>
+                <td>
+                    ${payable.status === 'pending' ? `
+                        <button class="btn btn-sm btn-success" onclick="markAsPaid('${payable.id}')" title="Marcar como pago">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    ` : ''}
+                    <button class="btn btn-sm btn-outline" onclick="editPayable('${payable.id}')" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            `;
+            
+            return row;
+        }
+
+        function loadBoletos() {
+            const tbody = document.getElementById('boletosTableBody');
+            tbody.innerHTML = '';
+
+            if (boletos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhum boleto encontrado</td></tr>';
+                return;
+            }
+
+            boletos.forEach(boleto => {
+                const row = createBoletoRow(boleto);
+                tbody.appendChild(row);
+            });
+        }
+
+        function createBoletoRow(boleto) {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${boleto.code}</td>
+                <td>${boleto.client}</td>
+                <td>${formatDate(boleto.dueDate)}</td>
+                <td>${formatCurrency(boleto.value)}</td>
+                <td>
+                    <span class="badge ${boleto.status === 'paid' ? 'badge-success' : 'badge-warning'}">
+                        ${boleto.status === 'paid' ? 'Pago' : 'Pendente'}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="downloadBoleto('${boleto.id}')" title="Download">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline" onclick="sendBoletoEmail('${boleto.id}')" title="Enviar por email">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                </td>
+            `;
+            
+            return row;
+        }
+
+        function generateBoleto() {
+            document.getElementById('boletoForm').reset();
+            const today = new Date();
+            const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+            document.getElementById('boletoDueDate').value = nextWeek.toISOString().split('T')[0];
+            const modal = document.getElementById('boletoModal');
+            modal.style.display = 'block';
+            modal.classList.add('show');
+        }
+
+        function closeBoletoModal() {
+            const modal = document.getElementById('boletoModal');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        }
+
+        // Form submission for boletos
+        document.getElementById('boletoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const boletoData = Object.fromEntries(formData.entries());
+            
+            const newBoleto = {
+                id: 'boleto_' + Date.now(),
+                code: generateBoletoCode(),
+                client: boletoData.boletoClient,
+                value: parseFloat(boletoData.boletoValue),
+                dueDate: boletoData.boletoDueDate,
+                description: boletoData.boletoDescription,
+                instructions: boletoData.boletoInstructions,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+            
+            boletos.push(newBoleto);
+            localStorage.setItem('boletos', JSON.stringify(boletos));
+            loadBoletos();
+            closeBoletoModal();
+            
+            alert('Boleto gerado com sucesso! Código: ' + newBoleto.code);
+        });
+
+        function generateBoletoCode() {
+            const timestamp = Date.now().toString().slice(-8);
+            const random = Math.random().toString(36).substr(2, 4).toUpperCase();
+            return timestamp + random;
+        }
+
+        function downloadBoleto(boletoId) {
+            const boleto = boletos.find(b => b.id === boletoId);
+            if (!boleto) return;
+
+            // Simular download do boleto
+            const boletoContent = generateBoletoContent(boleto);
+            const blob = new Blob([boletoContent], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `boleto_${boleto.code}.html`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function generateBoletoContent(boleto) {
+            const pixCode = generatePixCode(boleto);
+            const barcodeDigits = generateBarcodeDigits(boleto);
+            
+            return `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boleto - ${boleto.code}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .boleto-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .boleto-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1a365d; padding-bottom: 20px; }
+        .boleto-info { margin: 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .info-section { background: #f8f9fa; padding: 15px; border-radius: 6px; }
+        .boleto-code { font-size: 18px; font-weight: bold; color: #1a365d; }
+        .barcode { height: 60px; background: repeating-linear-gradient(90deg, #000 0, #000 2px, #fff 2px, #fff 4px); margin: 20px 0; border-radius: 4px; }
+        .barcode-digits { font-family: monospace; font-size: 14px; text-align: center; margin: 10px 0; letter-spacing: 2px; }
+        .pix-section { background: #e8f5e8; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #28a745; }
+        .pix-code { font-family: monospace; background: white; padding: 10px; border-radius: 4px; word-break: break-all; font-size: 12px; }
+        .qr-placeholder { width: 150px; height: 150px; background: #ddd; margin: 20px auto; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        @media print { body { background: white; } .boleto-container { box-shadow: none; } }
+    </style>
+</head>
+<body>
+    <div class="boleto-container">
+        <div class="boleto-header">
+            <h1 style="color: #1a365d; margin: 0;">Ali Software Jurídico</h1>
+            <h2 style="color: #666; margin: 10px 0 0 0;">Boleto Bancário com PIX</h2>
+        </div>
+        
+        <div class="boleto-info">
+            <div class="info-section">
+                <h3>Dados do Pagamento</h3>
+                <p><strong>Código do Boleto:</strong> <span class="boleto-code">${boleto.code}</span></p>
+                <p><strong>Valor:</strong> <span style="font-size: 24px; color: #28a745; font-weight: bold;">${formatCurrency(boleto.value)}</span></p>
+                <p><strong>Vencimento:</strong> ${formatDate(boleto.dueDate)}</p>
+                <p><strong>Descrição:</strong> ${boleto.description}</p>
+            </div>
+            <div class="info-section">
+                <h3>Dados do Cliente</h3>
+                <p><strong>Nome:</strong> ${boleto.client}</p>
+                <p><strong>Emissão:</strong> ${formatDate(boleto.createdAt)}</p>
+                <p><strong>Status:</strong> <span style="color: #ffc107;">Pendente</span></p>
+                ${boleto.instructions ? `<p><strong>Instruções:</strong> ${boleto.instructions}</p>` : ''}
+            </div>
+        </div>
+        
+        <div class="barcode"></div>
+        <div class="barcode-digits">${barcodeDigits}</div>
+        
+        <div class="pix-section">
+            <h3 style="margin-top: 0; color: #28a745;">💳 Pagamento via PIX</h3>
+            <p><strong>Copie e cole o código PIX abaixo ou escaneie o QR Code:</strong></p>
+            <div class="pix-code">${pixCode}</div>
+            <div class="qr-placeholder">QR Code PIX</div>
+            <p style="font-size: 12px; color: #666;">
+                ⚠️ Este código PIX é válido até ${formatDate(boleto.dueDate)}.<br>
+                📱 Use o app do seu banco para escanear ou colar o código PIX.
+            </p>
+        </div>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 12px;">
+            <p>Ali Software Jurídico - Gestão Jurídica Inteligente</p>
+            <p>CNPJ: 12.345.678/0001-90 | Tel: (19) 99182-1389</p>
+            <p>Este boleto foi gerado automaticamente pelo sistema.</p>
+        </div>
+    </div>
+</body>
+</html>
+            `;
+        }
+
+        function generatePixCode(boleto) {
+            // Gera um código PIX fictício mas realista
+            const merchantName = "ALI SOFTWARE JURIDICO";
+            const merchantCity = "CAMPINAS";
+            const pixKey = "12345678000190"; // CNPJ fictício
+            const description = boleto.description.substring(0, 25);
+            const value = boleto.value.toFixed(2);
+            
+            // Estrutura básica do PIX (formato simplificado)
+            return `00020126450014BR.GOV.BCB.PIX0123${pixKey}52040000530398654${value.length.toString().padStart(2,'0')}${value}5802BR5925${merchantName.padEnd(25,' ')}6008${merchantCity}62070503***6304`;
+        }
+
+        function generateBarcodeDigits(boleto) {
+            // Gera uma linha digitável fictícia mas realista
+            const bankCode = "341"; // Itaú
+            const currencyCode = "9";
+            const dueDate = Math.floor((new Date(boleto.dueDate) - new Date('1997-10-07')) / (1000 * 60 * 60 * 24));
+            const value = Math.floor(boleto.value * 100).toString().padStart(10, '0');
+            const code = boleto.code.replace(/[^0-9]/g, '').substring(0, 10).padStart(10, '0');
+            
+            return `${bankCode}${currencyCode}.${code.substring(0,5)} ${code.substring(5,10)}.${dueDate.toString().substring(0,4)} ${dueDate.toString().substring(4)} ${value.substring(0,5)} ${value.substring(5,10)}`;
+        }
+
+        function sendBoletoEmail(boletoId) {
+            alert('Funcionalidade de envio por email será implementada em breve!');
+        }
+
+        function generateFinancialReport() {
+            const reportData = {
+                income: transactions.filter(t => t.type === 'income'),
+                expenses: transactions.filter(t => t.type === 'expense'),
+                receivables: receivables,
+                payables: payables
+            };
+            
+            console.log('Financial Report:', reportData);
+            alert('Relatório financeiro gerado! Verifique o console para mais detalhes.');
+        }
+
+        function exportFinancialData() {
+            const data = {
+                transactions,
+                receivables,
+                payables,
+                boletos
+            };
+            
+            const csv = convertToCSV(data);
+            downloadCSV(csv, 'dados_financeiros_' + new Date().toISOString().split('T')[0] + '.csv');
+        }
+
+        function convertToCSV(data) {
+            let csv = 'Tipo,Data,Descrição,Valor,Status\n';
+            
+            data.transactions.forEach(t => {
+                csv += `${t.type},${t.date},${t.description},${t.value},confirmado\n`;
+            });
+            
+            return csv;
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Fechar modais ao clicar fora
+        window.addEventListener('click', function(event) {
+            const transactionModal = document.getElementById('transactionModal');
+            const boletoModal = document.getElementById('boletoModal');
+            
+            if (event.target === transactionModal) {
+                closeTransactionModal();
+            }
+            if (event.target === boletoModal) {
+                closeBoletoModal();
+            }
+        });
+
+        // Inicialização da página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Inicializando página financeiro...');
+            
+            // Certificar que todos os modais estão fechados PRIMEIRO
+            closeTransactionModal();
+            closeBoletoModal();
+            
+            // Verificar URL para parâmetros indesejados
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('modal') || urlParams.has('boleto')) {
+                // Limpar parâmetros da URL se houver
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            // Definir aba padrão como "Dashboard"
+            showTab('dashboard');
+            
+            // Carregar dados iniciais após um pequeno delay
+            setTimeout(() => {
+                loadTransactions();
+                loadReceivables();
+                loadPayables();
+                loadBoletos();
+                updateFinancialSummary();
+            }, 100);
+            
+            console.log('Página financeiro inicializada com sucesso');
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com o controle financeiro no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

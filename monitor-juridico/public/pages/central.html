@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Ali Software - Central de Navegação</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navigation-hub {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a365d 0%, #2d4a68 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .hub-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .hub-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        .hub-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hub-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .system-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .system-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .system-icon.primary {
+            background: linear-gradient(135deg, #1a365d, #3182ce);
+        }
+        
+        .system-icon.monitor {
+            background: linear-gradient(135deg, #38a169, #48bb78);
+        }
+        
+        .system-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 1rem;
+        }
+        
+        .system-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .system-features {
+            margin-bottom: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .feature-item i {
+            color: #38a169;
+            margin-right: 0.5rem;
+        }
+        
+        .system-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: #1a365d;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #153555;
+        }
+        
+        .btn-success {
+            background: #38a169;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #2f855a;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #1a365d;
+            border: 1px solid #1a365d;
+        }
+        
+        .btn-outline:hover {
+            background: #1a365d;
+            color: white;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .info-section {
+            text-align: center;
+        }
+        
+        .info-icon {
+            width: 60px !important;
+            height: 60px !important;
+            font-size: 1.5rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        .info-title {
+            color: #1a365d;
+            margin-bottom: 1rem;
+        }
+        
+        .info-content {
+            text-align: left;
+            color: #666;
+        }
+        
+        .info-paragraph {
+            margin-bottom: 1rem;
+        }
+        
+        .info-paragraph:last-child {
+            margin-bottom: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .navigation-hub {
+                padding: 1rem;
+            }
+            
+            .hub-title {
+                font-size: 2rem;
+            }
+            
+            .systems-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .system-actions {
+                flex-direction: column;
+            }
+            
+            .back-button {
+                position: static;
+                margin-bottom: 2rem;
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation-hub">
+        <a href="../index-principal.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Site
+        </a>
+        
+        <div class="hub-container">
+            <div class="hub-header">
+                <h1 class="hub-title">Central de Sistemas</h1>
+                <p class="hub-subtitle">Acesse os diferentes módulos do Ali Software Jurídico</p>
+            </div>
+            
+            <div class="systems-grid">
+                <!-- Sistema Principal -->
+                <div class="system-card">
+                    <div class="system-icon primary">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h2 class="system-title">Sistema Principal</h2>
+                    <p class="system-description">
+                        Gestão completa do escritório jurídico com controle de processos, clientes, 
+                        tarefas e finanças em uma plataforma integrada.
+                    </p>
+                    <div class="system-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Gestão de Processos e Clientes</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Controle de Prazos e Tarefas</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Gestão Financeira Completa</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Relatórios e Documentos</span>
+                        </div>
+                    </div>
+                    <div class="system-actions">
+                        <a href="dashboard.html" class="btn btn-primary">
+                            <i class="fas fa-home"></i>
+                            Acessar Dashboard
+                        </a>
+                        <a href="login.html" class="btn btn-outline">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Monitor Jurídico -->
+                <div class="system-card">
+                    <div class="system-icon monitor">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2 class="system-title">Monitor Jurídico</h2>
+                    <p class="system-description">
+                        Sistema avançado de monitoramento automatizado de processos jurídicos 
+                        com coleta de dados em tempo real dos tribunais.
+                    </p>
+                    <div class="system-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Monitoramento Automático 24/7</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Integração com Múltiplos Tribunais</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Alertas em Tempo Real</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>Histórico Completo de Eventos</span>
+                        </div>
+                    </div>
+                    <div class="system-actions">
+                        <a href="../index.html" class="btn btn-success">
+                            <i class="fas fa-chart-bar"></i>
+                            Abrir Monitor
+                        </a>
+                        <a href="fontes.html" class="btn btn-outline">
+                            <i class="fas fa-cog"></i>
+                            Configurar
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informações Adicionais -->
+            <div class="system-card">
+                <div class="info-section">
+                    <div class="system-icon primary info-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <h3 class="info-title">Como Usar</h3>
+                    <div class="info-content">
+                        <p class="info-paragraph">
+                            <strong>Sistema Principal:</strong> Use para o dia a dia do escritório - cadastro de clientes, 
+                            controle de processos, gestão de tarefas e finanças.
+                        </p>
+                        <p class="info-paragraph">
+                            <strong>Monitor Jurídico:</strong> Ferramenta especializada para monitoramento automatizado 
+                            de processos nos tribunais. Funciona em segundo plano coletando atualizações.
+                        </p>
+                        <p class="info-paragraph">
+                            Os dois sistemas são complementares e podem ser usados simultaneamente para 
+                            uma gestão jurídica completa e automatizada.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Verificar se há usuário logado e mostrar informações
+        document.addEventListener('DOMContentLoaded', function() {
+            const userLoggedIn = localStorage.getItem('userLoggedIn');
+            const userName = localStorage.getItem('userName');
+            
+            if (userLoggedIn && userName) {
+                const hubHeader = document.querySelector('.hub-header');
+                const welcomeMsg = document.createElement('div');
+                welcomeMsg.style.cssText = `
+                    background: rgba(255, 255, 255, 0.1);
+                    padding: 1rem;
+                    border-radius: 8px;
+                    margin-top: 1rem;
+                    color: white;
+                `;
+                welcomeMsg.innerHTML = `
+                    <i class="fas fa-user"></i>
+                    Bem-vindo, ${userName}! Escolha o sistema que deseja acessar.
+                `;
+                hubHeader.appendChild(welcomeMsg);
+            }
+        });
+        
+        // Analytics simples
+        function trackSystemAccess(system) {
+            console.log(`Acessando sistema: ${system}`);
+            // Aqui você pode adicionar analytics mais sofisticados
+        }
+        
+        // Adicionar listeners aos botões
+        document.querySelectorAll('a[href="dashboard.html"]').forEach(link => {
+            link.addEventListener('click', () => trackSystemAccess('Dashboard Principal'));
+        });
+        
+        document.querySelectorAll('a[href="../index.html"]').forEach(link => {
+            link.addEventListener('click', () => trackSystemAccess('Monitor Jurídico'));
+        });
+    </script>
+</body>
+</html>

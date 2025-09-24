@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Grátis - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <a href="../index.html" class="logo" aria-label="Voltar à página inicial">
+                    <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+                </a>
+            </div>
+            
+            <h1 class="login-title">Comece seu teste grátis</h1>
+            <p class="login-subtitle">7 dias grátis, sem compromisso</p>
+            
+            <form id="trialForm" class="form">
+                <div class="form-group">
+                    <label for="name" class="form-label">Nome completo</label>
+                    <input type="text" id="name" name="name" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail profissional</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" class="form-label">Telefone</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="oab" class="form-label">OAB (opcional)</label>
+                    <input type="text" id="oab" name="oab" class="form-input" placeholder="Ex: SP123456">
+                </div>
+                
+                <div class="form-group">
+                    <label for="firm" class="form-label">Nome do escritório</label>
+                    <input type="text" id="firm" name="firm" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="terms" name="terms" class="form-checkbox" required>
+                        <label for="terms" class="checkbox-label">Aceito os termos de uso e política de privacidade</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">Iniciar teste grátis</button>
+            </form>
+            
+            <div class="login-links">
+                <p>Já tem uma conta? <a href="login.html" class="link">Fazer login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../config.js"></script>
+    <script src="../js/api.js"></script>
+    <script>
+        document.getElementById('trialForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                nome: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('phone').value,
+                oab: document.getElementById('oab').value,
+                escritorio: document.getElementById('firm').value,
+                senha: 'teste123' // Senha temporária para teste
+            };
+            
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            
+            // Validação básica
+            if (!formData.nome || !formData.email || !formData.telefone || !formData.escritorio) {
+                UIUtils.showError('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            try {
+                // Mostrar loading
+                UIUtils.showLoading(submitButton);
+                
+                // Registrar via API
+                await AuthAPI.register(formData);
+                
+                // Definir usuário em período de teste
+                localStorage.setItem('trialUser', 'true');
+                localStorage.setItem('trialStartDate', new Date().toISOString());
+                localStorage.setItem('userEmail', formData.email);
+                localStorage.setItem('userName', formData.nome);
+                localStorage.setItem('userFirm', formData.escritorio);
+                
+                UIUtils.showSuccess('Conta criada com sucesso! Seu período de teste de 7 dias começou.');
+                
+                // Aguardar um pouco para mostrar a mensagem
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                UIUtils.showError(error.message || 'Erro ao criar conta. Tente novamente.');
+                UIUtils.hideLoading(submitButton, originalText);
+            }
+        });
+    </script>
+</body>
+</html>

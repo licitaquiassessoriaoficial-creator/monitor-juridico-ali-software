@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico - Monitor Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-brand">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="alertas.html" class="nav-item">Alertas</a>
+                    <a href="historico.html" class="nav-item active">Histórico</a>
+                    <a href="relatorios.html" class="nav-item">Relatórios</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <div class="page-header">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                        <span class="breadcrumb-separator">></span>
+                        <span class="breadcrumb-current">Histórico</span>
+                    </div>
+                    <h1 class="page-title">
+                        <i class="fas fa-history"></i>
+                        Histórico do Sistema
+                    </h1>
+                    <p class="page-subtitle">Registro de atividades e movimentações</p>
+                </div>
+
+                <div class="grid">
+                    <!-- Filtros -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-filter"></i>
+                                    Filtros de Busca
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="dateRange" class="form-label">Período</label>
+                                        <select id="dateRange" class="form-input">
+                                            <option value="today">Hoje</option>
+                                            <option value="week">Última Semana</option>
+                                            <option value="month" selected>Último Mês</option>
+                                            <option value="quarter">Último Trimestre</option>
+                                            <option value="year">Último Ano</option>
+                                            <option value="custom">Personalizado</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="activityType" class="form-label">Tipo de Atividade</label>
+                                        <select id="activityType" class="form-input">
+                                            <option value="all">Todas</option>
+                                            <option value="login">Login/Logout</option>
+                                            <option value="process">Processos</option>
+                                            <option value="notification">Notificações</option>
+                                            <option value="system">Sistema</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user" class="form-label">Usuário</label>
+                                        <select id="user" class="form-input">
+                                            <option value="all">Todos</option>
+                                            <option value="admin">Administrador</option>
+                                            <option value="user1">Usuário 1</option>
+                                            <option value="user2">Usuário 2</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-search"></i>
+                                            Buscar
+                                        </button>
+                                        <button class="btn btn-outline">
+                                            <i class="fas fa-times"></i>
+                                            Limpar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Histórico -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-list"></i>
+                                    Atividades Recentes
+                                </h2>
+                                <div class="card-actions">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-download"></i>
+                                        Exportar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="history-timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker process">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-header">
+                                                <span class="timeline-title">Nova movimentação no processo</span>
+                                                <span class="timeline-time">23/09/2024 - 13:45</span>
+                                            </div>
+                                            <div class="timeline-description">
+                                                Processo 1234567-89.2024.8.26.0100 - Juntada de documento
+                                            </div>
+                                            <div class="timeline-meta">
+                                                <span class="timeline-user">Sistema Automático</span>
+                                                <span class="timeline-type">Processo</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker notification">
+                                            <i class="fas fa-bell"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-header">
+                                                <span class="timeline-title">Notificação enviada</span>
+                                                <span class="timeline-time">23/09/2024 - 13:30</span>
+                                            </div>
+                                            <div class="timeline-description">
+                                                Email de alerta sobre prazo enviado para cliente@exemplo.com
+                                            </div>
+                                            <div class="timeline-meta">
+                                                <span class="timeline-user">Sistema de Notificações</span>
+                                                <span class="timeline-type">Notificação</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker login">
+                                            <i class="fas fa-sign-in-alt"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-header">
+                                                <span class="timeline-title">Login realizado</span>
+                                                <span class="timeline-time">23/09/2024 - 09:15</span>
+                                            </div>
+                                            <div class="timeline-description">
+                                                Usuário fez login no sistema
+                                            </div>
+                                            <div class="timeline-meta">
+                                                <span class="timeline-user">Administrador</span>
+                                                <span class="timeline-type">Login</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker system">
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-header">
+                                                <span class="timeline-title">Backup automático</span>
+                                                <span class="timeline-time">23/09/2024 - 03:00</span>
+                                            </div>
+                                            <div class="timeline-description">
+                                                Backup automático dos dados realizado com sucesso
+                                            </div>
+                                            <div class="timeline-meta">
+                                                <span class="timeline-user">Sistema</span>
+                                                <span class="timeline-type">Sistema</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker process">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-header">
+                                                <span class="timeline-title">Processo adicionado ao monitoramento</span>
+                                                <span class="timeline-time">22/09/2024 - 16:20</span>
+                                            </div>
+                                            <div class="timeline-description">
+                                                Processo 9876543-21.2024.8.26.0200 incluído no monitoramento
+                                            </div>
+                                            <div class="timeline-meta">
+                                                <span class="timeline-user">Administrador</span>
+                                                <span class="timeline-type">Processo</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Paginação -->
+                                <div class="pagination">
+                                    <button class="btn btn-sm btn-outline" disabled>
+                                        <i class="fas fa-chevron-left"></i>
+                                        Anterior
+                                    </button>
+                                    <span class="pagination-info">Página 1 de 10</span>
+                                    <button class="btn btn-sm btn-outline">
+                                        Próximo
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Funcionalidade do histórico
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filtros
+            const searchButton = document.querySelector('.btn-primary');
+            const clearButton = document.querySelector('.btn-outline');
+
+            if (searchButton) {
+                searchButton.addEventListener('click', function() {
+                    // Implementar lógica de busca
+                    console.log('Buscando histórico...');
+                });
+            }
+
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    // Limpar filtros
+                    document.getElementById('dateRange').value = 'month';
+                    document.getElementById('activityType').value = 'all';
+                    document.getElementById('user').value = 'all';
+                });
+            }
+
+            // Exportar histórico
+            const exportButton = document.querySelector('.card-actions .btn-outline');
+            if (exportButton) {
+                exportButton.addEventListener('click', function() {
+                    alert('Exportação em desenvolvimento');
+                });
+            }
+        });
+
+        // Verificar se o usuário está logado
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        // Verificar autenticação ao carregar a página
+        checkAuth();
+    </script>
+</body>
+</html>

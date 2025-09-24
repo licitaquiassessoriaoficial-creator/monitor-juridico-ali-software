@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarefas - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="tarefas.html" class="nav-item active">Tarefas</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Tarefas</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-tasks"></i> Gestão de Tarefas</h1>
+                    <p>Organize e acompanhe suas tarefas e prazos</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="exportTasks()" title="Exportar tarefas">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <button class="btn btn-primary" onclick="addNewTask()" title="Adicionar nova tarefa">
+                        <i class="fas fa-plus"></i> Nova Tarefa
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-4 stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalTasks">0</h3>
+                        <p>Total de Tarefas</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon urgent">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="urgentTasks">0</h3>
+                        <p>Urgentes</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="todayTasks">0</h3>
+                        <p>Para Hoje</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="completedTasks">0</h3>
+                        <p>Concluídas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="search-group">
+                    <input type="text" id="taskSearch" class="form-input" placeholder="Buscar tarefa..." title="Digite para buscar tarefa">
+                    <button class="btn btn-outline" onclick="searchTasks()" title="Buscar tarefas">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="priorityFilter">Prioridade:</label>
+                    <select id="priorityFilter" class="form-select" title="Filtrar por prioridade" onchange="filterTasks()">
+                        <option value="all">Todas</option>
+                        <option value="urgent">Urgente</option>
+                        <option value="high">Alta</option>
+                        <option value="normal">Normal</option>
+                        <option value="low">Baixa</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="statusFilter">Status:</label>
+                    <select id="statusFilter" class="form-select" title="Filtrar por status" onchange="filterTasks()">
+                        <option value="all">Todos</option>
+                        <option value="pending">Pendente</option>
+                        <option value="in-progress">Em Andamento</option>
+                        <option value="completed">Concluída</option>
+                        <option value="overdue">Atrasada</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="categoryFilter">Categoria:</label>
+                    <select id="categoryFilter" class="form-select" title="Filtrar por categoria" onchange="filterTasks()">
+                        <option value="all">Todas</option>
+                        <option value="processo">Processo</option>
+                        <option value="cliente">Cliente</option>
+                        <option value="administrativo">Administrativo</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tasks Board -->
+            <div class="tasks-board">
+                <div class="board-column">
+                    <div class="board-header">
+                        <h3><i class="fas fa-clock"></i> Pendentes</h3>
+                        <span class="task-count" id="pendingCount">0</span>
+                    </div>
+                    <div class="board-content" id="pendingTasks">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+
+                <div class="board-column">
+                    <div class="board-header">
+                        <h3><i class="fas fa-spinner"></i> Em Andamento</h3>
+                        <span class="task-count" id="inProgressCount">0</span>
+                    </div>
+                    <div class="board-content" id="inProgressTasks">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+
+                <div class="board-column">
+                    <div class="board-header">
+                        <h3><i class="fas fa-check"></i> Concluídas</h3>
+                        <span class="task-count" id="completedCount">0</span>
+                    </div>
+                    <div class="board-content" id="completedTasksBoard">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Nova Tarefa -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nova Tarefa</h3>
+                <button class="modal-close" onclick="closeTaskModal()" title="Fechar modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="taskForm" class="form">
+                    <input type="hidden" id="taskId" name="taskId">
+                    
+                    <div class="form-group">
+                        <label for="taskTitle" class="form-label">Título da Tarefa *</label>
+                        <input type="text" id="taskTitle" name="taskTitle" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskDescription" class="form-label">Descrição</label>
+                        <textarea id="taskDescription" name="taskDescription" class="form-textarea" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskPriority" class="form-label">Prioridade *</label>
+                            <select id="taskPriority" name="taskPriority" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="urgent">Urgente</option>
+                                <option value="high">Alta</option>
+                                <option value="normal">Normal</option>
+                                <option value="low">Baixa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskCategory" class="form-label">Categoria *</label>
+                            <select id="taskCategory" name="taskCategory" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="processo">Processo</option>
+                                <option value="cliente">Cliente</option>
+                                <option value="administrativo">Administrativo</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskDueDate" class="form-label">Data de Vencimento *</label>
+                            <input type="date" id="taskDueDate" name="taskDueDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDueTime" class="form-label">Horário</label>
+                            <input type="time" id="taskDueTime" name="taskDueTime" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskAssignee" class="form-label">Responsável</label>
+                        <select id="taskAssignee" name="taskAssignee" class="form-select">
+                            <option value="">Eu mesmo</option>
+                            <option value="colaborador1">Colaborador 1</option>
+                            <option value="colaborador2">Colaborador 2</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskClient" class="form-label">Cliente Relacionado</label>
+                        <select id="taskClient" name="taskClient" class="form-select">
+                            <option value="">Nenhum</option>
+                            <option value="joao-silva">João Silva</option>
+                            <option value="maria-santos">Maria Santos</option>
+                            <option value="empresa-xyz">Empresa XYZ Ltda</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskProcess" class="form-label">Processo Relacionado</label>
+                        <input type="text" id="taskProcess" name="taskProcess" class="form-input" placeholder="Ex: 1001234-56.2024.8.26.0001">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskNotes" class="form-label">Observações</label>
+                        <textarea id="taskNotes" name="taskNotes" class="form-textarea" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeTaskModal()" title="Cancelar operação">Cancelar</button>
+                <button type="submit" form="taskForm" class="btn btn-primary" id="saveTaskBtn">Salvar Tarefa</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Array para armazenar tarefas
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTasks();
+            updateStats();
+            setMinDate();
+        });
+
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('taskDueDate').min = today;
+        }
+
+        function loadTasks() {
+            const pendingContainer = document.getElementById('pendingTasks');
+            const inProgressContainer = document.getElementById('inProgressTasks');
+            const completedContainer = document.getElementById('completedTasksBoard');
+
+            // Limpar containers
+            pendingContainer.innerHTML = '';
+            inProgressContainer.innerHTML = '';
+            completedContainer.innerHTML = '';
+
+            tasks.forEach(task => {
+                const taskElement = createTaskElement(task);
+                
+                switch(task.status) {
+                    case 'pending':
+                        pendingContainer.appendChild(taskElement);
+                        break;
+                    case 'in-progress':
+                        inProgressContainer.appendChild(taskElement);
+                        break;
+                    case 'completed':
+                        completedContainer.appendChild(taskElement);
+                        break;
+                }
+            });
+
+            updateCounts();
+        }
+
+        function createTaskElement(task) {
+            const taskDiv = document.createElement('div');
+            taskDiv.className = `task-card priority-${task.priority}`;
+            taskDiv.dataset.taskId = task.id;
+
+            const isOverdue = new Date(task.dueDate) < new Date() && task.status !== 'completed';
+            
+            taskDiv.innerHTML = `
+                <div class="task-header">
+                    <h4>${task.title}</h4>
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-outline" onclick="editTask('${task.id}')" title="Editar tarefa">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="deleteTask('${task.id}')" title="Excluir tarefa">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                ${task.description ? `<p class="task-description">${task.description}</p>` : ''}
+                
+                <div class="task-meta">
+                    <span class="task-priority priority-${task.priority}">
+                        <i class="fas fa-flag"></i> ${getPriorityText(task.priority)}
+                    </span>
+                    <span class="task-category">
+                        <i class="fas fa-tag"></i> ${getCategoryText(task.category)}
+                    </span>
+                </div>
+
+                <div class="task-due-date ${isOverdue ? 'overdue' : ''}">
+                    <i class="fas fa-calendar"></i>
+                    ${formatDate(task.dueDate)} ${task.dueTime ? task.dueTime : ''}
+                    ${isOverdue ? '<span class="overdue-label">ATRASADA</span>' : ''}
+                </div>
+
+                ${task.client ? `<div class="task-client"><i class="fas fa-user"></i> ${task.client}</div>` : ''}
+                ${task.process ? `<div class="task-process"><i class="fas fa-gavel"></i> ${task.process}</div>` : ''}
+
+                <div class="task-status-actions">
+                    ${task.status === 'pending' ? `
+                        <button class="btn btn-sm btn-primary" onclick="changeTaskStatus('${task.id}', 'in-progress')">
+                            Iniciar
+                        </button>
+                    ` : ''}
+                    ${task.status === 'in-progress' ? `
+                        <button class="btn btn-sm btn-success" onclick="changeTaskStatus('${task.id}', 'completed')">
+                            Concluir
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="changeTaskStatus('${task.id}', 'pending')">
+                            Pausar
+                        </button>
+                    ` : ''}
+                    ${task.status === 'completed' ? `
+                        <button class="btn btn-sm btn-outline" onclick="changeTaskStatus('${task.id}', 'in-progress')">
+                            Reabrir
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+
+            return taskDiv;
+        }
+
+        function getPriorityText(priority) {
+            const priorities = {
+                'urgent': 'Urgente',
+                'high': 'Alta',
+                'normal': 'Normal',
+                'low': 'Baixa'
+            };
+            return priorities[priority] || priority;
+        }
+
+        function getCategoryText(category) {
+            const categories = {
+                'processo': 'Processo',
+                'cliente': 'Cliente',
+                'administrativo': 'Administrativo',
+                'financeiro': 'Financeiro',
+                'outros': 'Outros'
+            };
+            return categories[category] || category;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function updateStats() {
+            const total = tasks.length;
+            const urgent = tasks.filter(t => t.priority === 'urgent' && t.status !== 'completed').length;
+            const today = new Date().toISOString().split('T')[0];
+            const todayTasks = tasks.filter(t => t.dueDate === today && t.status !== 'completed').length;
+            const completed = tasks.filter(t => t.status === 'completed').length;
+
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('urgentTasks').textContent = urgent;
+            document.getElementById('todayTasks').textContent = todayTasks;
+            document.getElementById('completedTasks').textContent = completed;
+        }
+
+        function updateCounts() {
+            const pending = tasks.filter(t => t.status === 'pending').length;
+            const inProgress = tasks.filter(t => t.status === 'in-progress').length;
+            const completed = tasks.filter(t => t.status === 'completed').length;
+
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('inProgressCount').textContent = inProgress;
+            document.getElementById('completedCount').textContent = completed;
+        }
+
+        function addNewTask() {
+            document.getElementById('modalTitle').textContent = 'Nova Tarefa';
+            document.getElementById('saveTaskBtn').textContent = 'Salvar Tarefa';
+            document.getElementById('taskForm').reset();
+            document.getElementById('taskId').value = '';
+            document.getElementById('taskModal').style.display = 'flex';
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').style.display = 'none';
+            document.getElementById('taskForm').reset();
+        }
+
+        function editTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            document.getElementById('modalTitle').textContent = 'Editar Tarefa';
+            document.getElementById('saveTaskBtn').textContent = 'Atualizar Tarefa';
+            
+            // Preencher formulário
+            document.getElementById('taskId').value = task.id;
+            document.getElementById('taskTitle').value = task.title;
+            document.getElementById('taskDescription').value = task.description || '';
+            document.getElementById('taskPriority').value = task.priority;
+            document.getElementById('taskCategory').value = task.category;
+            document.getElementById('taskDueDate').value = task.dueDate;
+            document.getElementById('taskDueTime').value = task.dueTime || '';
+            document.getElementById('taskAssignee').value = task.assignee || '';
+            document.getElementById('taskClient').value = task.client || '';
+            document.getElementById('taskProcess').value = task.process || '';
+            document.getElementById('taskNotes').value = task.notes || '';
+
+            document.getElementById('taskModal').style.display = 'flex';
+        }
+
+        function deleteTask(taskId) {
+            if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveTasks();
+                loadTasks();
+                updateStats();
+            }
+        }
+
+        function changeTaskStatus(taskId, newStatus) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.status = newStatus;
+                if (newStatus === 'completed') {
+                    task.completedAt = new Date().toISOString();
+                }
+                saveTasks();
+                loadTasks();
+                updateStats();
+            }
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function generateTaskId() {
+            return 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Submissão do formulário
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const taskData = Object.fromEntries(formData.entries());
+            
+            const taskId = taskData.taskId;
+            
+            if (taskId) {
+                // Editando tarefa existente
+                const taskIndex = tasks.findIndex(t => t.id === taskId);
+                if (taskIndex !== -1) {
+                    tasks[taskIndex] = {
+                        ...tasks[taskIndex],
+                        ...taskData,
+                        updatedAt: new Date().toISOString()
+                    };
+                }
+            } else {
+                // Nova tarefa
+                const newTask = {
+                    id: generateTaskId(),
+                    ...taskData,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                };
+                tasks.push(newTask);
+            }
+            
+            saveTasks();
+            loadTasks();
+            updateStats();
+            closeTaskModal();
+        });
+
+        function searchTasks() {
+            const searchTerm = document.getElementById('taskSearch').value.toLowerCase();
+            filterTasksBy('search', searchTerm);
+        }
+
+        function filterTasks() {
+            const priority = document.getElementById('priorityFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            
+            let filteredTasks = tasks;
+            
+            if (priority !== 'all') {
+                filteredTasks = filteredTasks.filter(t => t.priority === priority);
+            }
+            
+            if (status !== 'all') {
+                if (status === 'overdue') {
+                    const today = new Date();
+                    filteredTasks = filteredTasks.filter(t => 
+                        new Date(t.dueDate) < today && t.status !== 'completed'
+                    );
+                } else {
+                    filteredTasks = filteredTasks.filter(t => t.status === status);
+                }
+            }
+            
+            if (category !== 'all') {
+                filteredTasks = filteredTasks.filter(t => t.category === category);
+            }
+            
+            displayFilteredTasks(filteredTasks);
+        }
+
+        function displayFilteredTasks(filteredTasks) {
+            // Temporarily replace tasks array for display
+            const originalTasks = tasks;
+            tasks = filteredTasks;
+            loadTasks();
+            tasks = originalTasks;
+        }
+
+        function exportTasks() {
+            const csv = convertTasksToCSV();
+            downloadCSV(csv, 'tarefas_' + new Date().toISOString().split('T')[0] + '.csv');
+        }
+
+        function convertTasksToCSV() {
+            const headers = ['Título', 'Descrição', 'Prioridade', 'Categoria', 'Status', 'Data Vencimento', 'Cliente', 'Processo'];
+            const rows = tasks.map(task => [
+                task.title,
+                task.description || '',
+                getPriorityText(task.priority),
+                getCategoryText(task.category),
+                task.status,
+                formatDate(task.dueDate),
+                task.client || '',
+                task.process || ''
+            ]);
+            
+            return [headers, ...rows].map(row => 
+                row.map(cell => `"${cell}"`).join(',')
+            ).join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('taskModal');
+            if (event.target === modal) {
+                closeTaskModal();
+            }
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com o gerenciamento de tarefas no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

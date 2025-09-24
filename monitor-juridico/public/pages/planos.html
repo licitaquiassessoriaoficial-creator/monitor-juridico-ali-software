@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos e Preços - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-item">Início</a>
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="planos.html" class="nav-item active">Planos e Preços</a>
+                    <a href="#contato" class="nav-item">Contato</a>
+                    <a href="login.html" class="btn btn-outline">Fazer login</a>
+                    <a href="trial.html" class="btn btn-primary">Experimentar grátis</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="plans-hero">
+                <h1>Planos que acompanham a evolução da sua advocacia</h1>
+                <p>Descubra o plano ideal para o seu escritório</p>
+            </section>
+
+            <!-- Pricing Cards -->
+            <section class="pricing-section">
+                <div class="pricing-toggle">
+                    <span class="toggle-label">Plano mensal</span>
+                    <label class="toggle-switch" for="annualToggle">
+                        <input type="checkbox" id="annualToggle" aria-label="Alternar entre plano mensal e anual">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Plano anual <span class="discount-badge">economize até 17%</span></span>
+                </div>
+
+                <div class="pricing-grid">
+                    <!-- Plano Light -->
+                    <div class="pricing-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">PLANO<strong>light</strong></h3>
+                            <p class="plan-subtitle">Comece sua atuação na advocacia de forma profissional</p>
+                        </div>
+                        
+                        <div class="plan-price">
+                            <span class="price-value free">Gratuito</span>
+                            <span class="price-period">por 20 dias</span>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="feature-highlight">
+                                <strong>40</strong> <span>processos</span> <br><small>monitorados</small>
+                            </div>
+                            
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 1 usuário</li>
+                                <li><i class="fas fa-check"></i> Sem nome para captura de publicações</li>
+                                <li><i class="fas fa-check"></i> Processos cadastrados ilimitados</li>
+                                <li><i class="fas fa-check"></i> 1 GB de espaço na nuvem</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-outline btn-full">Começar grátis</button>
+                    </div>
+
+                    <!-- Plano Up -->
+                    <div class="pricing-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">PLANO<strong>up</strong></h3>
+                            <p class="plan-subtitle">Automatize sua rotina e ganhe tempo para captar clientes</p>
+                        </div>
+                        
+                        <div class="plan-price">
+                            <span class="price-value monthly">R$ 209</span>
+                            <span class="price-value annual">R$ 175</span>
+                            <span class="price-period">/mês</span>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="feature-highlight">
+                                <strong>150</strong> <span>processos</span> <br><small>monitorados</small>
+                            </div>
+                            
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 2 usuários</li>
+                                <li><i class="fas fa-check"></i> 1 nome para captura de publicações</li>
+                                <li><i class="fas fa-check"></i> Processos cadastrados ilimitados</li>
+                                <li><i class="fas fa-check"></i> 10 GB de espaço na nuvem</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-full">Começar grátis</button>
+                        <div class="popular-badge">O MAIS CONTRATADO</div>
+                    </div>
+
+                    <!-- Plano Smart -->
+                    <div class="pricing-card featured">
+                        <div class="plan-header">
+                            <h3 class="plan-name">PLANO<strong>smart</strong></h3>
+                            <p class="plan-subtitle">Organize seu escritório para crescer com lucratividade</p>
+                        </div>
+                        
+                        <div class="plan-price">
+                            <span class="price-value monthly">R$ 379</span>
+                            <span class="price-value annual">R$ 319</span>
+                            <span class="price-period">/mês</span>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="feature-highlight">
+                                <strong>500</strong> <span>processos</span> <br><small>monitorados</small>
+                            </div>
+                            
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 5 usuários</li>
+                                <li><i class="fas fa-check"></i> 3 nomes para captura de publicações</li>
+                                <li><i class="fas fa-check"></i> Processos cadastrados ilimitados</li>
+                                <li><i class="fas fa-check"></i> 20 GB de espaço na nuvem</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-secondary btn-full">Começar grátis</button>
+                    </div>
+
+                    <!-- Plano Company -->
+                    <div class="pricing-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">PLANO<strong>company</strong></h3>
+                            <p class="plan-subtitle">Torne seu escritório eficiente para expandir com estratégia</p>
+                        </div>
+                        
+                        <div class="plan-price">
+                            <span class="price-value monthly">R$ 669</span>
+                            <span class="price-value annual">R$ 563</span>
+                            <span class="price-period">/mês</span>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="feature-highlight">
+                                <strong>1000</strong> <span>processos</span> <br><small>monitorados</small>
+                            </div>
+                            
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 10 usuários</li>
+                                <li><i class="fas fa-check"></i> 5 nomes para captura de publicações</li>
+                                <li><i class="fas fa-check"></i> Processos cadastrados ilimitados</li>
+                                <li><i class="fas fa-check"></i> 30 GB de espaço na nuvem</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-outline btn-full">Começar grátis</button>
+                    </div>
+
+                    <!-- Plano VIP -->
+                    <div class="pricing-card">
+                        <div class="plan-header">
+                            <h3 class="plan-name">PLANO<strong>vip</strong></h3>
+                            <p class="plan-subtitle">Eleve sua gestão jurídica e se torne referência no mercado</p>
+                        </div>
+                        
+                        <div class="plan-price">
+                            <span class="price-value monthly">R$ 1.219</span>
+                            <span class="price-value annual">R$ 1.027</span>
+                            <span class="price-period">/mês</span>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="feature-highlight">
+                                <strong>2000</strong> <span>processos</span> <br><small>monitorados</small>
+                            </div>
+                            
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 30 usuários</li>
+                                <li><i class="fas fa-check"></i> 10 nomes para captura de publicações</li>
+                                <li><i class="fas fa-check"></i> Processos cadastrados ilimitados</li>
+                                <li><i class="fas fa-check"></i> 50 GB de espaço na nuvem</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-outline btn-full">Começar grátis</button>
+                    </div>
+
+                    <!-- Plano Customizado -->
+                    <div class="pricing-card custom-plan">
+                        <div class="plan-header">
+                            <h3 class="plan-name">Precisa monitorar mais processos?</h3>
+                            <p class="plan-subtitle">Conheça nossos planos Vip+ e converse com nosso time para escolher o plano ideal!</p>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> Processos ilimitados</li>
+                                <li><i class="fas fa-check"></i> Usuários ilimitados</li>
+                                <li><i class="fas fa-check"></i> Suporte prioritário</li>
+                                <li><i class="fas fa-check"></i> Personalização completa</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-full">Falar com vendas</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Funcionalidades Incluídas -->
+            <section class="features-included">
+                <div class="container">
+                    <h2>Conheça o plano mais utilizado por nossos clientes</h2>
+                    <p>E ganhe agilidade nas tarefas diárias, segurança financeira e mais tempo para seus hobbies e para você. O resultado? O seu escritório cresce com qualidade.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Envio automático de andamentos traduzidos por IA</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-tasks"></i>
+                            <span>Controle das atividades por meio de tarefas e eventos</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Cronômetro e timesheet</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Criação de modelos de documentos</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Controle de prazos</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Acesso personalizado para clientes</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Controle financeiro por processo</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-coins"></i>
+                            <span>Gestão financeira</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-barcode"></i>
+                            <span>Emissão de boletos com pix e régua de cobrança</span>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Indicadores pessoais e gerais de processo</span>
+                        </div>
+                    </div>
+                    
+                    <div class="plan-highlight">
+                        <p>A partir de <strong>R$ 319/mês</strong> no plano anual ou <strong>R$ 379/mês</strong> no plano mensal</p>
+                        <button class="btn btn-secondary btn-lg">Começar grátis</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Benefícios -->
+            <section class="benefits-section">
+                <h2>O seu escritório mais estratégico com o Ali Software Jurídico</h2>
+                <p>Aproveite em todos os planos:</p>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <i class="fas fa-sync-alt"></i>
+                        <h3>Processos automáticos atualizados diariamente</h3>
+                        <p>Nossos robôs buscam seus processos a partir da sua OAB ou CNJ. Depois você passa a receber as atualizações processuais de forma automática e organizada.</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>Publicações diretamente no seu Ali Software</h3>
+                        <p>Tempo é dinheiro - e ninguém precisa mais gastar tempo selecionando publicações. Receba automaticamente todas as publicações e intimações dos Diários Oficiais.</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <i class="fas fa-brain"></i>
+                        <h3>Controle avançado de prazos processuais com IA</h3>
+                        <p>Mais eficiência na sua rotina com a classificação automática de publicações por prazo ou audiência. Assim, é mais fácil delegar tarefas e manter a organização.</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Seu escritório funcionando de qualquer lugar</h3>
+                        <p>Com o aplicativo Ali Software, você recebe notificações importantes direto na tela do celular. Ainda pode movimentar a agenda, timesheet e tornar o atendimento mais simples.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Final -->
+            <section class="final-cta">
+                <h2>Junte-se a mais de 100.000 profissionais que têm o Ali Software Jurídico como parceiro na advocacia</h2>
+                <p>Teste grátis por 7 dias. Após o teste, não é gerada nenhuma cobrança automática.</p>
+                <button class="btn btn-secondary btn-lg">Começar grátis</button>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="grid grid-cols-4 footer-grid">
+                <div>
+                    <div class="logo">
+                        <div class="logo-icon">A</div>
+                        <span class="logo-text">Ali Software Jurídico</span>
+                    </div>
+                    <p class="footer-description">
+                        Software jurídico completo para advogados e escritórios.
+                    </p>
+                </div>
+                <div>
+                    <h6>Produto</h6>
+                    <ul>
+                        <li><a href="../index.html">Funcionalidades</a></li>
+                        <li><a href="planos.html">Planos</a></li>
+                        <li><a href="trial.html">Teste grátis</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6>Empresa</h6>
+                    <ul>
+                        <li><a href="#sobre">Sobre</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                        <li><a href="#">Suporte</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6>Legal</h6>
+                    <ul>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle between monthly and annual pricing
+        const toggle = document.getElementById('annualToggle');
+        const monthlyPrices = document.querySelectorAll('.price-value.monthly');
+        const annualPrices = document.querySelectorAll('.price-value.annual');
+
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                // Show annual prices
+                monthlyPrices.forEach(price => price.style.display = 'none');
+                annualPrices.forEach(price => price.style.display = 'inline');
+            } else {
+                // Show monthly prices
+                monthlyPrices.forEach(price => price.style.display = 'inline');
+                annualPrices.forEach(price => price.style.display = 'none');
+            }
+        });
+
+        // Handle plan selection
+        document.querySelectorAll('.pricing-card .btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const planCard = this.closest('.pricing-card');
+                const planName = planCard.querySelector('.plan-name').textContent;
+                const priceElement = planCard.querySelector('.price-value:not([style*="display: none"])');
+                const price = priceElement ? priceElement.textContent : '';
+                
+                if (planName.includes('Precisa monitorar')) {
+                    alert('Entraremos em contato para apresentar nossos planos personalizados!');
+                    return;
+                }
+                
+                if (planName.includes('Light')) {
+                    // Plano gratuito - redirecionar para trial
+                    localStorage.setItem('selectedPlan', planName);
+                    window.location.href = 'trial.html';
+                    return;
+                }
+                
+                // Verificar se usuário está logado
+                const userLoggedIn = localStorage.getItem('userLoggedIn');
+                
+                if (!userLoggedIn) {
+                    // Usuário não logado - redirecionar para trial com plano selecionado
+                    localStorage.setItem('selectedPlan', planName);
+                    localStorage.setItem('selectedPrice', price);
+                    window.location.href = 'trial.html';
+                } else {
+                    // Usuário logado - mostrar informações de pagamento
+                    const paymentInfo = `
+                        Plano: ${planName}
+                        Valor: ${price}
+                        
+                        Para efetuar o pagamento:
+                        
+                        PIX: 118bc9d0-9d2a-4dd2-b6db-224e282e47b9
+                        Favorecido: Ali Software Jurídico
+                        
+                        Após o pagamento, envie o comprovante no WhatsApp para ativação imediata!
+                    `;
+                    
+                    const confirmed = confirm(`${paymentInfo}\n\nDeseja prosseguir com o pagamento?`);
+                    
+                    if (confirmed) {
+                        // Simular processo de pagamento
+                        localStorage.setItem('pendingPayment', 'true');
+                        localStorage.setItem('currentPlan', planName);
+                        localStorage.setItem('planPrice', price);
+                        localStorage.setItem('paymentKey', '118bc9d0-9d2a-4dd2-b6db-224e282e47b9');
+                        localStorage.setItem('paymentDate', new Date().toISOString());
+                        
+                        alert(`Informações de pagamento salvas! Após o pagamento via PIX, envie o comprovante no WhatsApp para ativação.`);
+                        
+                        // Abrir WhatsApp para envio do comprovante
+                        window.open('https://wa.me/5519991821389?text=Olá! Acabei de escolher o plano ' + planName + ' e gostaria de enviar o comprovante de pagamento.', '_blank');
+                        
+                        // Aguardar um momento e perguntar sobre configuração do Monitor Jurídico
+                        setTimeout(() => {
+                            const setupMonitor = confirm('Após confirmação do pagamento, você poderá configurar o Monitor Jurídico para monitoramento automático de processos. Deseja ir para a página de configuração agora?');
+                            if (setupMonitor) {
+                                window.open('monitor-config.html', '_blank');
+                            }
+                        }, 2000);
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Gostaria de tirar dúvidas sobre os planos do Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

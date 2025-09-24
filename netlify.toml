@@ -1,0 +1,94 @@
+[build]
+  publish = "monitor-juridico/public"
+  command = "echo 'Static site ready for deployment'"
+
+[functions]
+  directory = "monitor-juridico/netlify/functions"
+  node_bundler = "esbuild"
+
+# Worker a cada 15 minutos durante horario comercial
+[[scheduled.functions]]
+  path = "/work-run"
+  schedule = "*/15 9-18 * * 1-5"
+
+# Worker de hora em hora nos fins de semana
+[[scheduled.functions]]
+  path = "/work-run"
+  schedule = "0 * * * 0,6"
+
+# Configurações de ambiente
+[env]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "10"
+
+# Headers de segurança
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com https://web.whatsapp.com https://pix.bcb.gov.br"
+
+# Redirects para SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Redirect pages
+[[redirects]]
+  from = "/login"
+  to = "/pages/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/pages/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/processos"
+  to = "/pages/processos.html"
+  status = 200
+
+[[redirects]]
+  from = "/clientes"
+  to = "/pages/clientes.html"
+  status = 200
+
+[[redirects]]
+  from = "/agenda"
+  to = "/pages/agenda.html"
+  status = 200
+
+[[redirects]]
+  from = "/tarefas"
+  to = "/pages/tarefas.html"
+  status = 200
+
+[[redirects]]
+  from = "/financeiro"
+  to = "/pages/financeiro.html"
+  status = 200
+
+[[redirects]]
+  from = "/relatorios"
+  to = "/pages/relatorios.html"
+  status = 200
+
+[[redirects]]
+  from = "/boletos"
+  to = "/pages/boletos.html"
+  status = 200
+
+[[redirects]]
+  from = "/whatsapp"
+  to = "/pages/whatsapp.html"
+  status = 200
+
+[[redirects]]
+  from = "/robos"
+  to = "/pages/robos.html"
+  status = 200

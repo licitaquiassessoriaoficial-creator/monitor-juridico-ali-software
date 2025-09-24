@@ -1,0 +1,31 @@
+[build]
+  command = "pnpm build"
+  publish = "public"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Worker a cada 15 minutos durante horario comercial
+[[scheduled.functions]]
+  path = "/work-run"
+  schedule = "*/15 9-18 * * 1-5"
+
+# Worker de hora em hora nos fins de semana
+[[scheduled.functions]]
+  path = "/work-run"
+  schedule = "0 * * * 0,6"
+
+# Configurações de ambiente para deploy
+[env]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "10"
+
+# Headers de segurança
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"

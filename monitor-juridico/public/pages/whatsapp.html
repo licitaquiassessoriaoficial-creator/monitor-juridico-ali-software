@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central WhatsApp - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-item">Início</a>
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="whatsapp.html" class="nav-item active">WhatsApp</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <button onclick="logout()" class="btn btn-outline">Sair</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Central de Comunicação WhatsApp</h1>
+                    <p class="page-subtitle">Comunique-se com clientes sobre prazos, audiências e tarefas</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-success" onclick="showMessageModal()">
+                        <i class="fab fa-whatsapp"></i>
+                        Nova Mensagem
+                    </button>
+                </div>
+            </div>
+
+            <!-- WhatsApp Stats -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fab fa-whatsapp icon-success"></i>
+                    <div>
+                        <span class="stat-number">156</span>
+                        <span class="stat-label">Mensagens enviadas</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-bell icon-warning"></i>
+                    <div>
+                        <span class="stat-number">23</span>
+                        <span class="stat-label">Lembretes automáticos</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock icon-info"></i>
+                    <div>
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Prazos comunicados</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar icon-primary"></i>
+                    <div>
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">Audiências notificadas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Message Templates -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Templates de Mensagem</h3>
+                </div>
+                <div class="card-content">
+                    <div class="templates-grid">
+                        <div class="template-card" onclick="useTemplate('prazo')">
+                            <i class="fas fa-clock"></i>
+                            <h4>Lembrete de Prazo</h4>
+                            <p>Notificar cliente sobre prazo próximo</p>
+                        </div>
+                        <div class="template-card" onclick="useTemplate('audiencia')">
+                            <i class="fas fa-gavel"></i>
+                            <h4>Audiência</h4>
+                            <p>Informar data e local da audiência</p>
+                        </div>
+                        <div class="template-card" onclick="useTemplate('andamento')">
+                            <i class="fas fa-file-text"></i>
+                            <h4>Andamento Processual</h4>
+                            <p>Comunicar nova movimentação</p>
+                        </div>
+                        <div class="template-card" onclick="useTemplate('pagamento')">
+                            <i class="fas fa-dollar-sign"></i>
+                            <h4>Cobrança</h4>
+                            <p>Lembrete de pagamento</p>
+                        </div>
+                        <div class="template-card" onclick="useTemplate('documento')">
+                            <i class="fas fa-file"></i>
+                            <h4>Documentos</h4>
+                            <p>Solicitar ou enviar documentos</p>
+                        </div>
+                        <div class="template-card" onclick="useTemplate('reuniao')">
+                            <i class="fas fa-users"></i>
+                            <h4>Reunião</h4>
+                            <p>Agendar reunião com cliente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Messages -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Mensagens Recentes</h3>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline" onclick="refreshMessages()">
+                            <i class="fas fa-sync"></i>
+                            Atualizar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="messages-list">
+                    <div class="message-item">
+                        <div class="message-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>Maria Silva Santos</strong>
+                                <span class="message-time">15:30</span>
+                            </div>
+                            <div class="message-text">Lembrete: Sua audiência está marcada para amanhã (24/09) às 14h00 no Fórum Central. Local: Sala 205, 2º andar.</div>
+                            <div class="message-meta">
+                                <span class="message-type">
+                                    <i class="fas fa-gavel"></i>
+                                    Audiência
+                                </span>
+                                <span class="message-status delivered">
+                                    <i class="fas fa-check-double"></i>
+                                    Entregue
+                                </span>
+                            </div>
+                        </div>
+                        <div class="message-actions">
+                            <button class="btn btn-sm btn-outline" onclick="resendMessage(1)" title="Reenviar">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="message-item">
+                        <div class="message-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>João Pedro Oliveira</strong>
+                                <span class="message-time">14:15</span>
+                            </div>
+                            <div class="message-text">Seu processo teve uma nova movimentação: "Juntada de petição". Acesse o sistema para mais detalhes.</div>
+                            <div class="message-meta">
+                                <span class="message-type">
+                                    <i class="fas fa-file-text"></i>
+                                    Andamento
+                                </span>
+                                <span class="message-status read">
+                                    <i class="fas fa-check-double"></i>
+                                    Lida
+                                </span>
+                            </div>
+                        </div>
+                        <div class="message-actions">
+                            <button class="btn btn-sm btn-outline" onclick="resendMessage(2)" title="Reenviar">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="message-item">
+                        <div class="message-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>Ana Carolina Lima</strong>
+                                <span class="message-time">11:45</span>
+                            </div>
+                            <div class="message-text">Lembrete amigável: Seu boleto vence amanhã. Para facilitar, você pode pagar via PIX: 118bc9d0-9d2a-4dd2-b6db-224e282e47b9</div>
+                            <div class="message-meta">
+                                <span class="message-type">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Cobrança
+                                </span>
+                                <span class="message-status sent">
+                                    <i class="fas fa-check"></i>
+                                    Enviada
+                                </span>
+                            </div>
+                        </div>
+                        <div class="message-actions">
+                            <button class="btn btn-sm btn-outline" onclick="resendMessage(3)" title="Reenviar">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Nova Mensagem -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nova Mensagem WhatsApp</h3>
+                <button class="modal-close" onclick="closeMessageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="messageForm" class="form">
+                    <div class="form-group">
+                        <label for="clienteSelect" class="form-label">Cliente</label>
+                        <select id="clienteSelect" name="cliente" class="form-input" required onchange="loadClientInfo()">
+                            <option value="">Selecione um cliente</option>
+                            <option value="maria" data-phone="5519987654321">Maria Silva Santos</option>
+                            <option value="joao" data-phone="5519876543210">João Pedro Oliveira</option>
+                            <option value="ana" data-phone="5519765432109">Ana Carolina Lima</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="templateSelect" class="form-label">Template</label>
+                        <select id="templateSelect" name="template" class="form-input" onchange="loadTemplate()">
+                            <option value="">Mensagem personalizada</option>
+                            <option value="prazo">Lembrete de Prazo</option>
+                            <option value="audiencia">Audiência</option>
+                            <option value="andamento">Andamento Processual</option>
+                            <option value="pagamento">Cobrança</option>
+                            <option value="documento">Documentos</option>
+                            <option value="reuniao">Reunião</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="messageText" class="form-label">Mensagem</label>
+                        <textarea id="messageText" name="message" class="form-input" rows="6" placeholder="Digite sua mensagem aqui..." required></textarea>
+                        <small class="form-help">Use {nome} para personalizar com o nome do cliente</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" name="schedule" id="scheduleMessage">
+                            <span class="checkbox-label">Agendar mensagem</span>
+                        </label>
+                    </div>
+                    
+                    <div id="scheduleFields" class="form-row schedule-fields">
+                        <div class="form-group">
+                            <label for="scheduleDate" class="form-label">Data</label>
+                            <input type="date" id="scheduleDate" name="date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="scheduleTime" class="form-label">Hora</label>
+                            <input type="time" id="scheduleTime" name="time" class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeMessageModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fab fa-whatsapp"></i>
+                            Enviar WhatsApp
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se usuário está logado
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Templates de mensagem
+        const messageTemplates = {
+            prazo: "Olá {nome}! 👋\n\nEste é um lembrete importante sobre um prazo do seu processo.\n\n📅 Prazo: [Data]\n📋 Ação necessária: [Descrição]\n\nPor favor, entre em contato se tiver dúvidas.\n\nAtenciosamente,\nAli Software Jurídico",
+            
+            audiencia: "Olá {nome}! 👋\n\n⚖️ LEMBRETE DE AUDIÊNCIA\n\n📅 Data: [Data]\n🕐 Horário: [Hora]\n📍 Local: [Endereço]\n📄 Processo: [Número]\n\nPor favor, chegue com 30 minutos de antecedência.\n\nQualquer dúvida, estou à disposição!",
+            
+            andamento: "Olá {nome}! 👋\n\n📂 Nova movimentação no seu processo!\n\n📄 Processo: [Número]\n📝 Movimento: [Descrição]\n📅 Data: [Data]\n\nVocê pode acessar mais detalhes em nosso sistema.\n\nQualquer dúvida, estou aqui para ajudar!",
+            
+            pagamento: "Olá {nome}! 👋\n\n💳 Lembrete amigável sobre pagamento:\n\n💰 Valor: [Valor]\n📅 Vencimento: [Data]\n\n💳 Para sua comodidade, você pode pagar via PIX:\n🔑 Chave: 118bc9d0-9d2a-4dd2-b6db-224e282e47b9\n\nObrigado!",
+            
+            documento: "Olá {nome}! 👋\n\n📄 Precisamos de alguns documentos para dar continuidade ao seu processo:\n\n📋 Documentos necessários:\n• [Lista de documentos]\n\nPor favor, envie pelos canais oficiais.\n\nObrigado pela colaboração!",
+            
+            reuniao: "Olá {nome}! 👋\n\n📅 Gostaria de agendar uma reunião para discutirmos seu caso.\n\n🗓️ Opções de data/hora:\n• [Opção 1]\n• [Opção 2]\n• [Opção 3]\n\nPor favor, confirme qual horário é melhor para você.\n\nAguardo seu retorno!"
+        };
+
+        function showMessageModal() {
+            document.getElementById('messageModal').style.display = 'flex';
+        }
+
+        function closeMessageModal() {
+            document.getElementById('messageModal').style.display = 'none';
+            document.getElementById('messageForm').reset();
+        }
+
+        function useTemplate(type) {
+            showMessageModal();
+            document.getElementById('templateSelect').value = type;
+            loadTemplate();
+        }
+
+        function loadTemplate() {
+            const templateType = document.getElementById('templateSelect').value;
+            const messageTextarea = document.getElementById('messageText');
+            
+            if (templateType && messageTemplates[templateType]) {
+                messageTextarea.value = messageTemplates[templateType];
+            }
+        }
+
+        function loadClientInfo() {
+            const select = document.getElementById('clienteSelect');
+            const option = select.options[select.selectedIndex];
+            
+            if (option.dataset.phone) {
+                console.log('Cliente selecionado:', option.text, 'Telefone:', option.dataset.phone);
+            }
+        }
+
+        function resendMessage(id) {
+            alert(`Mensagem ${id} reenviada via WhatsApp!`);
+        }
+
+        function refreshMessages() {
+            alert('Lista de mensagens atualizada!');
+        }
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Schedule message toggle
+        document.getElementById('scheduleMessage').addEventListener('change', function() {
+            const scheduleFields = document.getElementById('scheduleFields');
+            scheduleFields.style.display = this.checked ? 'flex' : 'none';
+        });
+
+        // Handle form submission
+        document.getElementById('messageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const cliente = formData.get('cliente');
+            const message = formData.get('message');
+            const schedule = formData.get('schedule');
+            
+            // Get client phone
+            const select = document.getElementById('clienteSelect');
+            const option = select.options[select.selectedIndex];
+            const phone = option.dataset.phone;
+            
+            if (schedule) {
+                alert(`Mensagem agendada para ${cliente}!`);
+            } else {
+                // Send immediate WhatsApp message
+                const personalizedMessage = message.replace('{nome}', option.text);
+                const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(personalizedMessage)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                alert(`Mensagem enviada para ${option.text} via WhatsApp!`);
+            }
+            
+            closeMessageModal();
+        });
+
+        console.log('📱 Central WhatsApp carregada!');
+    </script>
+
+    <style>
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .template-card {
+            padding: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .template-card:hover {
+            border-color: var(--success-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+        }
+
+        .template-card i {
+            font-size: 2rem;
+            color: var(--success-color);
+            margin-bottom: 1rem;
+        }
+
+        .template-card h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .template-card p {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .messages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-time {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        .message-text {
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .message-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .message-type {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .message-status {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+        }
+
+        .message-status.sent {
+            color: var(--info-color);
+        }
+
+        .message-status.delivered {
+            color: var(--warning-color);
+        }
+
+        .message-status.read {
+            color: var(--success-color);
+        }
+
+        .message-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-help {
+            color: var(--text-light);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .schedule-fields {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .templates-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .message-item {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .message-actions {
+                flex-direction: row;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <a href="../index.html" class="logo" aria-label="Voltar à página inicial">
+                    <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+                </a>
+            </div>
+            
+            <h1 class="login-title">Bem-vindo de volta!</h1>
+            <p class="login-subtitle">Faça login em sua conta para continuar</p>
+            
+            <form id="loginForm" class="form">
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Senha</label>
+                    <input type="password" id="password" name="password" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="remember" name="remember" class="form-checkbox">
+                        <label for="remember" class="checkbox-label">Lembrar de mim</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+            </form>
+            
+            <div class="login-links">
+                <a href="#" class="link">Esqueceu sua senha?</a>
+                <p>Não tem uma conta? <a href="trial.html" class="link">Comece grátis</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../config.js"></script>
+    <script src="../js/api.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            
+            try {
+                // Mostrar loading
+                UIUtils.showLoading(submitButton);
+                
+                // Fazer login via API
+                await AuthAPI.login(email, password);
+                
+                UIUtils.showSuccess('Login realizado com sucesso!');
+                
+                // Verificar se usuário tem acesso pago
+                const paidUser = localStorage.getItem('paidUser');
+                const trialUser = localStorage.getItem('trialUser');
+                
+                let redirectUrl = 'dashboard.html';
+                
+                // Se não é usuário pago, verificar trial
+                if (!paidUser) {
+                    if (trialUser) {
+                        const trialStart = localStorage.getItem('trialStartDate');
+                        if (trialStart) {
+                            const trialDate = new Date(trialStart);
+                            const currentDate = new Date();
+                            const daysDiff = Math.ceil((currentDate - trialDate) / (1000 * 60 * 60 * 24));
+                            
+                            if (daysDiff > 7) {
+                                // Trial expirado
+                                redirectUrl = 'planos.html';
+                                UIUtils.showError('Seu período de teste gratuito expirou. Escolha um plano para continuar.');
+                            }
+                        }
+                    } else {
+                        // Não tem trial nem pagamento
+                        redirectUrl = 'planos.html';
+                    }
+                }
+                
+                // Aguardar um pouco para mostrar a mensagem
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 1000);
+                
+            } catch (error) {
+                UIUtils.showError(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
+                UIUtils.hideLoading(submitButton, originalText);
+            }
+        });
+
+        // Link para recuperação de senha
+        document.querySelector('a[href="#"]').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            
+            if (!email) {
+                UIUtils.showError('Digite seu e-mail para recuperar a senha.');
+                return;
+            }
+            
+            try {
+                await AuthAPI.forgotPassword(email);
+                UIUtils.showSuccess('Instruções de recuperação enviadas para seu e-mail!');
+            } catch (error) {
+                UIUtils.showError(error.message || 'Erro ao solicitar recuperação de senha.');
+            }
+        });
+    </script>
+</body>
+</html>

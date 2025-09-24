@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robôs de Busca - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-item">Início</a>
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="robos.html" class="nav-item active">Robôs</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <button onclick="logout()" class="btn btn-outline">Sair</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Robôs de Busca Processual</h1>
+                    <p class="page-subtitle">Monitoramento automático por OAB e CNJ</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-primary" onclick="showRobotModal()">
+                        <i class="fas fa-robot"></i>
+                        Configurar Robô
+                    </button>
+                </div>
+            </div>
+
+            <!-- Robot Stats -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-robot icon-primary"></i>
+                    <div>
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Robôs ativos</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-search icon-info"></i>
+                    <div>
+                        <span class="stat-number">1.247</span>
+                        <span class="stat-label">Buscas realizadas</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-bell icon-warning"></i>
+                    <div>
+                        <span class="stat-number">89</span>
+                        <span class="stat-label">Atualizações encontradas</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock icon-success"></i>
+                    <div>
+                        <span class="stat-number">15min</span>
+                        <span class="stat-label">Última verificação</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Robots -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Robôs Configurados</h3>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline" onclick="runAllRobots()">
+                            <i class="fas fa-play"></i>
+                            Executar Todos
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="robots-grid">
+                    <div class="robot-card active">
+                        <div class="robot-status">
+                            <i class="fas fa-circle status-active"></i>
+                            <span>Ativo</span>
+                        </div>
+                        <div class="robot-info">
+                            <h4><i class="fas fa-id-card"></i> Busca por OAB</h4>
+                            <p>Monitoramento automático de processos vinculados ao número da OAB</p>
+                            <div class="robot-config">
+                                <strong>OAB:</strong> SP 123.456<br>
+                                <strong>Intervalo:</strong> 30 minutos<br>
+                                <strong>Tribunais:</strong> TJSP, STJ, STF
+                            </div>
+                        </div>
+                        <div class="robot-metrics">
+                            <div class="metric">
+                                <span class="metric-value">45</span>
+                                <span class="metric-label">Processos</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">12</span>
+                                <span class="metric-label">Hoje</span>
+                            </div>
+                        </div>
+                        <div class="robot-actions">
+                            <button class="btn btn-sm btn-outline" onclick="configureRobot('oab')" title="Configurar">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="runRobot('oab')" title="Executar">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="pauseRobot('oab')" title="Pausar">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="robot-card active">
+                        <div class="robot-status">
+                            <i class="fas fa-circle status-active"></i>
+                            <span>Ativo</span>
+                        </div>
+                        <div class="robot-info">
+                            <h4><i class="fas fa-file-alt"></i> Busca por CNJ</h4>
+                            <p>Monitoramento de processos específicos pelo número CNJ</p>
+                            <div class="robot-config">
+                                <strong>Processos:</strong> 15 monitorados<br>
+                                <strong>Intervalo:</strong> 60 minutos<br>
+                                <strong>Auto-import:</strong> Habilitado
+                            </div>
+                        </div>
+                        <div class="robot-metrics">
+                            <div class="metric">
+                                <span class="metric-value">15</span>
+                                <span class="metric-label">Processos</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">7</span>
+                                <span class="metric-label">Hoje</span>
+                            </div>
+                        </div>
+                        <div class="robot-actions">
+                            <button class="btn btn-sm btn-outline" onclick="configureRobot('cnj')" title="Configurar">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="runRobot('cnj')" title="Executar">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="pauseRobot('cnj')" title="Pausar">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="robot-card paused">
+                        <div class="robot-status">
+                            <i class="fas fa-circle status-paused"></i>
+                            <span>Pausado</span>
+                        </div>
+                        <div class="robot-info">
+                            <h4><i class="fas fa-newspaper"></i> Busca de Publicações</h4>
+                            <p>Monitoramento de publicações no Diário Oficial</p>
+                            <div class="robot-config">
+                                <strong>Diários:</strong> DJE-SP, DOU<br>
+                                <strong>Palavras-chave:</strong> Configuradas<br>
+                                <strong>Status:</strong> Pausado pelo usuário
+                            </div>
+                        </div>
+                        <div class="robot-metrics">
+                            <div class="metric">
+                                <span class="metric-value">8</span>
+                                <span class="metric-label">Publicações</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">0</span>
+                                <span class="metric-label">Hoje</span>
+                            </div>
+                        </div>
+                        <div class="robot-actions">
+                            <button class="btn btn-sm btn-outline" onclick="configureRobot('pub')" title="Configurar">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="activateRobot('pub')" title="Ativar">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Discoveries -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Descobertas Recentes</h3>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline" onclick="exportDiscoveries()">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="discoveries-list">
+                    <div class="discovery-item new">
+                        <div class="discovery-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="discovery-content">
+                            <div class="discovery-header">
+                                <strong>Novo Processo Encontrado</strong>
+                                <span class="discovery-time">15:45 - Hoje</span>
+                            </div>
+                            <div class="discovery-details">
+                                <p><strong>CNJ:</strong> 1234567-89.2025.8.26.0001</p>
+                                <p><strong>Comarca:</strong> São Paulo - SP</p>
+                                <p><strong>Assunto:</strong> Ação de Cobrança</p>
+                            </div>
+                            <div class="discovery-actions">
+                                <button class="btn btn-sm btn-primary" onclick="importProcess('1234567')">
+                                    <i class="fas fa-plus"></i>
+                                    Importar
+                                </button>
+                                <button class="btn btn-sm btn-outline" onclick="viewProcess('1234567')">
+                                    <i class="fas fa-eye"></i>
+                                    Visualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="discovery-item">
+                        <div class="discovery-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="discovery-content">
+                            <div class="discovery-header">
+                                <strong>Atualização Processual</strong>
+                                <span class="discovery-time">14:30 - Hoje</span>
+                            </div>
+                            <div class="discovery-details">
+                                <p><strong>Processo:</strong> 9876543-21.2024.8.26.0002</p>
+                                <p><strong>Movimento:</strong> Juntada de Petição</p>
+                                <p><strong>Data:</strong> 23/09/2025</p>
+                            </div>
+                            <div class="discovery-actions">
+                                <button class="btn btn-sm btn-success" onclick="markAsRead('9876543')">
+                                    <i class="fas fa-check"></i>
+                                    Marcar como Lida
+                                </button>
+                                <button class="btn btn-sm btn-outline" onclick="notifyClient('9876543')">
+                                    <i class="fab fa-whatsapp"></i>
+                                    Notificar Cliente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="discovery-item">
+                        <div class="discovery-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="discovery-content">
+                            <div class="discovery-header">
+                                <strong>Publicação no DJE</strong>
+                                <span class="discovery-time">11:20 - Hoje</span>
+                            </div>
+                            <div class="discovery-details">
+                                <p><strong>Diário:</strong> DJE-SP</p>
+                                <p><strong>Página:</strong> 156</p>
+                                <p><strong>Menção:</strong> Ali Software Jurídico</p>
+                            </div>
+                            <div class="discovery-actions">
+                                <button class="btn btn-sm btn-primary" onclick="viewPublication('dje156')">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Ver Publicação
+                                </button>
+                                <button class="btn btn-sm btn-outline" onclick="savePublication('dje156')">
+                                    <i class="fas fa-save"></i>
+                                    Salvar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Configurar Robô -->
+    <div id="robotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Configurar Robô de Busca</h3>
+                <button class="modal-close" onclick="closeRobotModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="robotForm" class="form">
+                    <div class="form-group">
+                        <label for="robotType" class="form-label">Tipo de Robô</label>
+                        <select id="robotType" name="type" class="form-input" required onchange="updateRobotForm()">
+                            <option value="">Selecione o tipo</option>
+                            <option value="oab">Busca por OAB</option>
+                            <option value="cnj">Busca por CNJ</option>
+                            <option value="publication">Busca de Publicações</option>
+                        </select>
+                    </div>
+                    
+                    <div id="oabFields" class="robot-fields">
+                        <div class="form-group">
+                            <label for="oabNumber" class="form-label">Número da OAB</label>
+                            <input type="text" id="oabNumber" name="oab" class="form-input" placeholder="Ex: SP 123.456">
+                        </div>
+                        <div class="form-group">
+                            <label for="tribunals" class="form-label">Tribunais</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" name="tribunals" value="tjsp">
+                                    <span class="checkbox-label">TJSP - Tribunal de Justiça de SP</span>
+                                </label>
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" name="tribunals" value="stj">
+                                    <span class="checkbox-label">STJ - Superior Tribunal de Justiça</span>
+                                </label>
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" name="tribunals" value="stf">
+                                    <span class="checkbox-label">STF - Supremo Tribunal Federal</span>
+                                </label>
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" name="tribunals" value="trf">
+                                    <span class="checkbox-label">TRF - Tribunal Regional Federal</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="cnjFields" class="robot-fields">
+                        <div class="form-group">
+                            <label for="cnjNumbers" class="form-label">Números CNJ</label>
+                            <textarea id="cnjNumbers" name="cnj" class="form-input" rows="4" placeholder="Digite os números CNJ (um por linha)&#10;Ex:&#10;1234567-89.2025.8.26.0001&#10;9876543-21.2024.8.26.0002"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div id="publicationFields" class="robot-fields">
+                        <div class="form-group">
+                            <label for="sources" class="form-label">Fontes</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" name="sources" value="dje-sp">
+                                    <span class="checkbox-label">DJE-SP</span>
+                                </label>
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" name="sources" value="dou">
+                                    <span class="checkbox-label">DOU</span>
+                                </label>
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" name="sources" value="dje-rj">
+                                    <span class="checkbox-label">DJE-RJ</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="keywords" class="form-label">Palavras-chave</label>
+                            <input type="text" id="keywords" name="keywords" class="form-input" placeholder="Ex: Ali Software, nome do advogado, OAB">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interval" class="form-label">Intervalo de Verificação</label>
+                        <select id="interval" name="interval" class="form-input" required>
+                            <option value="15">15 minutos</option>
+                            <option value="30">30 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="120">2 horas</option>
+                            <option value="360">6 horas</option>
+                            <option value="720">12 horas</option>
+                            <option value="1440">24 horas</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" name="notifications" checked>
+                            <span class="checkbox-label">Notificações por WhatsApp</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeRobotModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-robot"></i>
+                            Ativar Robô
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se usuário está logado
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        function showRobotModal() {
+            document.getElementById('robotModal').style.display = 'flex';
+        }
+
+        function closeRobotModal() {
+            document.getElementById('robotModal').style.display = 'none';
+            document.getElementById('robotForm').reset();
+            hideAllRobotFields();
+        }
+
+        function updateRobotForm() {
+            const robotType = document.getElementById('robotType').value;
+            hideAllRobotFields();
+            
+            if (robotType) {
+                document.getElementById(robotType + 'Fields').style.display = 'block';
+            }
+        }
+
+        function hideAllRobotFields() {
+            document.querySelectorAll('.robot-fields').forEach(field => {
+                field.style.display = 'none';
+            });
+        }
+
+        function configureRobot(type) {
+            showRobotModal();
+            document.getElementById('robotType').value = type;
+            updateRobotForm();
+        }
+
+        function runRobot(type) {
+            const robotNames = {
+                'oab': 'Busca por OAB',
+                'cnj': 'Busca por CNJ',
+                'pub': 'Busca de Publicações'
+            };
+            
+            alert(`Executando ${robotNames[type]}...`);
+            
+            // Simulate robot execution
+            setTimeout(() => {
+                alert(`${robotNames[type]} executado com sucesso! 3 novas atualizações encontradas.`);
+            }, 2000);
+        }
+
+        function pauseRobot(type) {
+            alert(`Robô pausado com sucesso!`);
+        }
+
+        function activateRobot(type) {
+            alert(`Robô ativado com sucesso!`);
+        }
+
+        function runAllRobots() {
+            alert('Executando todos os robôs ativos...');
+            
+            setTimeout(() => {
+                alert('Execução concluída! 12 novas atualizações encontradas.');
+            }, 3000);
+        }
+
+        function importProcess(id) {
+            alert(`Processo ${id} importado com sucesso para o sistema!`);
+        }
+
+        function viewProcess(id) {
+            alert(`Abrindo visualização do processo ${id}...`);
+        }
+
+        function markAsRead(id) {
+            alert(`Atualização marcada como lida!`);
+        }
+
+        function notifyClient(id) {
+            const message = `Olá! Seu processo teve uma nova movimentação. Acesse nosso sistema para mais detalhes ou entre em contato conosco.`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function viewPublication(id) {
+            alert(`Abrindo publicação ${id}...`);
+        }
+
+        function savePublication(id) {
+            alert(`Publicação ${id} salva no sistema!`);
+        }
+
+        function exportDiscoveries() {
+            alert('Relatório de descobertas exportado com sucesso!');
+        }
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Handle form submission
+        document.getElementById('robotForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const robotType = formData.get('type');
+            const interval = formData.get('interval');
+            
+            alert(`Robô configurado com sucesso!\n\nTipo: ${robotType}\nIntervalo: ${interval} minutos\n\nO robô começará a funcionar automaticamente.`);
+            
+            closeRobotModal();
+        });
+
+        // Initialize page
+        hideAllRobotFields();
+
+        console.log('🤖 Sistema de Robôs de Busca carregado!');
+    </script>
+
+    <style>
+        .robots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .robot-card {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .robot-card.active {
+            border-color: var(--success-color);
+        }
+
+        .robot-card.paused {
+            border-color: var(--warning-color);
+            opacity: 0.8;
+        }
+
+        .robot-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            color: var(--success-color);
+        }
+
+        .status-paused {
+            color: var(--warning-color);
+        }
+
+        .robot-info h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .robot-info p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .robot-config {
+            background: var(--background-light);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .robot-metrics {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .robot-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .discoveries-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .discovery-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .discovery-item.new {
+            border-color: var(--primary-color);
+            background: rgba(26, 54, 93, 0.02);
+        }
+
+        .discovery-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .discovery-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .discovery-content {
+            flex: 1;
+        }
+
+        .discovery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .discovery-time {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        .discovery-details {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .discovery-details p {
+            margin: 0.25rem 0;
+            font-size: 0.875rem;
+        }
+
+        .discovery-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .robot-fields {
+            display: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .robots-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .robot-metrics {
+                gap: 1rem;
+            }
+            
+            .discovery-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .discovery-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .discovery-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</body>
+</html>

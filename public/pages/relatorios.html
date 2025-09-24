@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="clientes.html" class="nav-item">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <a href="relatorios.html" class="nav-item active">Relatórios</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Relatórios</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-chart-bar"></i> Relatórios Gerenciais</h1>
+                    <p>Análises e indicadores do seu escritório</p>
+                </div>
+                <div class="page-actions">
+                    <div class="filter-group">
+                        <label for="reportPeriod">Período:</label>
+                        <select id="reportPeriod" class="form-select" onchange="updateReports()" title="Selecionar período dos relatórios">
+                            <option value="month">Este Mês</option>
+                            <option value="quarter">Este Trimestre</option>
+                            <option value="year">Este Ano</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="exportAllReports()" title="Exportar todos os relatórios">
+                        <i class="fas fa-download"></i> Exportar Todos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Report Cards -->
+            <div class="grid grid-cols-4 stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalRevenue">R$ 0,00</h3>
+                        <p>Receita Total</p>
+                        <small class="stat-change positive" id="revenueChange">+0%</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalProcesses">0</h3>
+                        <p>Processos Ativos</p>
+                        <small class="stat-change positive" id="processesChange">+0</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalClients">0</h3>
+                        <p>Clientes Ativos</p>
+                        <small class="stat-change positive" id="clientsChange">+0</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="completedTasks">0</h3>
+                        <p>Tarefas Concluídas</p>
+                        <small class="stat-change positive" id="tasksChange">+0</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-2">
+                <!-- Revenue Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-line"></i> Evolução da Receita</h3>
+                        <button class="btn btn-sm btn-outline" onclick="exportChart('revenueChart')" title="Exportar gráfico">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+                <!-- Cases by Type Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-pie"></i> Processos por Área</h3>
+                        <button class="btn btn-sm btn-outline" onclick="exportChart('casesChart')" title="Exportar gráfico">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <canvas id="casesChart"></canvas>
+                </div>
+
+                <!-- Tasks Performance -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-bar"></i> Performance de Tarefas</h3>
+                        <button class="btn btn-sm btn-outline" onclick="exportChart('tasksChart')" title="Exportar gráfico">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <canvas id="tasksChart"></canvas>
+                </div>
+
+                <!-- Client Growth -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-area"></i> Crescimento de Clientes</h3>
+                        <button class="btn btn-sm btn-outline" onclick="exportChart('clientsChart')" title="Exportar gráfico">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <canvas id="clientsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Reports Tables Section -->
+            <div class="reports-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-table"></i> Relatórios Detalhados</h2>
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <button class="tab-button active" onclick="showReportTab('financial')" title="Ver relatórios financeiros">
+                        <i class="fas fa-money-bill-wave"></i> Financeiro
+                    </button>
+                    <button class="tab-button" onclick="showReportTab('productivity')" title="Ver relatórios de produtividade">
+                        <i class="fas fa-chart-line"></i> Produtividade
+                    </button>
+                    <button class="tab-button" onclick="showReportTab('clients')" title="Ver relatórios de clientes">
+                        <i class="fas fa-users"></i> Clientes
+                    </button>
+                    <button class="tab-button" onclick="showReportTab('processes')" title="Ver relatórios de processos">
+                        <i class="fas fa-gavel"></i> Processos
+                    </button>
+                </div>
+
+                <!-- Financial Report Tab -->
+                <div id="financialTab" class="tab-content active">
+                    <div class="report-header">
+                        <h3>Relatório Financeiro</h3>
+                        <button class="btn btn-outline" onclick="exportReport('financial')" title="Exportar relatório financeiro">
+                            <i class="fas fa-file-excel"></i> Exportar
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mês</th>
+                                    <th>Receitas</th>
+                                    <th>Despesas</th>
+                                    <th>Lucro Líquido</th>
+                                    <th>Margem (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="financialReportBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Productivity Report Tab -->
+                <div id="productivityTab" class="tab-content">
+                    <div class="report-header">
+                        <h3>Relatório de Produtividade</h3>
+                        <button class="btn btn-outline" onclick="exportReport('productivity')" title="Exportar relatório de produtividade">
+                            <i class="fas fa-file-excel"></i> Exportar
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Indicador</th>
+                                    <th>Valor Atual</th>
+                                    <th>Meta</th>
+                                    <th>Atingimento</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productivityReportBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Clients Report Tab -->
+                <div id="clientsTab" class="tab-content">
+                    <div class="report-header">
+                        <h3>Relatório de Clientes</h3>
+                        <button class="btn btn-outline" onclick="exportReport('clients')" title="Exportar relatório de clientes">
+                            <i class="fas fa-file-excel"></i> Exportar
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Processos Ativos</th>
+                                    <th>Valor Recebido</th>
+                                    <th>Última Atividade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientsReportBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Processes Report Tab -->
+                <div id="processesTab" class="tab-content">
+                    <div class="report-header">
+                        <h3>Relatório de Processos</h3>
+                        <button class="btn btn-outline" onclick="exportReport('processes')" title="Exportar relatório de processos">
+                            <i class="fas fa-file-excel"></i> Exportar
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Área</th>
+                                    <th>Processos Ativos</th>
+                                    <th>Processos Ganhos</th>
+                                    <th>Processos Perdidos</th>
+                                    <th>Taxa de Sucesso</th>
+                                </tr>
+                            </thead>
+                            <tbody id="processesReportBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Dados dos relatórios
+        let revenueChart, casesChart, tasksChart, clientsChart;
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReportData();
+            initCharts();
+            updateReports();
+        });
+
+        function loadReportData() {
+            // Carregar dados do localStorage
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const processes = JSON.parse(localStorage.getItem('processes')) || [];
+            const clients = JSON.parse(localStorage.getItem('clients')) || [];
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+            // Calcular estatísticas
+            const totalRevenue = transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + parseFloat(t.value), 0);
+
+            const totalProcesses = processes.filter(p => p.status === 'active').length;
+            const totalClients = clients.length;
+            const completedTasks = tasks.filter(t => t.status === 'completed').length;
+
+            // Atualizar cards
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('totalProcesses').textContent = totalProcesses;
+            document.getElementById('totalClients').textContent = totalClients;
+            document.getElementById('completedTasks').textContent = completedTasks;
+
+            // Simular mudanças percentuais
+            document.getElementById('revenueChange').textContent = '+12.5%';
+            document.getElementById('processesChange').textContent = '+3';
+            document.getElementById('clientsChange').textContent = '+2';
+            document.getElementById('tasksChange').textContent = '+15';
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        function initCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Receita',
+                        data: [12000, 15000, 18000, 16000, 20000, 22000],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Cases Chart
+            const casesCtx = document.getElementById('casesChart').getContext('2d');
+            casesChart = new Chart(casesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Trabalhista', 'Cível', 'Criminal', 'Tributário', 'Outros'],
+                    datasets: [{
+                        data: [30, 25, 15, 20, 10],
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#8b5cf6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Tasks Chart
+            const tasksCtx = document.getElementById('tasksChart').getContext('2d');
+            tasksChart = new Chart(tasksCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Concluídas', 'Em Andamento', 'Pendentes', 'Atrasadas'],
+                    datasets: [{
+                        label: 'Tarefas',
+                        data: [45, 12, 8, 3],
+                        backgroundColor: [
+                            '#10b981',
+                            '#3b82f6',
+                            '#f59e0b',
+                            '#ef4444'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Clients Chart
+            const clientsCtx = document.getElementById('clientsChart').getContext('2d');
+            clientsChart = new Chart(clientsCtx, {
+                type: 'area',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Novos Clientes',
+                        data: [5, 8, 3, 6, 4, 7],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function showReportTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Add active class to selected tab
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            // Load specific report data
+            loadReportTable(tabName);
+        }
+
+        function loadReportTable(reportType) {
+            switch(reportType) {
+                case 'financial':
+                    loadFinancialReport();
+                    break;
+                case 'productivity':
+                    loadProductivityReport();
+                    break;
+                case 'clients':
+                    loadClientsReport();
+                    break;
+                case 'processes':
+                    loadProcessesReport();
+                    break;
+            }
+        }
+
+        function loadFinancialReport() {
+            const tbody = document.getElementById('financialReportBody');
+            tbody.innerHTML = '';
+
+            const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
+            const revenues = [12000, 15000, 18000, 16000, 20000, 22000];
+            const expenses = [8000, 9000, 11000, 10000, 12000, 13000];
+
+            months.forEach((month, index) => {
+                const revenue = revenues[index];
+                const expense = expenses[index];
+                const profit = revenue - expense;
+                const margin = ((profit / revenue) * 100).toFixed(1);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${month}</td>
+                    <td class="text-success">${formatCurrency(revenue)}</td>
+                    <td class="text-danger">${formatCurrency(expense)}</td>
+                    <td class="${profit >= 0 ? 'text-success' : 'text-danger'}">${formatCurrency(profit)}</td>
+                    <td>${margin}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadProductivityReport() {
+            const tbody = document.getElementById('productivityReportBody');
+            tbody.innerHTML = '';
+
+            const indicators = [
+                { name: 'Tarefas por Dia', current: 12, target: 15, unit: 'tarefas' },
+                { name: 'Processos Novos/Mês', current: 8, target: 10, unit: 'processos' },
+                { name: 'Taxa de Conclusão', current: 85, target: 90, unit: '%' },
+                { name: 'Tempo Médio por Tarefa', current: 2.5, target: 2, unit: 'horas' }
+            ];
+
+            indicators.forEach(indicator => {
+                const achievement = ((indicator.current / indicator.target) * 100).toFixed(1);
+                const status = achievement >= 100 ? 'Atingido' : achievement >= 80 ? 'Próximo' : 'Distante';
+                const statusClass = achievement >= 100 ? 'badge-success' : achievement >= 80 ? 'badge-warning' : 'badge-danger';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${indicator.name}</td>
+                    <td>${indicator.current} ${indicator.unit}</td>
+                    <td>${indicator.target} ${indicator.unit}</td>
+                    <td>${achievement}%</td>
+                    <td><span class="badge ${statusClass}">${status}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadClientsReport() {
+            const tbody = document.getElementById('clientsReportBody');
+            tbody.innerHTML = '';
+
+            const clients = [
+                { name: 'João Silva', processes: 3, revenue: 15000, lastActivity: '2024-01-15', status: 'Ativo' },
+                { name: 'Maria Santos', processes: 2, revenue: 12000, lastActivity: '2024-01-10', status: 'Ativo' },
+                { name: 'Empresa XYZ', processes: 5, revenue: 25000, lastActivity: '2024-01-12', status: 'Ativo' },
+                { name: 'Carlos Oliveira', processes: 1, revenue: 8000, lastActivity: '2023-12-20', status: 'Inativo' }
+            ];
+
+            clients.forEach(client => {
+                const statusClass = client.status === 'Ativo' ? 'badge-success' : 'badge-secondary';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.processes}</td>
+                    <td>${formatCurrency(client.revenue)}</td>
+                    <td>${formatDate(client.lastActivity)}</td>
+                    <td><span class="badge ${statusClass}">${client.status}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadProcessesReport() {
+            const tbody = document.getElementById('processesReportBody');
+            tbody.innerHTML = '';
+
+            const areas = [
+                { name: 'Trabalhista', active: 15, won: 8, lost: 2, rate: 80 },
+                { name: 'Cível', active: 12, won: 6, lost: 1, rate: 85.7 },
+                { name: 'Criminal', active: 8, won: 5, lost: 0, rate: 100 },
+                { name: 'Tributário', active: 10, won: 4, lost: 3, rate: 57.1 },
+                { name: 'Outros', active: 5, won: 3, lost: 1, rate: 75 }
+            ];
+
+            areas.forEach(area => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${area.name}</td>
+                    <td>${area.active}</td>
+                    <td class="text-success">${area.won}</td>
+                    <td class="text-danger">${area.lost}</td>
+                    <td>${area.rate}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('pt-BR');
+        }
+
+        function updateReports() {
+            const period = document.getElementById('reportPeriod').value;
+            console.log('Updating reports for period:', period);
+            
+            // Atualizar dados baseado no período
+            loadReportData();
+            
+            // Recarregar a aba ativa
+            const activeTab = document.querySelector('.tab-button.active');
+            if (activeTab) {
+                const tabText = activeTab.textContent.trim().toLowerCase();
+                if (tabText.includes('financeiro')) loadFinancialReport();
+                else if (tabText.includes('produtividade')) loadProductivityReport();
+                else if (tabText.includes('clientes')) loadClientsReport();
+                else if (tabText.includes('processos')) loadProcessesReport();
+            }
+        }
+
+        function exportChart(chartId) {
+            const canvas = document.getElementById(chartId);
+            const url = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = chartId + '_' + new Date().toISOString().split('T')[0] + '.png';
+            a.click();
+        }
+
+        function exportReport(reportType) {
+            let data = [];
+            let filename = '';
+
+            switch(reportType) {
+                case 'financial':
+                    data = getFinancialReportData();
+                    filename = 'relatorio_financeiro';
+                    break;
+                case 'productivity':
+                    data = getProductivityReportData();
+                    filename = 'relatorio_produtividade';
+                    break;
+                case 'clients':
+                    data = getClientsReportData();
+                    filename = 'relatorio_clientes';
+                    break;
+                case 'processes':
+                    data = getProcessesReportData();
+                    filename = 'relatorio_processos';
+                    break;
+            }
+
+            const csv = convertToCSV(data);
+            downloadCSV(csv, filename + '_' + new Date().toISOString().split('T')[0] + '.csv');
+        }
+
+        function getFinancialReportData() {
+            return [
+                ['Mês', 'Receitas', 'Despesas', 'Lucro Líquido', 'Margem (%)'],
+                ['Janeiro', '12000', '8000', '4000', '33.3'],
+                ['Fevereiro', '15000', '9000', '6000', '40.0'],
+                ['Março', '18000', '11000', '7000', '38.9'],
+                ['Abril', '16000', '10000', '6000', '37.5'],
+                ['Maio', '20000', '12000', '8000', '40.0'],
+                ['Junho', '22000', '13000', '9000', '40.9']
+            ];
+        }
+
+        function getProductivityReportData() {
+            return [
+                ['Indicador', 'Valor Atual', 'Meta', 'Atingimento (%)', 'Status'],
+                ['Tarefas por Dia', '12 tarefas', '15 tarefas', '80.0', 'Próximo'],
+                ['Processos Novos/Mês', '8 processos', '10 processos', '80.0', 'Próximo'],
+                ['Taxa de Conclusão', '85%', '90%', '94.4', 'Próximo'],
+                ['Tempo Médio por Tarefa', '2.5 horas', '2 horas', '80.0', 'Distante']
+            ];
+        }
+
+        function getClientsReportData() {
+            return [
+                ['Cliente', 'Processos Ativos', 'Valor Recebido', 'Última Atividade', 'Status'],
+                ['João Silva', '3', '15000', '15/01/2024', 'Ativo'],
+                ['Maria Santos', '2', '12000', '10/01/2024', 'Ativo'],
+                ['Empresa XYZ', '5', '25000', '12/01/2024', 'Ativo'],
+                ['Carlos Oliveira', '1', '8000', '20/12/2023', 'Inativo']
+            ];
+        }
+
+        function getProcessesReportData() {
+            return [
+                ['Área', 'Processos Ativos', 'Processos Ganhos', 'Processos Perdidos', 'Taxa de Sucesso (%)'],
+                ['Trabalhista', '15', '8', '2', '80.0'],
+                ['Cível', '12', '6', '1', '85.7'],
+                ['Criminal', '8', '5', '0', '100.0'],
+                ['Tributário', '10', '4', '3', '57.1'],
+                ['Outros', '5', '3', '1', '75.0']
+            ];
+        }
+
+        function convertToCSV(data) {
+            return data.map(row => 
+                row.map(cell => `"${cell}"`).join(',')
+            ).join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function exportAllReports() {
+            const reports = ['financial', 'productivity', 'clients', 'processes'];
+            reports.forEach(report => {
+                setTimeout(() => exportReport(report), 500);
+            });
+        }
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Inicializar com relatório financeiro
+        loadFinancialReport();
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com os relatórios no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- Rodapé Premium -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">A</div>
+                        <span class="logo-text">Ali Software Jurídico</span>
+                    </div>
+                    <p class="footer-description">
+                        A solução completa para advocacia em nuvem. 
+                        Transforme sua prática jurídica com tecnologia avançada e facilidade de uso.
+                    </p>
+                    <div class="footer-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">+5.000</span>
+                            <span class="stat-label">Advogados</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">99.9%</span>
+                            <span class="stat-label">Uptime</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Suporte</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Navegação</h4>
+                        <ul>
+                            <li><a href="dashboard.html">Dashboard</a></li>
+                            <li><a href="processos.html">Processos</a></li>
+                            <li><a href="agenda.html">Agenda</a></li>
+                            <li><a href="tarefas.html">Tarefas</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>Gestão</h4>
+                        <ul>
+                            <li><a href="clientes.html">Clientes</a></li>
+                            <li><a href="financeiro.html">Financeiro</a></li>
+                            <li><a href="relatorios.html">Relatórios</a></li>
+                            <li><a href="../../../index.html">Página Inicial</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>Suporte</h4>
+                        <ul>
+                            <li><a href="#help">Central de Ajuda</a></li>
+                            <li><a href="#docs">Documentação</a></li>
+                            <li><a href="https://wa.me/5519991821389">WhatsApp</a></li>
+                            <li><a href="#contact">Contato</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#privacy">Privacidade</a></li>
+                            <li><a href="#terms">Termos de Uso</a></li>
+                            <li><a href="#lgpd">LGPD</a></li>
+                            <li><a href="#security">Segurança</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Fale Conosco</h4>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>contato@alisoftwarejuridico.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>(19) 99182-1389</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Campinas, SP - Brasil</span>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://wa.me/5519991821389" class="social-link" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        © 2024 Ali Software Jurídico. Todos os direitos reservados.
+                    </p>
+                    <div class="footer-badges">
+                        <div class="badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>LGPD Compliant</span>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-lock"></i>
+                            <span>SSL Secured</span>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-cloud"></i>
+                            <span>Cloud Native</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

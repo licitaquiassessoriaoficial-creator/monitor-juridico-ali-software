@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alertas - Monitor Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-brand">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="tarefas.html" class="nav-item">Tarefas</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="alertas.html" class="nav-item active">Alertas</a>
+                    <a href="relatorios.html" class="nav-item">Relatórios</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <div class="page-header">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                        <span class="breadcrumb-separator">></span>
+                        <span class="breadcrumb-current">Alertas</span>
+                    </div>
+                    <h1 class="page-title">
+                        <i class="fas fa-bell"></i>
+                        Alertas do Sistema
+                    </h1>
+                    <p class="page-subtitle">Notificações e alertas importantes</p>
+                </div>
+
+                <div class="grid">
+                    <!-- Resumo de Alertas -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Resumo de Alertas
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="stats-grid">
+                                    <div class="stat-card urgent">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">3</div>
+                                            <div class="stat-label">Urgentes</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card warning">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">7</div>
+                                            <div class="stat-label">Avisos</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card info">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-info-circle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">12</div>
+                                            <div class="stat-label">Informações</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card success">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <div class="stat-number">25</div>
+                                            <div class="stat-label">Resolvidos</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Alertas -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i class="fas fa-list"></i>
+                                    Alertas Recentes
+                                </h2>
+                                <div class="card-actions">
+                                    <button class="btn btn-sm btn-outline">
+                                        <i class="fas fa-filter"></i>
+                                        Filtrar
+                                    </button>
+                                    <button class="btn btn-sm btn-primary">
+                                        <i class="fas fa-plus"></i>
+                                        Novo Alerta
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert-list">
+                                    <div class="alert-item urgent">
+                                        <div class="alert-icon">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Prazo de Recurso Vencendo</div>
+                                            <div class="alert-description">Processo 1234567-89.2024.8.26.0100 - Prazo vence em 2 dias</div>
+                                            <div class="alert-meta">
+                                                <span class="alert-time">Há 30 minutos</span>
+                                                <span class="alert-type">Urgente</span>
+                                            </div>
+                                        </div>
+                                        <div class="alert-actions">
+                                            <button class="btn btn-sm btn-outline">Ver Processo</button>
+                                            <button class="btn btn-sm btn-primary">Marcar como Lido</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="alert-item warning">
+                                        <div class="alert-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Nova Movimentação Detectada</div>
+                                            <div class="alert-description">3 novos andamentos em processos monitorados</div>
+                                            <div class="alert-meta">
+                                                <span class="alert-time">Há 1 hora</span>
+                                                <span class="alert-type">Aviso</span>
+                                            </div>
+                                        </div>
+                                        <div class="alert-actions">
+                                            <button class="btn btn-sm btn-outline">Ver Detalhes</button>
+                                            <button class="btn btn-sm btn-primary">Marcar como Lido</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="alert-item info">
+                                        <div class="alert-icon">
+                                            <i class="fas fa-info-circle"></i>
+                                        </div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Relatório Mensal Disponível</div>
+                                            <div class="alert-description">Relatório de setembro de 2024 foi gerado</div>
+                                            <div class="alert-meta">
+                                                <span class="alert-time">Há 2 horas</span>
+                                                <span class="alert-type">Informação</span>
+                                            </div>
+                                        </div>
+                                        <div class="alert-actions">
+                                            <button class="btn btn-sm btn-outline">Baixar Relatório</button>
+                                            <button class="btn btn-sm btn-primary">Marcar como Lido</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="alert-item success read">
+                                        <div class="alert-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Backup Realizado com Sucesso</div>
+                                            <div class="alert-description">Backup automático dos dados concluído</div>
+                                            <div class="alert-meta">
+                                                <span class="alert-time">Há 4 horas</span>
+                                                <span class="alert-type">Sucesso</span>
+                                            </div>
+                                        </div>
+                                        <div class="alert-actions">
+                                            <button class="btn btn-sm btn-outline">Ver Log</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Funcionalidade dos alertas
+        document.addEventListener('DOMContentLoaded', function() {
+            // Marcar alerta como lido
+            const markAsReadButtons = document.querySelectorAll('.alert-actions .btn-primary');
+            markAsReadButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const alertItem = this.closest('.alert-item');
+                    alertItem.classList.add('read');
+                    this.style.display = 'none';
+                });
+            });
+
+            // Filtros de alerta
+            const filterButton = document.querySelector('.card-actions .btn-outline');
+            if (filterButton) {
+                filterButton.addEventListener('click', function() {
+                    alert('Filtros de alertas em desenvolvimento');
+                });
+            }
+        });
+
+        // Verificar se o usuário está logado
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+
+        // Verificar autenticação ao carregar a página
+        checkAuth();
+    </script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span class="logo-text">Ali Software Jurídico</span>
+                </div>
+                
+                <nav class="nav-menu">
+                    <a href="dashboard.html" class="nav-item">Dashboard</a>
+                    <a href="processos.html" class="nav-item">Processos</a>
+                    <a href="agenda.html" class="nav-item">Agenda</a>
+                    <a href="clientes.html" class="nav-item active">Clientes</a>
+                    <a href="financeiro.html" class="nav-item">Financeiro</a>
+                    <div class="user-menu">
+                        <span id="userEmail" class="user-name"></span>
+                        <button onclick="logout()" class="btn btn-outline btn-sm" title="Fazer logout">Sair</button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html" class="breadcrumb-item">Dashboard</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-item active">Clientes</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-users"></i> Gestão de Clientes</h1>
+                    <p>Gerencie informações e relacionamento com seus clientes</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="exportClients()" title="Exportar lista de clientes">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <button class="btn btn-primary" onclick="addNewClient()" title="Adicionar novo cliente">
+                        <i class="fas fa-plus"></i> Novo Cliente
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="search-group">
+                    <input type="text" id="clientSearch" class="form-input" placeholder="Buscar cliente..." title="Digite o nome do cliente para buscar">
+                    <button class="btn btn-outline" onclick="searchClients()" title="Buscar">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="clientType">Tipo:</label>
+                    <select id="clientType" class="form-select" title="Filtrar por tipo de cliente">
+                        <option value="all">Todos</option>
+                        <option value="pf">Pessoa Física</option>
+                        <option value="pj">Pessoa Jurídica</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="clientStatus">Status:</label>
+                    <select id="clientStatus" class="form-select" title="Filtrar por status">
+                        <option value="all">Todos</option>
+                        <option value="active">Ativo</option>
+                        <option value="inactive">Inativo</option>
+                        <option value="prospect">Prospecto</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-4 stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>127</h3>
+                        <p>Total Clientes</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>98</h3>
+                        <p>Clientes Ativos</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>15</h3>
+                        <p>Novos este mês</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>R$ 45.200</h3>
+                        <p>Receita Mensal</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Tipo</th>
+                            <th>CPF/CNPJ</th>
+                            <th>Contato</th>
+                            <th>Processos</th>
+                            <th>Status</th>
+                            <th>Última Interação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="client-row" data-client-id="1">
+                            <td>
+                                <div class="client-info">
+                                    <div class="client-avatar">JS</div>
+                                    <div>
+                                        <h4>João Silva</h4>
+                                        <p>Empresário</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-info">Pessoa Física</span></td>
+                            <td>123.456.789-00</td>
+                            <td>
+                                <div class="contact-info">
+                                    <span>(11) 99999-9999</span>
+                                    <small>joao@email.com</small>
+                                </div>
+                            </td>
+                            <td><span class="process-count">3 processos</span></td>
+                            <td><span class="badge badge-success">Ativo</span></td>
+                            <td>
+                                <div class="last-interaction">
+                                    <span>Ligação</span>
+                                    <small>2 dias atrás</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="viewClient(1)" title="Ver detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="editClient(1)" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="contactClient(1)" title="Contatar">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="client-row" data-client-id="2">
+                            <td>
+                                <div class="client-info">
+                                    <div class="client-avatar">MS</div>
+                                    <div>
+                                        <h4>Maria Santos</h4>
+                                        <p>Contadora</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-info">Pessoa Física</span></td>
+                            <td>987.654.321-00</td>
+                            <td>
+                                <div class="contact-info">
+                                    <span>(11) 88888-8888</span>
+                                    <small>maria@email.com</small>
+                                </div>
+                            </td>
+                            <td><span class="process-count">1 processo</span></td>
+                            <td><span class="badge badge-success">Ativo</span></td>
+                            <td>
+                                <div class="last-interaction">
+                                    <span>E-mail</span>
+                                    <small>1 semana atrás</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="viewClient(2)" title="Ver detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="editClient(2)" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="contactClient(2)" title="Contatar">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="client-row" data-client-id="3">
+                            <td>
+                                <div class="client-info">
+                                    <div class="client-avatar">XY</div>
+                                    <div>
+                                        <h4>Empresa XYZ Ltda</h4>
+                                        <p>Tecnologia</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-warning">Pessoa Jurídica</span></td>
+                            <td>12.345.678/0001-90</td>
+                            <td>
+                                <div class="contact-info">
+                                    <span>(11) 77777-7777</span>
+                                    <small>contato@xyz.com</small>
+                                </div>
+                            </td>
+                            <td><span class="process-count">5 processos</span></td>
+                            <td><span class="badge badge-success">Ativo</span></td>
+                            <td>
+                                <div class="last-interaction">
+                                    <span>Reunião</span>
+                                    <small>3 dias atrás</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="viewClient(3)" title="Ver detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="editClient(3)" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="contactClient(3)" title="Contatar">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="client-row" data-client-id="4">
+                            <td>
+                                <div class="client-info">
+                                    <div class="client-avatar">PC</div>
+                                    <div>
+                                        <h4>Pedro Costa</h4>
+                                        <p>Advogado</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge badge-info">Pessoa Física</span></td>
+                            <td>456.789.123-00</td>
+                            <td>
+                                <div class="contact-info">
+                                    <span>(11) 66666-6666</span>
+                                    <small>pedro@email.com</small>
+                                </div>
+                            </td>
+                            <td><span class="process-count">2 processos</span></td>
+                            <td><span class="badge badge-secondary">Prospecto</span></td>
+                            <td>
+                                <div class="last-interaction">
+                                    <span>WhatsApp</span>
+                                    <small>5 dias atrás</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline" onclick="viewClient(4)" title="Ver detalhes">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="editClient(4)" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline" onclick="contactClient(4)" title="Contatar">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Novo Cliente -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Novo Cliente</h3>
+                <button class="modal-close" onclick="closeClientModal()" title="Fechar janela">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="clientForm" class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName" class="form-label">Nome/Razão Social *</label>
+                            <input type="text" id="clientName" name="clientName" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientTypeModal" class="form-label">Tipo *</label>
+                            <select id="clientTypeModal" name="clientType" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="pf">Pessoa Física</option>
+                                <option value="pj">Pessoa Jurídica</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientDocument" class="form-label">CPF/CNPJ *</label>
+                            <input type="text" id="clientDocument" name="clientDocument" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientPhone" class="form-label">Telefone *</label>
+                            <input type="tel" id="clientPhone" name="clientPhone" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail" class="form-label">E-mail *</label>
+                            <input type="email" id="clientEmail" name="clientEmail" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientAddress" class="form-label">Endereço</label>
+                        <input type="text" id="clientAddress" name="clientAddress" class="form-input">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientCity" class="form-label">Cidade</label>
+                            <input type="text" id="clientCity" name="clientCity" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientState" class="form-label">Estado</label>
+                            <select id="clientState" name="clientState" class="form-select">
+                                <option value="">Selecione</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="MG">Minas Gerais</option>
+                                <!-- Outros estados -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientNotes" class="form-label">Observações</label>
+                        <textarea id="clientNotes" name="clientNotes" class="form-textarea" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientStatus" class="form-label">Status</label>
+                        <select id="clientStatusModal" name="clientStatus" class="form-select" title="Selecionar status do cliente">
+                            <option value="active">Ativo</option>
+                            <option value="prospect">Prospecto</option>
+                            <option value="inactive">Inativo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeClientModal()" title="Cancelar operação">Cancelar</button>
+                <button type="submit" form="clientForm" class="btn btn-primary">Salvar Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        if (!localStorage.getItem('userLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Exibir dados do usuário
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+
+        // Funções dos clientes
+        function addNewClient() {
+            document.getElementById('clientModal').style.display = 'flex';
+        }
+
+        function closeClientModal() {
+            document.getElementById('clientModal').style.display = 'none';
+            document.getElementById('clientForm').reset();
+        }
+
+        function searchClients() {
+            const searchTerm = document.getElementById('clientSearch').value;
+            alert(`Buscando por: ${searchTerm}`);
+        }
+
+        function exportClients() {
+            alert('Exportando lista de clientes...');
+        }
+
+        function viewClient(clientId) {
+            alert(`Visualizando cliente ${clientId}`);
+        }
+
+        function editClient(clientId) {
+            alert(`Editando cliente ${clientId}`);
+        }
+
+        function contactClient(clientId) {
+            alert(`Entrando em contato com cliente ${clientId}`);
+        }
+
+        // Submissão do formulário
+        document.getElementById('clientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const clientData = Object.fromEntries(formData.entries());
+            
+            console.log('Novo cliente:', clientData);
+            alert('Cliente salvo com sucesso!');
+            closeClientModal();
+        });
+
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userFirm');
+            localStorage.removeItem('trialUser');
+            window.location.href = 'login.html';
+        }
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('clientModal');
+            if (event.target === modal) {
+                closeClientModal();
+            }
+        });
+    </script>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com o gerenciamento de clientes no Ali Software Jurídico" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener"
+       title="Suporte WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>
