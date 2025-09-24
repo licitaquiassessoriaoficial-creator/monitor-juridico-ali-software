@@ -128,10 +128,10 @@ a:hover {
 .header .logo-image,
 .logo-image,
 img[src*="logo.png"] {
-    width: 80px !important;
+    width: 50px !important;
     height: auto !important;
-    max-height: 25px !important;
-    max-width: 80px !important;
+    max-height: 20px !important;
+    max-width: 50px !important;
     object-fit: contain !important;
     display: block !important;
 }
@@ -155,10 +155,10 @@ img[src*="logo.png"] {
 }
 
 .logo-image {
-    width: 80px !important;
+    width: 50px !important;
     height: auto !important;
-    max-height: 25px !important;
-    max-width: 80px !important;
+    max-height: 20px !important;
+    max-width: 50px !important;
     object-fit: contain;
     transition: all 0.3s ease;
 }
@@ -195,6 +195,12 @@ img[src*="logo.png"] {
     justify-content: space-between;
     align-items: center;
     padding: var(--spacing-md) 0;
+    min-height: 60px;
+}
+
+.header .logo {
+    flex-shrink: 0;
+    max-width: 60px;
 }
 
 .nav-menu {
@@ -3325,9 +3331,9 @@ h1, h2, h3 {
     
     /* Logo */
     .logo-image {
-        width: 70px !important;
-        max-height: 22px !important;
-        max-width: 70px !important;
+        width: 45px !important;
+        max-height: 18px !important;
+        max-width: 45px !important;
     }
     
     .logo {
@@ -3649,9 +3655,9 @@ h1, h2, h3 {
 /* Tablet */
 @media (min-width: 769px) and (max-width: 1024px) {
     .logo-image {
-        width: 75px !important;
-        max-height: 24px !important;
-        max-width: 75px !important;
+        width: 48px !important;
+        max-height: 19px !important;
+        max-width: 48px !important;
     }
     
     .logo {
@@ -3666,8 +3672,8 @@ h1, h2, h3 {
     }
     
     .logo-image {
-        width: 85px !important;
-        max-height: 26px !important;
-        max-width: 85px !important;
+        width: 52px !important;
+        max-height: 21px !important;
+        max-width: 52px !important;
     }
 }
