@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm build"
+  command = "echo 'Static site ready'"
   publish = "public"
 
 [functions]
