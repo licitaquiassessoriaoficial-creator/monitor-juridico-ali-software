@@ -128,11 +128,12 @@ a:hover {
 .header .logo-image,
 .logo-image,
 img[src*="logo.png"] {
-    width: 120px !important;
+    width: 80px !important;
     height: auto !important;
-    max-height: 35px !important;
-    max-width: 120px !important;
+    max-height: 25px !important;
+    max-width: 80px !important;
     object-fit: contain !important;
+    display: block !important;
 }
 
 .logo:hover {
@@ -154,10 +155,10 @@ img[src*="logo.png"] {
 }
 
 .logo-image {
-    width: 120px !important;
+    width: 80px !important;
     height: auto !important;
-    max-height: 35px !important;
-    max-width: 120px !important;
+    max-height: 25px !important;
+    max-width: 80px !important;
     object-fit: contain;
     transition: all 0.3s ease;
 }
@@ -3324,9 +3325,9 @@ h1, h2, h3 {
     
     /* Logo */
     .logo-image {
-        width: 90px !important;
-        max-height: 28px !important;
-        max-width: 90px !important;
+        width: 70px !important;
+        max-height: 22px !important;
+        max-width: 70px !important;
     }
     
     .logo {
@@ -3648,9 +3649,9 @@ h1, h2, h3 {
 /* Tablet */
 @media (min-width: 769px) and (max-width: 1024px) {
     .logo-image {
-        width: 100px !important;
-        max-height: 32px !important;
-        max-width: 100px !important;
+        width: 75px !important;
+        max-height: 24px !important;
+        max-width: 75px !important;
     }
     
     .logo {
@@ -3665,8 +3666,8 @@ h1, h2, h3 {
     }
     
     .logo-image {
-        width: 110px !important;
-        max-height: 35px !important;
-        max-width: 110px !important;
+        width: 85px !important;
+        max-height: 26px !important;
+        max-width: 85px !important;
     }
 }
