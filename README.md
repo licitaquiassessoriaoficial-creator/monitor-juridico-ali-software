@@ -1,8 +1,8 @@
-# Ali Software Jur�dico - Sistema Completo
+# Ali Software Jur�dico - Sistema Completo
 
 ## 🎯 Visão Geral
 
-O Ali Software Jur�dico é um sistema completo de gestão jurídica que combina tecnologia avançada com facilidade de uso. O sistema oferece gerenciamento de processos, clientes, tarefas, financeiro e um sistema completo de notificações automáticas por email.
+O Ali Software Jur�dico é um sistema completo de gestão jurídica que combina tecnologia avançada com facilidade de uso. O sistema oferece gerenciamento de processos, clientes, tarefas, financeiro e um sistema completo de notificações automáticas por email.
 
 ## ✅ Status do Projeto
 
@@ -82,7 +82,7 @@ node server.js
 ```env
 GMAIL_USER=alisoftwarejuridico@gmail.com
 GMAIL_PASS=opqm nemr fobi nvjr
-EMAIL_FROM_NAME=Ali Software Jur�dico
+EMAIL_FROM_NAME=Ali Software Jur�dico
 EMAIL_SUPPORT=alisoftwarejuridico@gmail.com
 ```
 
@@ -141,7 +141,7 @@ EMAIL_SUPPORT=alisoftwarejuridico@gmail.com
 
    ```bash
    GET https://SEU-DOMINIO-RAILWAY.up.railway.app/api/hello
-   Resposta: {"ok": true, "message": "Ali Software Jur�dico Backend - Running!"}
+   Resposta: {"ok": true, "message": "Ali Software Jur�dico Backend - Running!"}
    ```
 
 ### Frontend no Netlify
@@ -171,6 +171,6 @@ EMAIL_SUPPORT=alisoftwarejuridico@gmail.com
 
 ---
 
-� 2025 Ali Software Jur�dico. Todos os direitos reservados.
+� 2025 Ali Software Jur�dico. Todos os direitos reservados.
 
 **Deploy:** 09/23/2025 21:22:40
