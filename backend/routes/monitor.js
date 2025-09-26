@@ -1,3 +1,8 @@
+
+const express = require('express');
+const { LogAtividade } = require('../models');
+const router = express.Router();
+
 // GET /api/history - Listar eventos do usuário
 router.get('/history', async (req, res, next) => {
   try {
@@ -46,10 +51,6 @@ router.delete('/history', async (req, res, next) => {
     next(error);
   }
 });
-const express = require('express');
-const { LogAtividade } = require('../models');
-
-const router = express.Router();
 
 // GET /api/monitor/activities - Obter log de atividades
 router.get('/activities', async (req, res, next) => {
