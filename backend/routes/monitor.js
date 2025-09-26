@@ -1,3 +1,51 @@
+// GET /api/history - Listar eventos do usuário
+router.get('/history', async (req, res, next) => {
+  try {
+    const userId = req.header('x-user-id') || (req.user && req.user.id);
+    if (!userId) return res.status(401).json({ message: 'Usuário não autenticado' });
+    const eventos = await LogAtividade.findAll({
+      where: { userId },
+      order: [['criadoEm', 'DESC']]
+    });
+    res.json(eventos);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/ingest - Registrar evento
+router.post('/ingest', async (req, res, next) => {
+  try {
+    const userId = req.header('x-user-id') || (req.user && req.user.id);
+    if (!userId) return res.status(401).json({ message: 'Usuário não autenticado' });
+    const { entidade, entidadeId, acao, detalhes } = req.body;
+    if (!entidade || !entidadeId || !acao) {
+      return res.status(400).json({ message: 'Campos obrigatórios ausentes' });
+    }
+    const evento = await LogAtividade.create({
+      userId,
+      entidade,
+      entidadeId,
+      acao,
+      detalhes
+    });
+    res.status(201).json(evento);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// DELETE /api/history - Limpar eventos do usuário
+router.delete('/history', async (req, res, next) => {
+  try {
+    const userId = req.header('x-user-id') || (req.user && req.user.id);
+    if (!userId) return res.status(401).json({ message: 'Usuário não autenticado' });
+    await LogAtividade.destroy({ where: { userId } });
+    res.json({ message: 'Eventos removidos com sucesso' });
+  } catch (error) {
+    next(error);
+  }
+});
 const express = require('express');
 const { LogAtividade } = require('../models');
 

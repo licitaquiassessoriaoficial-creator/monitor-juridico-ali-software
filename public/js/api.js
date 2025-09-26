@@ -13,7 +13,7 @@ const API_CONFIG = {
 class ApiClient {
     constructor() {
         this.baseURL = API_CONFIG.baseURL;
-        this.token = localStorage.getItem('authToken');
+    this.token = localStorage.getItem('authToken') || localStorage.getItem('jwt_token');
     }
 
     // Headers padrão para requisições
@@ -21,11 +21,11 @@ class ApiClient {
         const headers = {
             'Content-Type': 'application/json'
         };
-        
-        if (this.token) {
-            headers['Authorization'] = `Bearer ${this.token}`;
+        // Busca token atualizado do localStorage se necessário
+        const token = this.token || localStorage.getItem('authToken') || localStorage.getItem('jwt_token');
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
         }
-        
         return headers;
     }
 

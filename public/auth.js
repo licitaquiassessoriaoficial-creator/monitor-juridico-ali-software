@@ -26,35 +26,38 @@ class AuthSystem {
 
     async handleLogin(event) {
         event.preventDefault();
-        
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        
-        // Mostrar loading
         this.showLoginLoading(true);
-        
         try {
-            // Simulação de autenticação (em produção, chamaria a API)
-            await this.simulateLogin(email, password);
-            
-            // Salvar dados do usuário
-            const userData = {
-                email: email,
-                name: email.split('@')[0],
-                avatar: email.charAt(0).toUpperCase()
-            };
-            
+            // Chamada real à API de login
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Falha no login');
+            }
+            const data = await response.json();
+            // Espera-se que a API retorne { token, user }
+            if (!data.token) throw new Error('Token não recebido');
+            // Salvar JWT e atualizar api.js
+            if (window.api && typeof window.api.setToken === 'function') {
+                window.api.setToken(data.token);
+            } else {
+                localStorage.setItem('authToken', data.token);
+            }
             localStorage.setItem('astrea_logged_in', 'true');
-            localStorage.setItem('astrea_user', JSON.stringify(userData));
-            
+            localStorage.setItem('astrea_user', JSON.stringify(data.user || { email }));
             this.isLoggedIn = true;
-            this.currentUser = userData;
-            
-            // Transição para dashboard
+            this.currentUser = data.user || { email };
             this.showDashboard();
             this.loadUserData();
             this.loadDashboardStats();
-            
         } catch (error) {
             alert('Erro no login: ' + error.message);
         } finally {
@@ -62,22 +65,7 @@ class AuthSystem {
         }
     }
 
-    async simulateLogin(email, password) {
-        // Simular delay de rede
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Validações simples (em produção seria mais robusta)
-        if (!email || !password) {
-            throw new Error('E-mail e senha são obrigatórios');
-        }
-        
-        if (password.length < 4) {
-            throw new Error('Senha deve ter pelo menos 4 caracteres');
-        }
-        
-        // Simular sucesso (em produção validaria credenciais)
-        return true;
-    }
+    // Removido simulateLogin, agora login é real
 
     showLoginLoading(loading) {
         const loginText = document.getElementById('loginText');
