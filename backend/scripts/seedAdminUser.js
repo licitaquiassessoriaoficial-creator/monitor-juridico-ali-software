@@ -3,20 +3,20 @@ const bcrypt = require('bcryptjs');
 
 async function seedAdminUser() {
   const email = 'alisoftwarejuridico@gmail.com';
-  const senha = '23092019';
-  const hash = await bcrypt.hash(senha, 10);
+  const password = '23092019';
+  const hash = await bcrypt.hash(password, 12);
   let user = await User.findOne({ where: { email } });
   if (!user) {
     user = await User.create({
       email,
-      senha: hash,
-      nome: 'Admin Global',
+      password: hash,
+      name: 'Admin Global',
       role: 'admin',
-      isAdmin: true
+      isActive: true
     });
     console.log('Usuário admin criado:', email);
   } else {
-    await user.update({ senha: hash, role: 'admin', isAdmin: true });
+    await user.update({ password: hash, role: 'admin', isActive: true });
     console.log('Usuário admin atualizado:', email);
   }
 }
