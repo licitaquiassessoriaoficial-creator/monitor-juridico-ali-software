@@ -44,8 +44,14 @@ const User = sequelize.define('User', {
   },
   oab: {
     type: DataTypes.STRING,
+    allowNull: false,
     validate: {
-      len: { args: [0, 20], msg: 'OAB deve ter no máximo 20 caracteres' }
+      notEmpty: { msg: 'OAB é obrigatória' },
+      is: {
+        args: /^(\d{4,6})-?([A-Z]{2})$/,
+        msg: 'OAB deve ter 4-6 dígitos seguidos de UF, ex: 123456-SP'
+      },
+      len: { args: [5, 20], msg: 'OAB deve ter entre 5 e 20 caracteres' }
     }
   },
   uf: {
@@ -85,6 +91,11 @@ const User = sequelize.define('User', {
   resetPasswordExpiry: {
     type: DataTypes.DATE,
     allowNull: true
+  },
+  asaasCustomerId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    comment: 'ID do cliente na plataforma ASAAS'
   }
 }, {
   hooks: {

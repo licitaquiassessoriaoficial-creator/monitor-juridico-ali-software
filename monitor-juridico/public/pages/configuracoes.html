@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações e Automação - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="configuracoes.html" class="nav-item active">Configurações</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Painel de Configurações e Automação</h1>
+            <section class="card">
+                <h2>Alertas Personalizados</h2>
+                <form id="formAlertas" class="form-inline">
+                    <label for="alertaEmail"><input type="checkbox" id="alertaEmail"> Receber alertas por email</label>
+                    <label for="alertaWhatsapp"><input type="checkbox" id="alertaWhatsapp"> Receber alertas por WhatsApp</label>
+                    <label for="alertaDashboard"><input type="checkbox" id="alertaDashboard"> Exibir alertas no dashboard</label>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar Preferências</button>
+                </form>
+            </section>
+            <section class="card">
+                <h2>Automação de Tarefas</h2>
+                <form id="formAutomacao" class="form-inline">
+                    <label for="autoTarefas"><input type="checkbox" id="autoTarefas"> Criar tarefas automaticamente a partir de publicações</label>
+                    <label for="autoFinanceiro"><input type="checkbox" id="autoFinanceiro"> Gerar lançamentos financeiros automáticos</label>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-robot"></i> Salvar Automação</button>
+                </form>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+    // Preferências em localStorage (demo)
+    function getPrefs() {
+        return JSON.parse(localStorage.getItem('prefs') || '{}');
+    }
+    function savePrefs(prefs) {
+        localStorage.setItem('prefs', JSON.stringify(prefs));
+    }
+    function renderPrefs() {
+        const prefs = getPrefs();
+        document.getElementById('alertaEmail').checked = !!prefs.alertaEmail;
+        document.getElementById('alertaWhatsapp').checked = !!prefs.alertaWhatsapp;
+        document.getElementById('alertaDashboard').checked = !!prefs.alertaDashboard;
+        document.getElementById('autoTarefas').checked = !!prefs.autoTarefas;
+        document.getElementById('autoFinanceiro').checked = !!prefs.autoFinanceiro;
+    }
+    document.getElementById('formAlertas').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const prefs = getPrefs();
+        prefs.alertaEmail = document.getElementById('alertaEmail').checked;
+        prefs.alertaWhatsapp = document.getElementById('alertaWhatsapp').checked;
+        prefs.alertaDashboard = document.getElementById('alertaDashboard').checked;
+        savePrefs(prefs);
+        alert('Preferências de alertas salvas!');
+    });
+    document.getElementById('formAutomacao').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const prefs = getPrefs();
+        prefs.autoTarefas = document.getElementById('autoTarefas').checked;
+        prefs.autoFinanceiro = document.getElementById('autoFinanceiro').checked;
+        savePrefs(prefs);
+        alert('Configurações de automação salvas!');
+    });
+    renderPrefs();
+    </script>
+</body>
+</html>

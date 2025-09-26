@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Comunicação - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="chat.html" class="nav-item active">Comunicação</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Central de Comunicação</h1>
+            <section class="card">
+                <h2>Chat</h2>
+                <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+                <form id="chatForm" class="form-inline" autocomplete="off">
+                    <input type="text" id="chatInput" placeholder="Digite sua mensagem..." title="Mensagem" required>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                </form>
+            </section>
+            <section class="card">
+                <h2>Histórico de Interações</h2>
+                <div id="chatHistory" class="result-list"></div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+    // Chat e histórico em localStorage (demo)
+    function getChatHistory() {
+        return JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    }
+    function saveChatHistory(history) {
+        localStorage.setItem('chatHistory', JSON.stringify(history));
+    }
+    function renderChat() {
+        const history = getChatHistory();
+        const chatWindow = document.getElementById('chatWindow');
+        chatWindow.innerHTML = history.slice(-10).map(m => `<div class="chat-msg"><strong>${m.user}:</strong> ${m.text}</div>`).join('');
+    }
+    function renderHistory() {
+        const history = getChatHistory();
+        const list = document.getElementById('chatHistory');
+        if (!history.length) {
+            list.innerHTML = '<span>Nenhuma interação registrada.</span>';
+            return;
+        }
+        list.innerHTML = history.map(m => `<div class="result-card"><strong>${m.user}:</strong> ${m.text} <span class="chat-date">${m.date}</span></div>`).join('');
+    }
+    document.getElementById('chatForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        const user = localStorage.getItem('userName') || 'Você';
+        const msg = { user, text, date: new Date().toLocaleString('pt-BR') };
+        const history = getChatHistory();
+        history.push(msg);
+        saveChatHistory(history);
+        renderChat();
+        renderHistory();
+        input.value = '';
+    });
+    renderChat();
+    renderHistory();
+    </script>
+</body>
+</html>

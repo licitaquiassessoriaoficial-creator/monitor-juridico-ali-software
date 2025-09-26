@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css?v=v-2025-09-23-1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="planos.html" class="nav-item">Planos</a>
+                <a href="sobre.html" class="nav-item">Sobre</a>
+                <a href="contato.html" class="nav-item active">Contato</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Fale Conosco</h1>
+            <p>Entre em contato para suporte, dúvidas, sugestões ou parcerias.</p>
+            <ul>
+                <li><strong>Email:</strong> <a href="mailto:isabela@alisoftware.com.br">isabela@alisoftware.com.br</a></li>
+                <li><strong>WhatsApp:</strong> <a href="https://wa.me/5519991821389" target="_blank" rel="noopener">(19) 99182-1389</a></li>
+                <li><strong>Responsável:</strong> Isabela Nascimento</li>
+            </ul>
+            <h2>Suporte</h2>
+            <p>Para suporte técnico, envie um email para <a href="mailto:isabela@alisoftware.com.br">isabela@alisoftware.com.br</a> ou utilize o WhatsApp acima.</p>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</body>
+<!-- Botão flutuante WhatsApp -->
+<a href="#" class="whatsapp-float" onclick="shareContatoWhatsApp()" title="Compartilhar contato via WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+<script>
+function shareContatoWhatsApp() {
+    const msg = `Contato Ali Software Jurídico:\nWhatsApp: (19) 99182-1389\nEmail: isabela@alisoftware.com.br\nResponsável: Isabela Nascimento\nAcesse: https://alisoftware.com.br`;
+    const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+}
+</script>
+</html>

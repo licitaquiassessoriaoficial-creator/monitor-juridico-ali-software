@@ -93,17 +93,27 @@ app.get('/api/hello', (req, res) => {
 });
 
 // Rotas da API
+const capturaRoutes = require('./routes/captura');
+app.use('/api/captura', authenticateToken, capturaRoutes);
+
+const audienciasRoutes = require('./routes/audiencias');
+const prazosRoutes = require('./routes/prazos');
+const eventosRoutes = require('./routes/eventos');
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
 app.use('/api/processos', authenticateToken, processRoutes);
 app.use('/api/tarefas', authenticateToken, taskRoutes);
+app.use('/api/audiencias', authenticateToken, audienciasRoutes);
+app.use('/api/prazos', authenticateToken, prazosRoutes);
+app.use('/api/eventos', authenticateToken, eventosRoutes);
 app.use('/api/clientes', authenticateToken, clientRoutes);
 app.use('/api/financeiro', authenticateToken, financeRoutes);
 app.use('/api/dashboard', authenticateToken, dashboardRoutes);
 app.use('/api/monitor', authenticateToken, monitorRoutes);
-
 app.use('/api/email', authenticateToken, emailRoutes);
 app.use('/api/billing', authenticateToken, billingRoutes);
+app.use('/asaas', require('./routes/asaas-list'));
 
 // Rota catch-all para SPA (deve vir por último)
 app.get('*', (req, res) => {

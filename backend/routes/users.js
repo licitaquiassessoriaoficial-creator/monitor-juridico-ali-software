@@ -57,4 +57,16 @@ router.put('/profile', async (req, res, next) => {
   }
 });
 
+// GET /api/users - Listar usuários
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await User.findAll({
+      attributes: ['id', 'name', 'email']
+    });
+    res.json({ users });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

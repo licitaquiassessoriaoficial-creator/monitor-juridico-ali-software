@@ -16,6 +16,36 @@
                     <div class="logo-icon">A</div>
                     <span class="logo-text">Ali Software Jurídico</span>
                 </div>
+                <style>
+                    .form-input:focus, .btn:focus, .form-checkbox:focus, .btn-primary:focus, .btn-outline:focus {
+                        outline: 2px solid #2563eb;
+                        outline-offset: 2px;
+                    }
+                    .btn-primary, .btn-primary:visited {
+                        background-color: #2563eb !important;
+                        color: #fff !important;
+                        border: 2px solid #2563eb !important;
+                    }
+                    .btn-primary:focus, .btn-primary:hover {
+                        background-color: #1e40af !important;
+                        border-color: #1e40af !important;
+                    }
+                    .btn-outline, .btn-outline:visited {
+                        border: 2px solid #2563eb !important;
+                        color: #2563eb !important;
+                        background: #fff !important;
+                    }
+                    .btn-outline:focus, .btn-outline:hover {
+                        background: #2563eb !important;
+                        color: #fff !important;
+                    }
+                    .stat-label, .card-title, .stat-number, .stat-content, .stat-icon, .badge, .user-name {
+                        color: #222 !important;
+                    }
+                    .stat-number {
+                        font-weight: 700;
+                    }
+                </style>
                 
                 <nav class="nav-menu">
                     <a href="dashboard.html" class="nav-item">Dashboard</a>
@@ -103,35 +133,10 @@
                         <i class="fas fa-user-check"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>98</h3>
-                        <p>Clientes Ativos</p>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>15</h3>
-                        <p>Novos este mês</p>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>R$ 45.200</h3>
-                        <p>Receita Mensal</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Clients Table -->
-            <div class="table-container">
-                <table class="data-table">
+                        <script type="module">
+                            import { requireAuth } from '../js/auth-guard.js';
+                            document.addEventListener('DOMContentLoaded', requireAuth);
+                        </script>
                     <thead>
                         <tr>
                             <th>Cliente</th>
@@ -402,17 +407,7 @@
         </div>
     </div>
 
-    <script>
-        // Verificar autenticação
-        if (!localStorage.getItem('userLoggedIn')) {
-            window.location.href = 'login.html';
-        }
-
-        // Exibir dados do usuário
-        const userEmail = localStorage.getItem('userEmail');
-        if (userEmail) {
-            document.getElementById('userEmail').textContent = userEmail;
-        }
+    <!-- Guard de autenticação padronizado pelo requireAuth do auth-guard.js -->
 
         // Funções dos clientes
         function addNewClient() {

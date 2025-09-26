@@ -314,6 +314,36 @@
                     <div class="logo-icon">A</div>
                     <span class="logo-text">Ali Software Jurídico</span>
                 </div>
+                <style>
+                    .form-input:focus, .btn:focus, .form-checkbox:focus, .btn-primary:focus, .btn-outline:focus {
+                        outline: 2px solid #2563eb;
+                        outline-offset: 2px;
+                    }
+                    .btn-primary, .btn-primary:visited {
+                        background-color: #2563eb !important;
+                        color: #fff !important;
+                        border: 2px solid #2563eb !important;
+                    }
+                    .btn-primary:focus, .btn-primary:hover {
+                        background-color: #1e40af !important;
+                        border-color: #1e40af !important;
+                    }
+                    .btn-outline, .btn-outline:visited {
+                        border: 2px solid #2563eb !important;
+                        color: #2563eb !important;
+                        background: #fff !important;
+                    }
+                    .btn-outline:focus, .btn-outline:hover {
+                        background: #2563eb !important;
+                        color: #fff !important;
+                    }
+                    .stat-label, .card-title, .stat-number, .stat-content, .stat-icon, .badge, .user-name {
+                        color: #222 !important;
+                    }
+                    .stat-number {
+                        font-weight: 700;
+                    }
+                </style>
                 
                 <nav class="nav-menu">
                     <a href="dashboard.html" class="nav-item">Dashboard</a>
@@ -819,16 +849,7 @@
     </div>
 
     <script>
-        // Verificar autenticação
-        if (!localStorage.getItem('userLoggedIn')) {
-            window.location.href = 'login.html';
-        }
-
-        // Exibir dados do usuário
-        const userEmail = localStorage.getItem('userEmail');
-        if (userEmail) {
-            document.getElementById('userEmail').textContent = userEmail;
-        }
+        // Guard de autenticação padronizado pelo requireAuth do auth-guard.js
 
         // Arrays para armazenar dados financeiros
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];

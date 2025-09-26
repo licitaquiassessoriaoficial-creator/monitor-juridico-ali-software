@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="onboarding.html" class="nav-item active">Onboarding</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Bem-vindo ao Ali Software Jurídico!</h1>
+            <section class="card" id="tour">
+                <h2>Tour Interativo</h2>
+                <ol id="tourSteps">
+                    <li><strong>Dashboard:</strong> Acompanhe seus processos, tarefas e finanças em tempo real.</li>
+                    <li><strong>Captura OAB/CNJ:</strong> Busque publicações e processos automaticamente.</li>
+                    <li><strong>Lembretes:</strong> Agende notificações automáticas para vencimentos e pagamentos.</li>
+                    <li><strong>Financeiro:</strong> Visualize receitas, despesas e relatórios detalhados.</li>
+                    <li><strong>Comunicação:</strong> Compartilhe informações via WhatsApp e acesse o chat integrado.</li>
+                </ol>
+                <button class="btn btn-primary" id="startTour"><i class="fas fa-play"></i> Iniciar Tour</button>
+                <div id="tourHighlight" class="tour-highlight"></div>
+            </section>
+            <section class="card">
+                <h2>Importação de Dados</h2>
+                <form id="formImport" enctype="multipart/form-data">
+                    <label for="importFile">Selecione o arquivo (.csv, .xlsx):</label>
+                    <input type="file" id="importFile" accept=".csv,.xlsx" required>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Importar</button>
+                </form>
+                <div id="importResult"></div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+    // Tour Interativo (demo)
+    const steps = document.querySelectorAll('#tourSteps li');
+    let currentStep = 0;
+    document.getElementById('startTour').addEventListener('click', function() {
+        currentStep = 0;
+        highlightStep();
+    });
+    function highlightStep() {
+        steps.forEach((step, i) => {
+            step.style.background = i === currentStep ? '#e0f7fa' : '';
+        });
+        const highlight = document.getElementById('tourHighlight');
+        highlight.style.display = 'block';
+        highlight.textContent = steps[currentStep].textContent;
+        setTimeout(() => {
+            steps[currentStep].style.background = '';
+            currentStep++;
+            if (currentStep < steps.length) {
+                highlightStep();
+            } else {
+                highlight.style.display = 'none';
+            }
+        }, 2000);
+    }
+    // Importação de Dados (demo)
+    document.getElementById('formImport').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const fileInput = document.getElementById('importFile');
+        if (!fileInput.files.length) return;
+        const file = fileInput.files[0];
+        document.getElementById('importResult').textContent = 'Arquivo recebido: ' + file.name;
+        // Aqui pode ser feita a integração real com backend
+    });
+    </script>
+</body>
+</html>

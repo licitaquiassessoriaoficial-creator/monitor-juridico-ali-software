@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembretes de Pagamento - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="lembretes.html" class="nav-item active">Lembretes de Pagamento</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Automação de Lembretes de Pagamento</h1>
+            <section class="card">
+                <h2>Configurar Lembretes</h2>
+                <form id="formLembrete" class="form-inline">
+                    <label for="inputEmail" class="sr-only">Email do cliente</label>
+                    <input type="email" id="inputEmail" placeholder="Email do cliente" title="Email do cliente" required>
+                    <label for="inputVencimento" class="sr-only">Data de vencimento</label>
+                    <input type="date" id="inputVencimento" title="Data de vencimento" required>
+                    <label for="inputDias" class="sr-only">Dias antes do vencimento</label>
+                    <input type="number" id="inputDias" min="1" max="30" value="3" title="Dias antes do vencimento" placeholder="Dias antes" required>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-bell"></i> Agendar Lembrete</button>
+                </form>
+            </section>
+            <section class="card">
+                <h2>Lembretes Agendados</h2>
+                <div id="lembretesList" class="result-list"></div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+    // Lembretes em localStorage (demo)
+    function getLembretes() {
+        return JSON.parse(localStorage.getItem('lembretes') || '[]');
+    }
+    function saveLembretes(lembretes) {
+        localStorage.setItem('lembretes', JSON.stringify(lembretes));
+    }
+    function renderLembretes() {
+        const lembretes = getLembretes();
+        const list = document.getElementById('lembretesList');
+        if (!lembretes.length) {
+            list.innerHTML = '<span>Nenhum lembrete agendado.</span>';
+            return;
+        }
+        list.innerHTML = lembretes.map(l => `
+            <div class="result-card">
+                <strong>Email:</strong> ${l.email}<br>
+                <strong>Vencimento:</strong> ${l.vencimento}<br>
+                <strong>Dias antes:</strong> ${l.dias}<br>
+                <button class="btn btn-danger btn-sm" onclick="removerLembrete('${l.id}')"><i class="fas fa-trash"></i> Remover</button>
+            </div>
+        `).join('');
+    }
+    function removerLembrete(id) {
+        let lembretes = getLembretes();
+        lembretes = lembretes.filter(l => l.id !== id);
+        saveLembretes(lembretes);
+        renderLembretes();
+    }
+    document.getElementById('formLembrete').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('inputEmail').value.trim();
+        const vencimento = document.getElementById('inputVencimento').value;
+        const dias = document.getElementById('inputDias').value;
+        if (!email || !vencimento || !dias) return;
+        const lembrete = {
+            id: 'lmb_' + Date.now(),
+            email,
+            vencimento,
+            dias
+        };
+        const lembretes = getLembretes();
+        lembretes.push(lembrete);
+        saveLembretes(lembretes);
+        renderLembretes();
+        e.target.reset();
+    });
+    renderLembretes();
+    </script>
+</body>
+</html>

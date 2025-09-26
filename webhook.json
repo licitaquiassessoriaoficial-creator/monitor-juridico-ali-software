@@ -1,0 +1,11 @@
+{
+  "event": "PAYMENT_RECEIVED",
+  "payment": {
+    "id": "PAYMENT_ID",
+    "status": "RECEIVED",
+    "paymentDate": "2025-09-25",
+    "billingType": "PIX",
+    "subscription": "SUBSCRIPTION_ID",
+    "nextDueDate": "2025-10-25"
+  }
+}

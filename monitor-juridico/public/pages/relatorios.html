@@ -294,10 +294,7 @@
     </main>
 
     <script>
-        // Verificar autenticação
-        if (!localStorage.getItem('userLoggedIn')) {
-            window.location.href = 'login.html';
-        }
+        // Guard de autenticação padronizado pelo requireAuth do auth-guard.js
 
         // Exibir dados do usuário
         const userEmail = localStorage.getItem('userEmail');

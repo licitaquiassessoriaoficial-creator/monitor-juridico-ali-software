@@ -53,7 +53,7 @@
                                 <input type="tel" id="phone" name="phone" class="form-input" required>
                             </div>
                             <div class="form-group">
-                                <label for="oab" class="form-label">OAB <span style="color:red">*</span> <span class="form-helper">Obrigatório para ativar o sistema</span></label>
+                                <label for="oab" class="form-label">OAB <span class="required-asterisk">*</span> <span class="form-helper">Obrigatório para ativar o sistema</span></label>
                                 <input type="text" id="oab" name="oab" class="form-input" placeholder="Ex: SP123456" required>
                             </div>
                             <div class="form-group">
@@ -127,30 +127,51 @@
         <i class="fab fa-whatsapp" aria-hidden="true"></i>
     </a>
     <script>
-        document.getElementById('trialForm').addEventListener('submit', function(e) {
+        document.getElementById('trialForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            // Coletar dados do formulário
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                oab: document.getElementById('oab').value,
-                firm: document.getElementById('firm').value
-            };
-            if (formData.name && formData.email && formData.phone && formData.firm && formData.oab) {
-                // Armazenar dados do usuário (apenas para controle local, não exibir credenciais)
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', formData.email);
-                localStorage.setItem('userName', formData.name);
-                localStorage.setItem('userFirm', formData.firm);
-                localStorage.setItem('trialUser', 'true');
-                localStorage.setItem('trialStartDate', new Date().toISOString());
-                // Mensagem de confirmação
-                alert('Teste grátis iniciado com sucesso! Você receberá um e-mail de confirmação com instruções de acesso. Aproveite 7 dias para explorar todas as funcionalidades.');
-                // Redirecionar para o dashboard
-                window.location.href = 'dashboard.html';
-            } else {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const oab = document.getElementById('oab').value.trim().toUpperCase();
+            const firm = document.getElementById('firm').value.trim();
+            const acceptTerms = document.getElementById('terms').checked;
+            // Regex OAB: 6 dígitos + UF
+            const oabRegex = /^\d{6}[A-Z]{2}$/;
+            if (!name || !email || !phone || !firm || !oab) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            if (!oabRegex.test(oab)) {
+                alert('OAB deve ter 6 dígitos seguidos da UF (ex: 123456SP).');
+                return;
+            }
+            if (!acceptTerms) {
+                alert('É necessário aceitar os termos de uso e política de privacidade.');
+                return;
+            }
+            try {
+                const resp = await fetch('https://monitor-juridico-ali-software-production.up.railway.app/api/auth/trial', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        phone,
+                        oab,
+                        escritorio: firm,
+                        uf: oab.slice(-2),
+                        acceptTerms: true
+                    })
+                });
+                const data = await resp.json();
+                if (resp.ok) {
+                    alert('Cadastro realizado com sucesso! Verifique seu e-mail para acessar o sistema.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.error || 'Erro ao cadastrar.');
+                }
+            } catch (err) {
+                alert('Erro de conexão com o servidor.');
             }
         });
     </script>

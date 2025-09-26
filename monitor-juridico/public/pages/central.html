@@ -14,61 +14,11 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
-        }
-        
-        .hub-container {
-            max-width: 1200px;
-            width: 100%;
-        }
-        
-        .hub-header {
-            text-align: center;
-            color: white;
-            margin-bottom: 3rem;
-        }
-        
-        .hub-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .hub-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .systems-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
-        }
-        
-        .system-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-align: center;
-        }
-        
-        .system-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .system-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1.5rem;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
+    /* Nenhum script ou import aqui, apenas CSS válido */
         }
         
         .system-icon.primary {
@@ -355,29 +305,7 @@
         </div>
     </div>
     
-    <script>
-        // Verificar se há usuário logado e mostrar informações
-        document.addEventListener('DOMContentLoaded', function() {
-            const userLoggedIn = localStorage.getItem('userLoggedIn');
-            const userName = localStorage.getItem('userName');
-            
-            if (userLoggedIn && userName) {
-                const hubHeader = document.querySelector('.hub-header');
-                const welcomeMsg = document.createElement('div');
-                welcomeMsg.style.cssText = `
-                    background: rgba(255, 255, 255, 0.1);
-                    padding: 1rem;
-                    border-radius: 8px;
-                    margin-top: 1rem;
-                    color: white;
-                `;
-                welcomeMsg.innerHTML = `
-                    <i class="fas fa-user"></i>
-                    Bem-vindo, ${userName}! Escolha o sistema que deseja acessar.
-                `;
-                hubHeader.appendChild(welcomeMsg);
-            }
-        });
+    <!-- Script duplicado removido: autenticação já garantida no topo do arquivo -->
         
         // Analytics simples
         function trackSystemAccess(system) {

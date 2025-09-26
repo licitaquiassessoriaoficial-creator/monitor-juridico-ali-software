@@ -409,9 +409,8 @@
 
     <script>
         // Verificar se usuário está logado
-        if (!localStorage.getItem('userLoggedIn')) {
-            window.location.href = 'login.html';
-        }
+        import { requireAuth } from '../js/auth-guard.js';
+        document.addEventListener('DOMContentLoaded', requireAuth);
 
         function showRobotModal() {
             document.getElementById('robotModal').style.display = 'flex';

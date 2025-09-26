@@ -12,21 +12,34 @@ async function criarDadosExemplo() {
   try {
     console.log('🌱 Criando dados de exemplo...');
     
-    // Criar apenas o usuário admin para testes
+    // Criar admin global para gestão interna (OAB fictícia válida)
+    const adminInterno = await User.create({
+      name: 'Admin Proprietária',
+      email: 'alisoftwarejuridico@gmail.com',
+      password: '23092019Bela*',
+  oab: '123456-SP',
+      uf: 'SP',
+      role: 'admin',
+      isActive: true,
+      emailVerified: true,
+      planType: 'enterprise',
+      trialEndsAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+    });
+    console.log(`👤 Admin proprietário criado: ${adminInterno.email}`);
+    // Usuário admin de teste (advogado fictício)
     const usuario = await User.create({
       name: 'Admin Teste',
       email: 'admin@teste.com',
-      password: 'admin123', // será criptografada pelo hook
+      password: 'admin123',
       phone: '(11) 99999-9999',
       oab: 'SP123456',
       uf: 'SP',
       role: 'admin',
       isActive: true,
       emailVerified: true,
-      planType: 'enterprise', // acesso total
-      trialEndsAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 ano de trial
+      planType: 'enterprise',
+      trialEndsAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
     });
-
     console.log(`👤 Usuário admin criado: ${usuario.name}`);
     console.log('✅ Dados de exemplo criados com sucesso!');
     console.log('📧 Email admin: admin@teste.com');

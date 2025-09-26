@@ -187,6 +187,9 @@
                                         <button class="btn btn-sm btn-outline" onclick="showProcessMenu('1')" title="Mais opções">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
+                                        <button class="btn btn-sm btn-success" onclick="shareProcessWhatsApp('1234567-89.2024.8.26.0001', 'João Santos Silva', 'Ação de Cobrança', 'TJSP')" title="Compartilhar via WhatsApp">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -224,6 +227,9 @@
                                         <button class="btn btn-sm btn-outline" onclick="showProcessMenu('2')" title="Mais opções">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
+                                        <button class="btn btn-sm btn-success" onclick="shareProcessWhatsApp('2345678-90.2024.8.26.0003', 'Maria Silva Santos', 'Divórcio Consensual', 'TJSP')" title="Compartilhar via WhatsApp">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -260,6 +266,9 @@
                                         </button>
                                         <button class="btn btn-sm btn-outline" onclick="showProcessMenu('3')" title="Mais opções">
                                             <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-success" onclick="shareProcessWhatsApp('3456789-01.2024.8.26.0004', 'Empresa ABC Ltda', 'Revisional de Aluguel', 'TJSP')" title="Compartilhar via WhatsApp">
+                                            <i class="fab fa-whatsapp"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -423,6 +432,12 @@
                 closeProcessModal();
             }
         });
+
+        function shareProcessWhatsApp(numero, cliente, assunto, tribunal) {
+            const mensagem = `Processo: ${numero}%0ACliente: ${cliente}%0AAssunto: ${assunto}%0ATribunal: ${tribunal}%0A%0AEnviado via Ali Software Jurídico.`;
+            const url = `https://wa.me/?text=${mensagem}`;
+            window.open(url, '_blank');
+        }
     </script>
 
     <!-- WhatsApp Floating Button -->

@@ -6,6 +6,8 @@ const Cliente = require('./Cliente');
 const Processo = require('./Processo');
 const Tarefa = require('./Tarefa');
 const Financeiro = require('./Financeiro');
+const Subscription = require('./Subscription');
+const Payment = require('./Payment');
 
 // Definir associações
 
@@ -138,5 +140,7 @@ module.exports = {
   Tarefa,
   Financeiro,
   Andamento,
-  LogAtividade
+  LogAtividade,
+  Subscription,
+  Payment
 };

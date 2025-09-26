@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://alisoftware.com.br/sitemap.xml

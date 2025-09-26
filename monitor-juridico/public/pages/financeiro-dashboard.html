@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="financeiro-dashboard.html" class="nav-item active">Financeiro</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Dashboard Financeiro</h1>
+            <section class="card">
+                <h2>Resumo</h2>
+                <div class="finance-summary">
+                    <div><strong>Receitas:</strong> <span id="receitasTotal">R$ 0,00</span></div>
+                    <div><strong>Despesas:</strong> <span id="despesasTotal">R$ 0,00</span></div>
+                    <div><strong>Saldo:</strong> <span id="saldoTotal">R$ 0,00</span></div>
+                </div>
+            </section>
+            <section class="card">
+                <h2>Gráficos</h2>
+                <canvas id="graficoReceitas" width="400" height="200" aria-label="Gráfico de receitas" role="img"></canvas>
+                <canvas id="graficoDespesas" width="400" height="200" aria-label="Gráfico de despesas" role="img"></canvas>
+            </section>
+            <section class="card">
+                <h2>Relatórios Detalhados</h2>
+                <div id="relatorioFinanceiro"></div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+    // Simulação de dados financeiros
+    const receitas = [
+        { mes: 'Jan', valor: 12000 },
+        { mes: 'Fev', valor: 9500 },
+        { mes: 'Mar', valor: 10200 },
+        { mes: 'Abr', valor: 11000 },
+        { mes: 'Mai', valor: 9800 },
+        { mes: 'Jun', valor: 12500 }
+    ];
+    const despesas = [
+        { mes: 'Jan', valor: 8000 },
+        { mes: 'Fev', valor: 7000 },
+        { mes: 'Mar', valor: 7500 },
+        { mes: 'Abr', valor: 8200 },
+        { mes: 'Mai', valor: 7900 },
+        { mes: 'Jun', valor: 9000 }
+    ];
+    // Resumo
+    const totalReceitas = receitas.reduce((acc, r) => acc + r.valor, 0);
+    const totalDespesas = despesas.reduce((acc, d) => acc + d.valor, 0);
+    const saldo = totalReceitas - totalDespesas;
+    document.getElementById('receitasTotal').textContent = 'R$ ' + totalReceitas.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    document.getElementById('despesasTotal').textContent = 'R$ ' + totalDespesas.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    document.getElementById('saldoTotal').textContent = 'R$ ' + saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    // Gráfico de receitas
+    new Chart(document.getElementById('graficoReceitas').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: receitas.map(r => r.mes),
+            datasets: [{
+                label: 'Receitas',
+                data: receitas.map(r => r.valor),
+                backgroundColor: '#10b981'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+    // Gráfico de despesas
+    new Chart(document.getElementById('graficoDespesas').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: despesas.map(d => d.mes),
+            datasets: [{
+                label: 'Despesas',
+                data: despesas.map(d => d.valor),
+                backgroundColor: '#ef4444'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+    // Relatório detalhado
+    const relatorio = receitas.map((r, i) => {
+        const desp = despesas[i] ? despesas[i].valor : 0;
+        return `<div class="result-card">
+            <strong>${r.mes}</strong><br>
+            Receita: R$ ${r.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}<br>
+            Despesa: R$ ${desp.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}<br>
+            Saldo: R$ ${(r.valor - desp).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+        </div>`;
+    }).join('');
+    document.getElementById('relatorioFinanceiro').innerHTML = relatorio;
+    </script>
+</body>
+</html>

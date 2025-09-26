@@ -125,8 +125,8 @@ EMAIL_SUPPORT=alisoftwarejuridico@gmail.com
    GMAIL_PASS=opqm nemr fobi nvjr
    ASAAS_API_URL=https://sandbox.asaas.com/api/v3
    ASAAS_API_KEY=sua-chave-sandbox-asaas
-   FRONTEND_URL=https://seu-site.netlify.app
-   BACKEND_URL=https://SEU-DOMINIO-RAILWAY.up.railway.app
+   FRONTEND_URL=https://alisoftwarejuridico.netlify.app
+   BACKEND_URL=https://monitor-juridico-ali-software-production.up.railway.app
    ```
 
 3. **Persistência SQLite (recomendado):**

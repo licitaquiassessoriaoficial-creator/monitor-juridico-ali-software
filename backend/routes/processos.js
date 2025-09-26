@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult, query } = require('express-validator');
 const { Op } = require('sequelize');
 const { Processo, Cliente, Tarefa, Andamento, LogAtividade } = require('../models');
+const checkPlan = require('../middleware/checkPlan');
 const { CustomError } = require('../middleware/errorHandler');
 
 const router = express.Router();
@@ -34,7 +35,7 @@ const processoValidation = [
 ];
 
 // GET /api/processos - Listar processos
-router.get('/', async (req, res, next) => {
+router.get('/', checkPlan, async (req, res, next) => {
   try {
     const { page = 1, limit = 20, status, clienteId, search, instancia } = req.query;
     const offset = (page - 1) * limit;
@@ -108,7 +109,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // GET /api/processos/:id - Obter processo específico
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', checkPlan, async (req, res, next) => {
   try {
     const processo = await Processo.findOne({
       where: { 
@@ -149,7 +150,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // POST /api/processos - Criar novo processo
-router.post('/', processoValidation, async (req, res, next) => {
+router.post('/', checkPlan, processoValidation, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -235,7 +236,7 @@ router.post('/', processoValidation, async (req, res, next) => {
 });
 
 // PUT /api/processos/:id - Atualizar processo
-router.put('/:id', processoValidation, async (req, res, next) => {
+router.put('/:id', checkPlan, processoValidation, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -338,7 +339,7 @@ router.put('/:id', processoValidation, async (req, res, next) => {
 });
 
 // DELETE /api/processos/:id - Excluir processo
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', checkPlan, async (req, res, next) => {
   try {
     const processo = await Processo.findOne({
       where: { 
@@ -383,7 +384,7 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 // GET /api/processos/stats - Estatísticas de processos
-router.get('/stats/summary', async (req, res, next) => {
+router.get('/stats/summary', checkPlan, async (req, res, next) => {
   try {
     const [
       totalProcessos,
@@ -425,7 +426,7 @@ router.get('/stats/summary', async (req, res, next) => {
 });
 
 // POST /api/processos/:id/andamentos - Adicionar andamento
-router.post('/:id/andamentos', [
+router.post('/:id/andamentos', checkPlan, [
   body('descricao')
     .trim()
     .isLength({ min: 10, max: 1000 })

@@ -348,6 +348,9 @@
                         <button class="btn btn-sm btn-outline" onclick="deleteTask('${task.id}')" title="Excluir tarefa">
                             <i class="fas fa-trash"></i>
                         </button>
+                            <button class="btn btn-sm btn-success" onclick="shareTaskWhatsApp('${task.id}')" title="Compartilhar via WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
                     </div>
                 </div>
                 
@@ -641,6 +644,23 @@
     </script>
 
     <!-- WhatsApp Floating Button -->
+        <script>
+        // Compartilhar tarefa via WhatsApp
+        function shareTaskWhatsApp(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            let msg = `Tarefa: ${task.title}\n`;
+            if (task.description) msg += `Descrição: ${task.description}\n`;
+            msg += `Prioridade: ${getPriorityText(task.priority)}\n`;
+            msg += `Categoria: ${getCategoryText(task.category)}\n`;
+            msg += `Vencimento: ${formatDate(task.dueDate)} ${task.dueTime ? task.dueTime : ''}\n`;
+            if (task.client) msg += `Cliente: ${task.client}\n`;
+            if (task.process) msg += `Processo: ${task.process}\n`;
+            msg += `Status: ${task.status}\n`;
+            const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+        </script>
     <a href="https://wa.me/5519991821389?text=Olá! Preciso de ajuda com o gerenciamento de tarefas no Ali Software Jurídico" 
        class="whatsapp-float" 
        target="_blank" 

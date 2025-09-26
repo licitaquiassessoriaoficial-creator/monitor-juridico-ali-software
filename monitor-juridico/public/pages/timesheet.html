@@ -402,9 +402,8 @@
 
     <script>
         // Verificar autenticação
-        if (!localStorage.getItem('userLoggedIn')) {
-            window.location.href = 'login.html';
-        }
+        import { requireAuth } from '../js/auth-guard.js';
+        document.addEventListener('DOMContentLoaded', requireAuth);
 
         // Exibir dados do usuário
         const userEmail = localStorage.getItem('userEmail');

@@ -35,6 +35,31 @@ const tarefaValidation = [
 ];
 
 // GET /api/tarefas - Listar tarefas
+// POST /api/tarefas/:id/compartilhar - Registrar compartilhamento WhatsApp
+router.post('/:id/compartilhar', async (req, res, next) => {
+  try {
+    const tarefaId = req.params.id;
+    const tarefa = await Tarefa.findByPk(tarefaId);
+    if (!tarefa) {
+      return res.status(404).json({ error: 'Tarefa não encontrada' });
+    }
+    await LogAtividade.create({
+      userId: req.user.id,
+      entidade: 'tarefa',
+      entidadeId: tarefaId,
+      acao: 'compartilhar_whatsapp',
+      detalhes: JSON.stringify({
+        titulo: tarefa.titulo,
+        descricao: tarefa.descricao,
+        prioridade: tarefa.prioridade,
+        dataVencimento: tarefa.dataVencimento
+      })
+    });
+    res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+});
 router.get('/', async (req, res, next) => {
   try {
     const { 

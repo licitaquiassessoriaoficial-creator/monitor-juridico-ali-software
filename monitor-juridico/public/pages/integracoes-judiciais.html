@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrações Judiciais - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="integracoes-judiciais.html" class="nav-item active">Integrações Judiciais</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Integrações Judiciais</h1>
+            <section class="card">
+                <h2>Buscar Publicações/Processos</h2>
+                <form id="formBuscaJudicial" class="form-inline">
+                    <select id="tribunal" required title="Selecione o tribunal">
+                        <option value="">Tribunal</option>
+                        <option value="TRT">TRT</option>
+                        <option value="TJ">TJ</option>
+                        <option value="CNJ">CNJ</option>
+                    </select>
+                    <input type="text" id="parametro" placeholder="OAB, CNJ ou número do processo" title="Parâmetro de busca" required>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                </form>
+                <div id="resultJudicial" class="result-list"></div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+    // Busca judicial simulada
+    document.getElementById('formBuscaJudicial').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const tribunal = document.getElementById('tribunal').value;
+        const parametro = document.getElementById('parametro').value.trim();
+        if (!tribunal || !parametro) return;
+        document.getElementById('resultJudicial').innerHTML = '<span>Aguarde...</span>';
+        // Simulação de resposta
+        setTimeout(() => {
+            document.getElementById('resultJudicial').innerHTML = `
+                <div class="result-card">
+                    <strong>Tribunal:</strong> ${tribunal}<br>
+                    <strong>Parâmetro:</strong> ${parametro}<br>
+                    <strong>Processo:</strong> 1234567-89.2025.8.26.0001<br>
+                    <strong>Vara:</strong> 2ª Vara Cível<br>
+                    <strong>Data:</strong> 2025-09-20<br>
+                    <strong>Assunto:</strong> Execução de Título<br>
+                    <strong>Partes:</strong> Cliente X Réu Y
+                </div>
+            `;
+        }, 1200);
+    });
+    </script>
+</body>
+</html>

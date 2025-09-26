@@ -23,7 +23,7 @@
         <div class="container">
             <div class="header-content">
                 <a href="../index.html" class="logo" aria-label="Voltar ao início">
-                    <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image">
+                    <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image" loading="lazy">
                 </a>
                 <nav class="nav-menu" role="navigation" aria-label="Menu principal">
                     <a href="../pages/planos.html" class="nav-item">Planos</a>
@@ -43,11 +43,11 @@
                         <form id="loginForm" class="form-modern">
                             <div class="form-group">
                                 <label for="email" class="form-label">E-mail</label>
-                                <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required autofocus>
+                                <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required autofocus autocomplete="username">
                             </div>
                             <div class="form-group">
                                 <label for="password" class="form-label">Senha</label>
-                                <input type="password" id="password" name="password" class="form-input" placeholder="Digite sua senha" required>
+                                <input type="password" id="password" name="password" class="form-input" placeholder="Digite sua senha" required autocomplete="current-password">
                             </div>
                             <div class="form-group form-remember">
                                 <input type="checkbox" id="remember" name="remember" class="form-checkbox">
@@ -56,9 +56,10 @@
                             <button type="submit" class="btn btn-primary btn-full">Entrar</button>
                         </form>
                         <div class="login-links-modern">
-                            <a href="#" class="link">Esqueceu a senha?</a>
+                            <a href="#" class="link" id="forgotPasswordLink">Esqueceu a senha?</a>
                             <span>Não tem conta? <a href="trial.html" class="link">Comece grátis</a></span>
                         </div>
+                        <div id="loginMsg" aria-live="polite"></div>
                     </div>
                 </div>
             </div>
@@ -66,13 +67,45 @@
     </main>
     <style>
         .logo-login-img { height: 48px; }
+        #loginMsg {
+            margin-top: 1rem;
+        }
+        /* Foco visível para acessibilidade */
+        .form-input:focus, .btn:focus, .form-checkbox:focus {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+        .btn-primary, .btn-primary:visited {
+            background-color: #2563eb !important;
+            color: #fff !important;
+            border: 2px solid #2563eb !important;
+        }
+        .btn-primary:focus, .btn-primary:hover {
+            background-color: #1e40af !important;
+            border-color: #1e40af !important;
+        }
+        .form-input, .form-input:visited {
+            background: #fff;
+            color: #222;
+            border: 1.5px solid #2563eb;
+        }
+        .form-input:focus {
+            border-color: #1e40af;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #222;
+        }
+        .checkbox-label {
+            color: #222;
+        }
     </style>
     <footer class="footer-section">
         <div class="container">
             <div class="grid grid-cols-4 footer-grid-container">
                 <div>
                     <a href="../index.html" class="logo footer-logo" aria-label="Voltar ao topo">
-                        <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image">
+                        <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image" loading="lazy">
                     </a>
                     <p class="footer-description-text">
                         Software jurídico completo para advogados e escritórios.
@@ -118,18 +151,86 @@
         <i class="fab fa-whatsapp" aria-hidden="true"></i>
     </a>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            // Simular login
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            if (email && password) {
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Por favor, preencha todos os campos.');
+            const msgDiv = document.getElementById('loginMsg');
+            msgDiv.textContent = '';
+            if (!email || !password) {
+                msgDiv.style.color = '#ef4444';
+                msgDiv.textContent = 'Por favor, preencha todos os campos.';
+                return;
             }
+            try {
+                const resp = await fetch('https://monitor-juridico-ali-software-production.up.railway.app/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await resp.json();
+                if (resp.ok && data.token) {
+                    localStorage.setItem('userLoggedIn', 'true');
+                    localStorage.setItem('userEmail', data.user.email);
+                    localStorage.setItem('userName', data.user.name);
+                    localStorage.setItem('userToken', data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    msgDiv.style.color = '#ef4444';
+                    msgDiv.textContent = data.error || 'Email ou senha inválidos.';
+                }
+            } catch (err) {
+                msgDiv.style.color = '#ef4444';
+                msgDiv.textContent = 'Erro de conexão com o servidor.';
+            }
+        });
+
+        // Recuperação de senha amigável
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Cria modal simples
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width:400px;padding:2rem;">
+                    <h3>Recuperar senha</h3>
+                    <p>Informe seu e-mail cadastrado para receber instruções de redefinição.</p>
+                    <form id="forgotForm">
+                        <input type="email" id="forgotEmail" class="form-input" placeholder="Seu e-mail" required style="margin-bottom:1rem;width:100%;" autocomplete="username">
+                        <button type="submit" class="btn btn-primary btn-full">Enviar</button>
+                        <button type="button" class="btn btn-outline btn-full" id="closeModalBtn" style="margin-top:0.5rem;">Cancelar</button>
+                    </form>
+                    <div id="forgotMsg" style="margin-top:1rem;"></div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            // Fecha modal
+            modal.querySelector('#closeModalBtn').onclick = () => modal.remove();
+            // Submete email
+            modal.querySelector('#forgotForm').onsubmit = async function(ev) {
+                ev.preventDefault();
+                const email = modal.querySelector('#forgotEmail').value;
+                const msgDiv = modal.querySelector('#forgotMsg');
+                msgDiv.textContent = '';
+                try {
+                    const resp = await fetch('http://localhost:3001/api/auth/forgot-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await resp.json();
+                    if (resp.ok) {
+                        msgDiv.style.color = '#10b981';
+                        msgDiv.textContent = 'Se o e-mail existir, você receberá instruções em instantes.';
+                    } else {
+                        msgDiv.style.color = '#ef4444';
+                        msgDiv.textContent = data.error || 'Erro ao solicitar recuperação.';
+                    }
+                } catch (err) {
+                    msgDiv.style.color = '#ef4444';
+                    msgDiv.textContent = 'Erro de conexão com o servidor.';
+                }
+            };
         });
     </script>
 </body>

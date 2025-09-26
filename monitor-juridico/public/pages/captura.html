@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura OAB/CNJ - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="captura.html" class="nav-item active">Captura OAB/CNJ</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Robô de Captura OAB/CNJ</h1>
+            <section class="card">
+                <h2>Buscar por OAB</h2>
+                <form id="formOAB" class="form-inline">
+                    <input type="text" id="inputOAB" placeholder="Número OAB" required>
+                    <label for="inputUF" class="sr-only">UF</label>
+                    <select id="inputUF" required title="Selecione o estado da OAB">
+                        <option value="">UF</option>
+                        <option value="SP">SP</option>
+                        <option value="RJ">RJ</option>
+                        <option value="MG">MG</option>
+                        <option value="RS">RS</option>
+                        <option value="PR">PR</option>
+                        <option value="SC">SC</option>
+                        <option value="BA">BA</option>
+                        <option value="PE">PE</option>
+                        <option value="DF">DF</option>
+                        <!-- ...outras UFs... -->
+                    </select>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                </form>
+                <div id="resultOAB" class="result-list"></div>
+            </section>
+            <section class="card">
+                <h2>Buscar por Número CNJ</h2>
+                <form id="formCNJ" class="form-inline">
+                    <input type="text" id="inputCNJ" placeholder="Número CNJ" required>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                </form>
+                <div id="resultCNJ" class="result-list"></div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+    // Buscar por OAB
+    document.getElementById('formOAB').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const oab = document.getElementById('inputOAB').value.trim();
+        const uf = document.getElementById('inputUF').value;
+        if (!oab || !uf) return;
+        document.getElementById('resultOAB').innerHTML = '<span>Aguarde...</span>';
+        try {
+            const res = await fetch('/api/captura/oab', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+                body: JSON.stringify({ oab, uf })
+            });
+            const data = await res.json();
+            if (data.resultados && data.resultados.length) {
+                document.getElementById('resultOAB').innerHTML = data.resultados.map(r => `
+                    <div class="result-card">
+                        <strong>Processo:</strong> ${r.processo}<br>
+                        <strong>Vara:</strong> ${r.vara}<br>
+                        <strong>Data:</strong> ${r.data}<br>
+                        <strong>Assunto:</strong> ${r.assunto}<br>
+                        <strong>Partes:</strong> ${r.partes}
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('resultOAB').innerHTML = '<span>Nenhum resultado encontrado.</span>';
+            }
+        } catch (err) {
+            document.getElementById('resultOAB').innerHTML = '<span>Erro na busca.</span>';
+        }
+    });
+    // Buscar por CNJ
+    document.getElementById('formCNJ').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const numero = document.getElementById('inputCNJ').value.trim();
+        if (!numero) return;
+        document.getElementById('resultCNJ').innerHTML = '<span>Aguarde...</span>';
+        try {
+            const res = await fetch('/api/captura/cnj', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+                body: JSON.stringify({ numero })
+            });
+            const data = await res.json();
+            if (data.resultado) {
+                const r = data.resultado;
+                document.getElementById('resultCNJ').innerHTML = `
+                    <div class="result-card">
+                        <strong>Processo:</strong> ${r.processo}<br>
+                        <strong>Vara:</strong> ${r.vara}<br>
+                        <strong>Data:</strong> ${r.data}<br>
+                        <strong>Assunto:</strong> ${r.assunto}<br>
+                        <strong>Partes:</strong> ${r.partes}
+                    </div>
+                `;
+            } else {
+                document.getElementById('resultCNJ').innerHTML = '<span>Nenhum resultado encontrado.</span>';
+            }
+        } catch (err) {
+            document.getElementById('resultCNJ').innerHTML = '<span>Erro na busca.</span>';
+        }
+    });
+    </script>
+</body>
+</html>

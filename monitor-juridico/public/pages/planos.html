@@ -16,24 +16,25 @@
         }
     </script>
     <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <a href="../index.html" class="logo" aria-label="Voltar ao início">
-                    <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image">
-                </a>
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                        <img src="../logo.png?v=v-2025-09-23-1" alt="Ali Software Jurídico" class="logo-image">
+                    </a>
                 
-                <nav class="nav-menu">
-                    <a href="../index.html" class="nav-item">Início</a>
-                    <a href="dashboard.html" class="nav-item">Dashboard</a>
-                    <a href="planos.html" class="nav-item active">Planos e Preços</a>
-                    <a href="#contato" class="nav-item">Contato</a>
-                    <a href="login.html" class="btn btn-outline">Fazer login</a>
-                    <a href="trial.html" class="btn btn-primary">Experimentar grátis</a>
-                </nav>
+                    <nav class="nav-menu">
+                        <a href="../index.html" class="nav-item">Início</a>
+                        <a href="dashboard.html" class="nav-item">Dashboard</a>
+                        <a href="planos.html" class="nav-item active">Planos e Preços</a>
+                        <a href="sobre.html" class="nav-item">Sobre</a>
+                        <a href="contato.html" class="nav-item">Contato</a>
+                        <a href="login.html" class="btn btn-outline">Fazer login</a>
+                        <a href="trial.html" class="btn btn-primary">Experimentar grátis</a>
+                    </nav>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
     <main class="main-content">
         <div class="container">
@@ -62,7 +63,7 @@
                             <p class="plan-subtitle">Comece sua atuação na advocacia de forma profissional</p>
                         </div>
                         
-                        <div class="plan-price">
+                        <button class="btn btn-primary btn-full" onclick="subscribePlan('Básico')">Assinar</button>
                             <span class="price-value free">Gratuito</span>
                             <span class="price-period">por 7 dias</span>
                         </div>
@@ -80,7 +81,7 @@
                             </ul>
                         </div>
                         
-                        <button class="btn btn-outline btn-full">Começar grátis</button>
+                        <button class="btn btn-outline btn-full" onclick="window.location.href='trial.html'">Começar grátis</button>
                     </div>
 
                     <!-- Plano Up -->
@@ -88,7 +89,7 @@
                         <div class="plan-header">
                             <h3 class="plan-name">PLANO<strong>up</strong></h3>
                             <p class="plan-subtitle">Automatize sua rotina e ganhe tempo para captar clientes</p>
-                        </div>
+                        <button class="btn btn-secondary btn-full" onclick="subscribePlan('Profissional')">Assinar</button>
                         
                         <div class="plan-price">
                             <span class="price-value monthly">R$ 209</span>
@@ -108,13 +109,13 @@
                             </ul>
                         </div>
                         
-                        <button class="btn btn-primary btn-full">Começar grátis</button>
+                        <button class="btn btn-primary btn-full" onclick="window.location.href='trial.html'">Começar grátis</button>
                         <div class="popular-badge">O MAIS CONTRATADO</div>
                     </div>
 
                     <!-- Plano Smart -->
                     <div class="pricing-card featured">
-                        <div class="plan-header">
+                        <button class="btn btn-outline btn-full" onclick="subscribePlan('Empresarial')">Assinar</button>
                             <h3 class="plan-name">PLANO<strong>smart</strong></h3>
                             <p class="plan-subtitle">Organize seu escritório para crescer com lucratividade</p>
                         </div>
@@ -138,7 +139,7 @@
                             </ul>
                         </div>
                         
-                        <button class="btn btn-secondary btn-full">Começar grátis</button>
+                        <button class="btn btn-secondary btn-full" onclick="window.location.href='trial.html'">Começar grátis</button>
                     </div>
 
                     <!-- Plano Company -->
@@ -168,7 +169,7 @@
                             </ul>
                         </div>
                         
-                        <button class="btn btn-outline btn-full">Começar grátis</button>
+                        <button class="btn btn-outline btn-full" onclick="window.location.href='trial.html'">Começar grátis</button>
                     </div>
 
                     <!-- Plano VIP -->
@@ -197,7 +198,7 @@
                             </ul>
                         </div>
                         
-                        <button class="btn btn-outline btn-full">Começar grátis</button>
+                        <button class="btn btn-outline btn-full" onclick="window.location.href='trial.html'">Começar grátis</button>
                     </div>
 
                     <!-- Plano Customizado -->
@@ -350,8 +351,8 @@
                 <div>
                     <h6>Empresa</h6>
                     <ul>
-                        <li><a href="#sobre">Sobre</a></li>
-                        <li><a href="#contato">Contato</a></li>
+                        <li><a href="sobre.html">Sobre</a></li>
+                        <li><a href="contato.html">Contato</a></li>
                         <li><a href="#">Suporte</a></li>
                     </ul>
                 </div>

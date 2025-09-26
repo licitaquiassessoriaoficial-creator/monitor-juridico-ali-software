@@ -326,24 +326,9 @@
             }, 3000);
         }
 
-        // Verificar se o usuário está logado
-        function checkAuth() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            if (!isLoggedIn) {
-                window.location.href = 'login.html';
-                return false;
-            }
-            return true;
-        }
-
-        // Logout
-        function logout() {
-            localStorage.removeItem('isLoggedIn');
-            window.location.href = 'login.html';
-        }
-
-        // Verificar autenticação ao carregar a página
-        checkAuth();
+        // Guard de autenticação padronizado pelo requireAuth do auth-guard.js
+        import { requireAuth } from '../js/auth-guard.js';
+        document.addEventListener('DOMContentLoaded', requireAuth);
     </script>
 </body>
 </html>

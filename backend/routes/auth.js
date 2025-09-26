@@ -26,9 +26,10 @@ const registerValidation = [
     .matches(/^(\+55\s?)?(\(?\d{2}\)?\s?)?\d{4,5}-?\d{4}$/)
     .withMessage('Telefone deve ter formato válido'),
   body('oab')
-    .optional()
-    .isLength({ max: 20 })
-    .withMessage('OAB deve ter no máximo 20 caracteres'),
+    .notEmpty()
+    .withMessage('OAB é obrigatória')
+    .matches(/^\d{6}[A-Z]{2}$/)
+    .withMessage('OAB deve ter 6 dígitos seguidos da UF (ex: 123456SP)'),
   body('uf')
     .optional()
     .isLength({ min: 2, max: 2 })
@@ -64,8 +65,9 @@ const setAuthCookie = (res, token) => {
   });
 };
 
+const { validateOAB } = require('../middlewares/validateOAB');
 // POST /api/auth/register - Cadastro de usuário
-router.post('/register', registerValidation, async (req, res, next) => {
+router.post('/register', registerValidation, validateOAB, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -76,7 +78,7 @@ router.post('/register', registerValidation, async (req, res, next) => {
       });
     }
 
-    const { name, email, password, phone, oab, uf, acceptTerms } = req.body;
+  const { name, email, password, phone, oab, uf, acceptTerms } = req.body;
 
     // Verificar se aceitou os termos
     if (!acceptTerms) {
@@ -122,7 +124,7 @@ router.post('/register', registerValidation, async (req, res, next) => {
 
     res.status(201).json({
       message: 'Usuário criado com sucesso',
-      user: userResponse,
+      user: { ...userResponse, oab: user.oab },
       token
     });
   } catch (error) {
@@ -131,7 +133,7 @@ router.post('/register', registerValidation, async (req, res, next) => {
 });
 
 // POST /api/auth/login - Login de usuário
-router.post('/login', loginValidation, async (req, res, next) => {
+router.post('/login', loginValidation, validateOAB, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -142,13 +144,14 @@ router.post('/login', loginValidation, async (req, res, next) => {
       });
     }
 
-    const { email, password } = req.body;
+  const { email, password, oab } = req.body;
+
 
     // Buscar usuário
     const user = await User.findByEmail(email);
-    if (!user) {
+    if (!user || user.oab !== oab) {
       return res.status(401).json({
-        error: 'Email ou senha incorretos',
+        error: 'Email, senha ou OAB incorretos',
         code: 'INVALID_CREDENTIALS'
       });
     }
@@ -165,7 +168,7 @@ router.post('/login', loginValidation, async (req, res, next) => {
     const isValidPassword = await user.validatePassword(password);
     if (!isValidPassword) {
       return res.status(401).json({
-        error: 'Email ou senha incorretos',
+        error: 'Email, senha ou OAB incorretos',
         code: 'INVALID_CREDENTIALS'
       });
     }
@@ -183,7 +186,7 @@ router.post('/login', loginValidation, async (req, res, next) => {
 
     res.json({
       message: 'Login realizado com sucesso',
-      user: userResponse,
+      user: { ...userResponse, oab: user.oab },
       token
     });
   } catch (error) {
@@ -395,7 +398,7 @@ router.post('/forgot-password', [
     // Gerar token de recuperação
     const resetToken = crypto.randomBytes(32).toString('hex');
     const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
-    const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+  const resetTokenExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
 
     // Salvar token no usuário
     user.resetPasswordToken = resetTokenHash;

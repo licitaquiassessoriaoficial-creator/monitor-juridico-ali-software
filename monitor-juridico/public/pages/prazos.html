@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prazos - Ali Software Jurídico</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="../index.html" class="logo" aria-label="Voltar ao início">
+                <img src="../logo.png" alt="Ali Software Jurídico" class="logo-image">
+            </a>
+            <nav class="nav-menu" role="navigation" aria-label="Menu principal">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="planos.html" class="nav-item">Planos</a>
+                <a href="prazos.html" class="nav-item active">Prazos</a>
+                <a href="login.html" class="btn btn-outline">Fazer login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <h1>Meus Prazos</h1>
+            <div id="prazosBoard"></div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ali Software Jurídico. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <!-- Botão flutuante WhatsApp -->
+    <a href="#" class="whatsapp-float" onclick="sharePrazoWhatsApp()" title="Compartilhar prazo via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <script>
+    // Exemplo de prazo
+    const prazo = {
+        id: 'prz_1',
+        titulo: 'Prazo para Apresentação de Defesa',
+        data: '2025-10-05',
+        hora: '23:59',
+        processo: '1234567-89.2025.8.26.0001',
+        parte: 'Cliente X'
+    };
+    document.getElementById('prazosBoard').innerHTML = `
+        <div class="prazo-card">
+            <h3>${prazo.titulo}</h3>
+            <p><strong>Data limite:</strong> ${prazo.data} ${prazo.hora}</p>
+            <p><strong>Processo:</strong> ${prazo.processo}</p>
+            <p><strong>Parte:</strong> ${prazo.parte}</p>
+            <button class="btn btn-success" onclick="sharePrazoWhatsApp('${prazo.id}')"><i class="fab fa-whatsapp"></i> Compartilhar</button>
+        </div>
+    `;
+    function sharePrazoWhatsApp(przId) {
+        // Para demo, sempre usa o exemplo
+        const prz = prazo;
+        let msg = `Prazo: ${prz.titulo}\nData limite: ${prz.data} ${prz.hora}\nProcesso: ${prz.processo}\nParte: ${prz.parte}`;
+        const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+    }
+    </script>
+</body>
+</html>
